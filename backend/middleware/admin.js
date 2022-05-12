@@ -1,5 +1,5 @@
 const isAdmin = (req, res, next) => {
-    if (req.company.role != "admin") {
+    if (req.user.role != "admin") {
         return res.status(403).send('Access denied.');
     }
     next();

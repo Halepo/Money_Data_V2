@@ -1,0 +1,25 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "Logs/.045163cf8b8e9d571107c48170f4963bf9b56dc2-audit.json",
+    "files": [
+        {
+            "date": 1649608894533,
+            "name": "Logs/asketari-2022-04-10-19.log",
+            "hash": "2508aa8b992bfaa41c1f51ea4d5f8d28"
+        },
+        {
+            "date": 1649610792297,
+            "name": "Logs/asketari-2022-04-10-20.log",
+            "hash": "604935e804fe5864324479b56f96e49d"
+        },
+        {
+            "date": 1649618012296,
+            "name": "Logs/asketari-2022-04-10-22.log",
+            "hash": "5afcc8ce596b16c1cb9b7b1fa4c412df"
+        }
+    ],
+    "hashType": "md5"
+}

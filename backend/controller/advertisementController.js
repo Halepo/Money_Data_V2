@@ -27,7 +27,7 @@ const addAdvertisement = async (req, res) => {
     if (!jobType) return res.status(400).send('Invalid Job Type.');
 
     const advertisement = new Advertisement({
-        companyName: req.body.companyName,
+        userName: req.body.userName,
         jobTitle: req.body.jobTitle,
         jobDetail: req.body.jobDetail,
         noOfPosition: req.body.noOfPosition,
@@ -35,7 +35,7 @@ const addAdvertisement = async (req, res) => {
         salary: req.body.salary,
         location: location._id,
         email: req.body.email
-     });
+    });
 
     advertisement = await advertisement.save();
 
@@ -54,16 +54,16 @@ const updateAdvertisement = async (req, res) => {
     if (!jobType) return res.status(400).send('Invalid Job Type.');
 
     const advertisement = await Advertisement.findByIdAndUpdate(req.params.id,
-    {
-        companyName: req.body.companyName,
-        jobTitle: req.body.jobTitle,
-        jobDetail: req.body.jobDetail,
-        noOfPosition: req.body.noOfPosition,
-        jobType: jobType._id,
-        salary: req.body.salary,
-        location: location._id,
-        email: req.body.email
-    }, { new: true});
+        {
+            userName: req.body.userName,
+            jobTitle: req.body.jobTitle,
+            jobDetail: req.body.jobDetail,
+            noOfPosition: req.body.noOfPosition,
+            jobType: jobType._id,
+            salary: req.body.salary,
+            location: location._id,
+            email: req.body.email
+        }, { new: true });
 
     if (!advertisement) return res.status(404).send('Advertisement not found.');
     res.send(advertisement);

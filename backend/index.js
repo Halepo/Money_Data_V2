@@ -18,15 +18,15 @@ const cors = require('cors')
 const auth = require('./routes/auth');
 const password = require('./routes/password');
 const job = require('./routes/job');
-const company = require('./routes/company');
+const user = require('./routes/user');
 const jobCategory = require('./routes/jobcategory');
 const experienceLevel = require('./routes/experience');
 const jobLocation = require('./routes/location');
 const jobType = require('./routes/jobtype');
 const advertisement = require('./routes/advertisement');
 
-const swaggerUI =  require('swagger-ui-express');
-const swaggerJsDoc =  require('swagger-jsdoc');
+const swaggerUI = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc');
 
 const app = express();
 const { API_PORT } = process.env;
@@ -35,7 +35,7 @@ const port = process.env.PORT || API_PORT;
 // Set request size limits
 app.use(function (req, res, next) {
   next();
-  
+
   /*
   if (!['POST', 'PUT', 'DELETE'].includes(req.method)) {
     next()
@@ -55,7 +55,7 @@ app.use(function (req, res, next) {
 
 
 });
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '1kb' })); // body parser defaults to a body size limit of 1kb
 
 
@@ -84,11 +84,11 @@ app.use(lusca({
 }));
 
 // Monitor the event loop for heavy traffic
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   if (toobusy()) {
-      res.send(503, "Server Too Busy");
+    res.send(503, "Server Too Busy");
   } else {
-  next();
+    next();
   }
 });
 
@@ -130,7 +130,7 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use('/api/auth', auth);
 app.use('/api/password', password);
 app.use('/api/jobs', job);
-app.use('/api/company', company);
+app.use('/api/user', user);
 app.use('/api/category', jobCategory);
 app.use('/api/experience', experienceLevel);
 app.use('/api/location', jobLocation);

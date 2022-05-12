@@ -1,7 +1,7 @@
 'use strict';
 require("dotenv").config();
 const express = require("express");
-const Company = require("../model/company");
+const User = require("../model/user");
 const Token = require("../model/token");
 const nodeMailer = require('../config/nodemailer');
 const crypto = require("crypto");
@@ -13,36 +13,36 @@ const app = express();
 
 app.use(express.json());
 
-const forgotPassword = async(req, res, next) => {
-    const email = req.body.email;
+const forgotPassword = async (req, res, next) => {
+  const email = req.body.email;
 
-    const company = await Company.findOne({ email });
-  
-    // check if company already exists
-    if (!company) throw new Error("Company does not exist");
+  const user = await User.findOne({ email });
 
-    let resetToken = crypto.randomBytes(32).toString("hex");
-    const hash = await bcrypt.hash(resetToken, 10);
-  
-    // Create password reset token
-    await new Token({
-      company_id: company._id,
-      token: hash,
-      createdAt: Date.now(),
-    }).save();
-  
-    const link = `/resetpassword?token=${resetToken}&id=${company._id}`;  // add client URL ${process.env.DOMAIN}
-    const msg = formateForMail.formateForMail('forgotPassword', link);
+  // check if user already exists
+  if (!user) throw new Error("User does not exist");
 
-    nodeMailer.nodeMailer(company.email, 'Asketari Password Assistance', msg);  // change recipient to company.email
-    return res.json({
-        success: true,
-        msg: 'Mail is sent to the registered mail address'
-    });
+  let resetToken = crypto.randomBytes(32).toString("hex");
+  const hash = await bcrypt.hash(resetToken, 10);
+
+  // Create password reset token
+  await new Token({
+    user_id: user._id,
+    token: hash,
+    createdAt: Date.now(),
+  }).save();
+
+  const link = `/resetpassword?token=${resetToken}&id=${user._id}`;  // add client URL ${process.env.DOMAIN}
+  const msg = formateForMail.formateForMail('forgotPassword', link);
+
+  nodeMailer.nodeMailer(user.email, 'Asketari Password Assistance', msg);  // change recipient to user.email
+  return res.json({
+    success: true,
+    msg: 'Mail is sent to the registered mail address'
+  });
 }
 
-const resetPassword = async(req, res, next) => {
-    // Get input
+const resetPassword = async (req, res, next) => {
+  // Get input
   const { token, id } = req.query;
   const { password, passwordConfirmation } = req.body;
 
@@ -51,7 +51,7 @@ const resetPassword = async(req, res, next) => {
   if (!passwordResetToken) {
     throw new Error("Invalid or expired password reset token");
   }
-  
+
   // Validate password reset token
   const isValid = await bcrypt.compare(token, passwordResetToken.token);
   if (!isValid) {
@@ -61,49 +61,49 @@ const resetPassword = async(req, res, next) => {
 
   // Encrypt password
   const hash = await bcrypt.hash(password, 10);
-  
-  await Company.updateOne(
+
+  await User.updateOne(
     { _id: id },
     { $set: { password: hash } },
     { new: true }
   );
 
-  const company = await Company.findById({ _id: id });
+  const user = await User.findById({ _id: id });
 
   const msg = formateForMail.formateForMail('resetPassword', '');
-  nodeMailer.nodeMailer(company.email, 'Asketari New Password', msg);
+  nodeMailer.nodeMailer(user.email, 'Asketari New Password', msg);
 
   await passwordResetToken.deleteOne();
 
   return res.json({
     success: true,
     msg: 'Password Reset Successfully'
-});
+  });
 }
 
-const changePassowrd = async(req, res, next) => {
-    const oldPassword = req.body.oldPassword;
-	  const newPassword = req.body.newPassword;
+const changePassowrd = async (req, res, next) => {
+  const oldPassword = req.body.oldPassword;
+  const newPassword = req.body.newPassword;
 
-    let email = req.company.email;
+  let email = req.user.email;
 
-    const company = await Company.findOne({ email });
+  const user = await User.findOne({ email });
 
-    if (company && (await bcrypt.compare(oldPassword, company.password))) {
+  if (user && (await bcrypt.compare(oldPassword, user.password))) {
 
-      //Encrypt password
-      const hash = await bcrypt.hash(newPassword, 10);
+    //Encrypt password
+    const hash = await bcrypt.hash(newPassword, 10);
 
-      await Company.updateOne(
-        { email: email },
-        { $set: { password: hash } },
-        { new: true }
-      );
-      return res.status(400).json({ message: "Password change successful" });
-    }
-    else {
-      return res.status(400).json({ message: "Wrong password" });
-    }
+    await User.updateOne(
+      { email: email },
+      { $set: { password: hash } },
+      { new: true }
+    );
+    return res.status(400).json({ message: "Password change successful" });
+  }
+  else {
+    return res.status(400).json({ message: "Wrong password" });
+  }
 }
 
-module.exports = {forgotPassword, resetPassword, changePassowrd};
+module.exports = { forgotPassword, resetPassword, changePassowrd };

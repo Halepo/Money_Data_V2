@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 
 // password reset token, email verification token
 const tokenSchema = new mongoose.Schema({
-  company_id: {
+  user_id: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "company",
+    ref: "user",
   },
   token: {
     type: String,

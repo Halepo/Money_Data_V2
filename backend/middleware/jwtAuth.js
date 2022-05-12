@@ -1,6 +1,6 @@
 'use strict';
 const jwt = require("jsonwebtoken");
-const Company = require("../model/company");
+const User = require("../model/user");
 const config = process.env;
 
 const isAuthenticated = (req, res, next) => {
@@ -12,16 +12,16 @@ const isAuthenticated = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, config.TOKEN_KEY);
-    req.company = decoded;
+    req.user = decoded;
 
-    Company.findOne({
-      _id: req.company.company_id,
+    User.findOne({
+      _id: req.user.user_id,
       verified: true
     })
-      .then((company) => {
-        if (company === null) {
+      .then((user) => {
+        if (user === null) {
           res.status(401).json({
-            message: "Inactive",
+            message: "No user found!",
           });
           return;
         }
@@ -40,10 +40,10 @@ const verifyRefresh = (email, token) => {
   try {
     const decoded = jwt.verify(token, config.TOKEN_KEY);
     return decoded.email === email;
-   } catch (error) {
+  } catch (error) {
     // console.error(error);
     return false;
-   }
+  }
 }
 
 module.exports = { isAuthenticated, verifyRefresh };

@@ -1,5 +1,5 @@
 const express = require("express");
-const {isAuthenticated} = require("../middleware/jwtAuth");
+const { isAuthenticated } = require("../middleware/jwtAuth");
 const jobController = require("../controller/jobController");
 
 const app = express();
@@ -41,18 +41,18 @@ app.use(express.json());
  *         updatedAt:
  *           type: string
  *           description: time of job update
- *         
- * 
- *         companyId:
+ *
+ *
+ *         userId:
  *           type: integer
- *           description: id of company
- *         companyName:
+ *           description: id of user
+ *         userName:
  *           type: string
  *           description: name of job
- *         
+ *
  *       example:
  *         _id: 1
- *         companyId: 1
+ *         userId: 1
  *         jobTitle: my title
  *
  */
