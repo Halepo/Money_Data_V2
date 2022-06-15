@@ -1,12 +1,15 @@
 const validator = require('validator');
-const isEmpty = require('./is-empty');
+const isEmpty = require('./helper/is-empty');
 
-module.exports = function validateUserInput(data) {
+const validateAuthInput = (data) => {
+  console.log('data', data)
   let errors = {};
 
-  data.handle = !isEmpty(data.name) ? data.name : '';
-  data.status = !isEmpty(data.email) ? data.email : '';
-  data.skills = !isEmpty(data.password) ? data.password : '';
+  //check empty
+  data.name = !isEmpty(data.name) ? data.name : '';
+  data.email = !isEmpty(data.email) ? data.email : '';
+  data.password = !isEmpty(data.password) ? data.password : '';
+  data.passwordConfirmation = !isEmpty(data.passwordConfirmation) ? data.passwordConfirmation : '';
 
   if (!validator.isLength(data.name, { min: 2, max: 40 })) {
     errors.handle = 'User must be between 2 and 40 characters';
@@ -16,6 +19,9 @@ module.exports = function validateUserInput(data) {
   }
   if (validator.isEmpty(data.password, { min: 8, max: 40 })) {
     errors.status = 'Password must be between 8 and 40 characters';
+  }
+  if (data.password != data.passwordConfirmation) {
+    errors.status = 'Passwords must match';
   }
 
   if (!isEmpty(data.email)) {
@@ -29,3 +35,6 @@ module.exports = function validateUserInput(data) {
     isValid: isEmpty(errors),
   };
 };
+
+
+module.exports = { validateAuthInput }

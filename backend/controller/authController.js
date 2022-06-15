@@ -1,6 +1,6 @@
 'use strict';
+
 require("dotenv").config();
-const express = require("express");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
@@ -12,28 +12,27 @@ const { validateEmail } = require('../middleware/validators/emailValidator');
 const { validatePassword } = require('../middleware/validators/passwordValidator');
 const User = require("../model/user");
 const Token = require("../model/token");
-const validateUserInput = require('./validation/user')
+const validateAuthInput = require('./validation/auth')
 
+const express = require("express");
 const app = express();
 
 app.use(express.json());
 app.use(rateLimiter);
 
 const register = async (req, res, next) => {
-  const { errors, isValid } = validateUserInput(req.body);
 
-  //check Validation
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
   try {
-
     // Get input
     const { name, email, password, passwordConfirmation } = req.body;
 
     // Validate input
-    if (!(email && password && name)) {
+    if (!(email && password && name && passwordConfirmation)) {
       return res.status(400).send("All inputs are required");
+    }
+    // if passwords don't match
+    if (password != passwordConfirmation) {
+      return res.status(400).send("Passwords Don't match");
     }
 
     // Check if user already exists
@@ -73,6 +72,7 @@ const register = async (req, res, next) => {
     // save refresh token
     user.refreshToken = refreshToken
 
+    //Email verification
     const emailVerification = await new Token({
       user_id: user._id,
       token: crypto.randomBytes(32).toString("hex"),
@@ -82,10 +82,12 @@ const register = async (req, res, next) => {
     const link = `api/auth/verify/${emailVerification.token}`;
     const msg = formateForMail.formateForMail('verifyEmail', link);
 
+
     nodeMailer.nodeMailer(user.email, 'Asketari Password Assistance', msg);
 
     // return new user
     return res.status(201).json(user);
+
   } catch (err) {
     console.log(err);
   }
@@ -141,14 +143,10 @@ const login = async (req, res, next) => {
         expiresIn: "24h",
       });
 
-      // save token
-      user.token = token;
-
-      // save refresh token
-      user.refreshToken = refreshToken
+      let resUser = { user, token, refreshToken }
 
       // user
-      return res.status(200).json(user);
+      return res.status(200).send(resUser);
     }
     return res.status(400).send("Invalid Credentials");
   } catch (err) {

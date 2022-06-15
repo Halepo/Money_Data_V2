@@ -8,10 +8,10 @@ const User = require("../model/user");
 const Job = require("../model/job");
 
 //validation
-const validateUserInput = require('./validation/user')
+const validateAuthInput = require('./validation/auth')
 
 const registerUser = async (req, res, next) => {
-  const { errors, isValid } = validateUserInput(req.body);
+  const { errors, isValid } = validateAuthInput(req.body);
 
   //check Validation
   if (!isValid) {
