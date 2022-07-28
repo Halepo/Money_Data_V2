@@ -15,7 +15,7 @@ module.exports.formateForMail = function (type, textInput) {
             msg = '<p style="font-size:15px;">New job for +' + textInput + ' posted.</p>';
             return msg
         case 'inviteSignup':
-            msg = 'Invitation to create an account on Asketari';
+            msg = 'Invitation to create an account on Money Data';
             return msg
         default:
             return 'HELLO';

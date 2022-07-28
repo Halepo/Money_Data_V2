@@ -16,14 +16,6 @@ const reqres = require('./middleware/reqreslog');
 const cors = require('cors')
 
 const auth = require('./routes/auth');
-const password = require('./routes/password');
-const job = require('./routes/job');
-const user = require('./routes/user');
-const jobCategory = require('./routes/jobcategory');
-const experienceLevel = require('./routes/experience');
-const jobLocation = require('./routes/location');
-const jobType = require('./routes/jobtype');
-const advertisement = require('./routes/advertisement');
 
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
@@ -128,16 +120,6 @@ const specs = swaggerJsDoc(options);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 app.use('/api/auth', auth);
-app.use('/api/password', password);
-app.use('/api/jobs', job);
-app.use('/api/user', user);
-app.use('/api/category', jobCategory);
-app.use('/api/experience', experienceLevel);
-app.use('/api/location', jobLocation);
-app.use('/api/jobtype', jobType);
-app.use('/api/advertisement', advertisement);
-
-
 
 
 app.listen(port, () => {

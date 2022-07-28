@@ -34,7 +34,7 @@ const forgotPassword = async (req, res, next) => {
   const link = `/resetpassword?token=${resetToken}&id=${user._id}`;  // add client URL ${process.env.DOMAIN}
   const msg = formateForMail.formateForMail('forgotPassword', link);
 
-  nodeMailer.nodeMailer(user.email, 'Asketari Password Assistance', msg);  // change recipient to user.email
+  nodeMailer.nodeMailer(user.email, 'Money Data Password Assistance', msg);  // change recipient to user.email
   return res.json({
     success: true,
     msg: 'Mail is sent to the registered mail address'

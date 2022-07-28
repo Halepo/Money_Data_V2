@@ -6,10 +6,10 @@
     "auditLog": "Logs/.045163cf8b8e9d571107c48170f4963bf9b56dc2-audit.json",
     "files": [
         {
-            "date": 1655310398039,
-            "name": "Logs/asketari-2022-06-15-19.log",
-            "hash": "e11df76239d13255ed05ee294cc8f155"
+            "date": 1658752159508,
+            "name": "Logs/asketari-2022-07-25-15.log",
+            "hash": "e6fe4003ee498b3ecad8a60f9b6d17d689ab3cfbfcefb64450f04b43f689267c"
         }
     ],
-    "hashType": "md5"
+    "hashType": "sha256"
 }
