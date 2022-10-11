@@ -31,8 +31,10 @@ jobs:
           npx webpack
              
       - name: List output files
-        run: ls
-
+        run: |
+          cd server
+          ls
+          
       - name: FTP-Deploy-Action
         uses: SamKirkland/FTP-Deploy-Action@3.1.0
         with:
@@ -40,4 +42,3 @@ jobs:
           ftp-username: ${{ secrets.FTP_USERNAME }}
           ftp-password: ${{ secrets.FTP_PASSWORD }}
           local-dir: build
-          git-ftp-args: --insecure
