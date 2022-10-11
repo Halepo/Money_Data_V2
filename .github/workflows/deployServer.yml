@@ -32,6 +32,7 @@ jobs:
              
       - name: List output files
         run: |
+          git reset --hard
           cd server
           ls
           
@@ -41,3 +42,4 @@ jobs:
           ftp-server: ${{ secrets.FTP_SERVER }}
           ftp-username: ${{ secrets.FTP_USERNAME }}
           ftp-password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./server/build
