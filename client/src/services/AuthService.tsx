@@ -1,34 +1,47 @@
-import { refreshToken } from './ApiService';
-import jwt_decode from 'jwt-decode';
+import { refreshToken } from './authApiService';
+import jwtDecode, { JwtPayload } from 'jwt-decode';
 import { Navigate } from 'react-router';
 
-export class AuthService {
+import { iAuthService } from '../interface/authService';
+import { ICachedJWT } from '../interface/authTypes';
+
+export class AuthService implements iAuthService {
+  returnAuthHeader() {
+    const token = this.getCachedJwtToken();
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    };
+    return headers;
+  }
+
   //store Token
-  saveAccessTokenAsCachedJwt(response: any) {
-    if (response.data.sign_in.token) {
+  returnAccessTokenAsCachedJwt(response: any) {
+    if (response.data.token) {
+      console.log('Saving access token..');
       this.destroyCachedJwt();
       const expiresAt = new Date(
-        jwt_decode(response.data.sign_in.token).exp * 1000
+        jwtDecode<JwtPayload>(response.data.token).exp! * 1000
       );
       //const expiresAt = new Date(Date.now() + expiresIn);
       const refreshAt = new Date(
         // Upon user's activity, refresh 5 minutes before token actually expires.
         // User inactivity till the access token expires will force re-authentication
-        Date.now() + expiresAt - 5 * 60
+        Date.now().valueOf() + expiresAt.valueOf() - 5 * 60
       );
 
       const jwt = {
-        accessToken: response.data.sign_in.token,
-        roleId: response.data.user.role_id,
-        roleName: response.data.user.role.role_name,
-        fullName: response.data.user.full_name,
-        userId: response.data.user.id,
-        companyId: response.data.user.company_id,
-        refreshToken: response.data.sign_in.refresh_token,
+        accessToken: response.data.token,
+        fullName: response.data.user.name,
+        userId: response.data.user._id,
+        refreshToken: response.data.refreshToken,
         expiresAt,
         refreshAt,
       };
-      this.saveCachedJwt(jwt);
+      console.log('jwtData', jwt);
+      // this.saveCachedJwt(jwt);
       return jwt;
     } else {
       return response;
@@ -36,12 +49,12 @@ export class AuthService {
   }
 
   refreshToken() {
-    let jwt = AuthService.getCachedJwt();
+    let jwt = this.getCachedJwt();
     let refreshTokenToken = jwt.refreshToken;
-    AuthService.destroyCachedJwt();
+    this.destroyCachedJwt();
     try {
       jwt.accessToken = refreshToken(refreshTokenToken);
-      AuthService.saveCachedJwt(jwt);
+      this.saveCachedJwt(jwt);
       return jwt;
     } catch (error) {
       console.log(error);
@@ -51,25 +64,16 @@ export class AuthService {
 
   //check the status of the token
   checkCachedJwtStatus = () => {
-    let cachedJwt = this.getCachedJwt();
-    if (cachedJwt) {
-      if (cachedJwt.refreshAt > new Date().toISOString()) return 'OKAY';
-      else if (cachedJwt.expiresAt <= new Date().toISOString())
+    let userInfoCache = this.getCachedJwt();
+    if (userInfoCache && Object.keys(userInfoCache).length != 0) {
+      if (userInfoCache.refreshAt > new Date().toISOString()) {
+        return 'OKAY';
+      } else if (userInfoCache.expiresAt <= new Date().toISOString()) {
         return 'EXPIRED';
-      else return 'REFRESH';
-    } else return 'NOTOKEN';
-  };
-
-  checkCachedJwtRole = () => {
-    let cachedJwt = this.getCachedJwt();
-    if (cachedJwt) {
-      if (cachedJwt.roleId === 1) return 'admin';
-      else if (cachedJwt.roleId === 2) return 'companyAdmin';
-      else if (cachedJwt.roleId === 3) return 'clerk';
-      //if the role is 1 Admin return Admin
-      //is the role is
-      else return 'unknown';
-    } else return 'unknown';
+      } else {
+        return 'NEED_REFRESH';
+      }
+    } else return 'NO_TOKEN';
   };
 
   getRefreshToken() {
@@ -77,19 +81,20 @@ export class AuthService {
   }
 
   getCachedJwt() {
-    return JSON.parse(sessionStorage.getItem('cachedJwt'));
+    let userInfoCache: any = sessionStorage.getItem('userInfoCache');
+    return JSON.parse(userInfoCache);
   }
 
   getCachedJwtToken() {
     return this.getCachedJwt().accessToken;
   }
 
-  saveCachedJwt(jwt) {
-    sessionStorage.setItem('cachedJwt', JSON.stringify(jwt));
+  saveCachedJwt(jwt: ICachedJWT) {
+    sessionStorage.setItem('userInfoCache', JSON.stringify(jwt));
   }
 
   destroyCachedJwt() {
-    sessionStorage.removeItem('cachedJwt');
+    sessionStorage.removeItem('userInfoCache');
   }
 
   handleLogOut() {

@@ -1,0 +1,11 @@
+{
+    "type": "mongodb",
+    "url": "mongodb+srv://MoneyDataApiV0:Halepo3737@moneydataapiv0.vbccn.mongodb.net/Primary?retryWrites=true&w=majority",
+    "database": "Primary",
+    "useNewUrlParser": true,
+    "synchronize": true,
+    "logging": true,
+    "entities": [
+        "src/models/*.{ts,js}"
+    ]
+}
