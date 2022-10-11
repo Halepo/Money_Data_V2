@@ -33,15 +33,15 @@ export async function isAuthorized(req: Request, res: Response, next: NextFuncti
     } else {
       //no barrier token
       logger.errorData(
-        `Authorization Error!  No token!`,
+        `Authorization Error! No token provided!`,
       );
       res.status(HttpStatusCode.UnAuthorized).json({
-        message: "Authorization Error!  No token!",
+        message: "Authorization Error! No token provided!",
       });
     }
   } catch (error) {
     logger.errorData(
-      `Authorization Error! ${error.message} `,
+      `Authorization Error! ${error.message}`,
     );
 
     res.status(HttpStatusCode.UnAuthorized).json({
