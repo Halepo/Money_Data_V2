@@ -21,31 +21,31 @@ export async function isAuthorized(req: Request, res: Response, next: NextFuncti
       const user = await db.collection('User').findOne({ _id: new ObjectId(requestUser.user_id) })
 
       if (user) {
-        logger.infoData(`[authorizationMiddleware] Authorized for user ${user._id}`)
+        logger.infoData(`Authorized for user ${user._id}`)
         return next();
       } else {
-        logger.errorData('[authorizationMiddleware] No/invalid user!')
+        logger.errorData('Authorization Error!  No/invalid user!')
         res.status(HttpStatusCode.UnAuthorized).json({
-          message: "[authorizationMiddleware] No/invalid user!",
+          message: "Authorization Error!  No/invalid user!",
         });
         return
       }
     } else {
       //no barrier token
       logger.errorData(
-        `[authorizationMiddleware] No token!`,
+        `Authorization Error!  No token!`,
       );
       res.status(HttpStatusCode.UnAuthorized).json({
-        message: "[authorizationMiddleware] No token!",
+        message: "Authorization Error!  No token!",
       });
     }
   } catch (error) {
     logger.errorData(
-      `[authorizationMiddleware] error :${error.message} `,
+      `Authorization Error! ${error.message} `,
     );
 
-    res.status(HttpStatusCode.InternalServerError).json({
-      message: `[authorizationMiddleware] Something went wrong ! error : ${error.message}`
+    res.status(HttpStatusCode.UnAuthorized).json({
+      message: `Authorization Error! ${error.message}`
     });
   }
 }

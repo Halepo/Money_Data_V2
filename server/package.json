@@ -1,6 +1,6 @@
 {
     "name": "money-manager",
-    "main": "index.ts",
+    "main": "src/index.ts",
     "scripts": {
         "build": "webpack",
         "run:dev": "nodemon .webpack/main.js",
@@ -53,6 +53,6 @@
         "webpack-node-externals": "^2.5.2",
         "webpack-shell-plugin": "^0.5.0"
     },
-    "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
+    "author": "The HaLePo team",
     "license": "MIT"
 }
