@@ -12,7 +12,7 @@ const entries = ['./src/index.ts'];
 module.exports = {
     context: __dirname,
     mode: 'development',
-    watch: true,
+    watch: false,
     entry: entries,
     devtool: 'source-map',
     resolve: {

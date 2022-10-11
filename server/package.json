@@ -3,7 +3,7 @@
     "main": "src/index.ts",
     "scripts": {
         "build": "webpack",
-        "run:dev": "nodemon .webpack/main.js",
+        "run:dev": "nodemon build/main.js",
         "start": "webpack --watch"
     },
     "engines": {
