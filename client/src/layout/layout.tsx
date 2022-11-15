@@ -1,4 +1,5 @@
-import { Box, Card } from '@mui/material';
+import './layout.sass';
+import { Box, Card, Divider, Typography } from '@mui/material';
 import NavBar from './navbar';
 import Footer from './footer';
 import { Sidebar } from './sidebar';
@@ -6,9 +7,17 @@ import { Sidebar } from './sidebar';
 export default function Layout(props: any) {
   return (
     <>
-      {/* <NavBar /> */}
+      <NavBar />
+
       <Sidebar />
-      {/* <Typography variant="h5">{props.title}</Typography>
+      <div className="main-container container">
+        <div>{props.title}</div>
+        {props.children}
+      </div>
+
+      <Footer />
+
+      {/* <Typography variant="h5"></Typography>
       <Divider
         sx={{
           width: '80%',
@@ -17,8 +26,6 @@ export default function Layout(props: any) {
           marginBottom: '2rem',
         }}
       /> */}
-      {props.children}
-      {/* <Footer /> */}
     </>
   );
 }

@@ -7,7 +7,7 @@ import { checkCachedJwtStatus } from './store/actionCreators';
 import ThemeContextProvider, {
   ThemeContext,
 } from './services/context/ThemeContext';
-import Index from './pages/Index';
+import Index from './pages/pages';
 import { Routes, Route } from 'react-router';
 import RedirectTo from './components/RedirectHome';
 import LoginUI from './pages/auth/login/login';
@@ -26,14 +26,7 @@ export default function App() {
           <Routes>
             <Route path="/login" element={<LoginUI />}></Route>
             <Route path="/register" element={<Register />}></Route>
-            <Route
-              path="*"
-              element={
-                <main style={{ padding: '1rem' }}>
-                  <p>There's nothing here!</p>
-                </main>
-              }
-            />
+            <Route path="*" element={<div className="*path"></div>} />
           </Routes>
           <Index />
         </ThemeContextProvider>

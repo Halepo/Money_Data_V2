@@ -6,9 +6,10 @@ import Profile from '../profile/profile';
 import { useContext } from 'react';
 import { UserDetailsContext } from '../../services/context/UserDetailsContext';
 import { Link } from 'react-router-dom';
+import { ICachedJWT } from '../../interface/authTypes';
 
 export default function Home() {
-  const { userDetails } = useContext(UserDetailsContext);
+  const userDetails  :React.Context<ICachedJWT> = useContext(UserDetailsContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,6 +23,7 @@ export default function Home() {
 
   return (
     <Box>
+      <div className="btn btn-primary">Button</div>
       <Typography sx={{ marginLeft: '5rem' }} variant="h6">
         Welcome to our home page - <Link to="/profile">Go to profile</Link>
       </Typography>
