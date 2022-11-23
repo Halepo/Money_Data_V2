@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './sidebar.sass'
+import './sidebar.sass';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -51,14 +51,22 @@ export function Sidebar() {
 
   const anchor: Anchor = 'left';
   return (
-    <>
-    <nav className="responsive-nav nav flex-column">
-  <a className="nav-link active" href="#">Active</a>
-  <a className="nav-link" href="#">Link</a>
-  <a className="nav-link" href="#">Link</a>
-  <a className="nav-link disabled" href="#">Disabled</a>
-</nav>
-    {/* <Box
+    <div className="col-3">
+      <nav className="responsive-nav nav flex-column">
+        <a className="nav-link active" href="#">
+          Active
+        </a>
+        <a className="nav-link" href="#">
+          Link
+        </a>
+        <a className="nav-link" href="#">
+          Link
+        </a>
+        <a className="nav-link disabled" href="#">
+          Disabled
+        </a>
+      </nav>
+      {/* <Box
       sx={{
         width: '250px',
         position: 'fixed',
@@ -138,7 +146,7 @@ export function Sidebar() {
         </Typography>
       </Box>
     </Box> */}
-    </>
+    </div>
   );
 
   // return (

@@ -38,93 +38,145 @@ export default function NavBar() {
   const { themeBackgroundColor }: any = useContext(ThemeContext);
 
   return (
-    <Box
-      sx={{
-        backgroundColor: themeBackgroundColor,
-        display: 'flex',
-        flexDirection: 'column',
-        color: 'white',
-        position: 'fixed',
-        top: 0,
-        width: '100%',
-        zIndex: '999',
-      }}
-    >
-      <Container sx={{ display: 'flex', margin: 'auto', my: 4 }}>
-        <Box
-          sx={{
-            display: 'flex',
-          }}
-        >
-          <RequestQuoteIcon fontSize="large" />
-          <Typography
-            sx={{ marginLeft: '1rem' }}
-            variant="h6"
-            component="h1"
-            gutterBottom
-          >
-            Money Manager
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            margin: 'auto',
-            marginRight: '0',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          {userDetails.fullName ? (
-            <Box sx={{ margin: 'auto', display: 'flex' }}>
-              <AccountDrawer
-                button={
-                  <Avatar sx={{ bgcolor: 'blue' }}>
-                    {userDetails.fullName[0]}
-                  </Avatar>
-                }
-                sliderItems={
-                  <>
-                    <Typography
-                      sx={{ marginRight: '1rem' }}
-                      variant="h6"
-                      component="h1"
-                    >
-                      {userDetails.fullName ? `${userDetails.fullName}` : ''}
-                    </Typography>
-                    <Button
-                      onClick={(e) => {
-                        handleLogout();
-                      }}
-                      sx={{ marginRight: '1rem' }}
-                      variant="outlined"
-                      startIcon={<LogoutIcon fontSize="inherit" />}
-                    >
-                      Logout
-                    </Button>
-                  </>
-                }
-              />
-            </Box>
-          ) : (
-            <Box sx={{ margin: 'auto', display: 'flex' }}>
-              <Link to="/login">
+    <div className="navbar col-12">
+      <div> Money Manager</div>
+      {userDetails.fullName ? (
+        <div className="navbar-content">
+          <AccountDrawer
+            button={
+              <Avatar sx={{ bgcolor: 'blue' }}>
+                {userDetails.fullName[0]}
+              </Avatar>
+            }
+            sliderItems={
+              <>
+                <Typography
+                  sx={{ marginRight: '1rem' }}
+                  variant="h6"
+                  component="h1"
+                >
+                  {userDetails.fullName ? `${userDetails.fullName}` : ''}
+                </Typography>
                 <Button
+                  onClick={(e) => {
+                    handleLogout();
+                  }}
                   sx={{ marginRight: '1rem' }}
                   variant="outlined"
-                  startIcon={<LoginIcon />}
+                  startIcon={<LogoutIcon fontSize="inherit" />}
                 >
-                  login
+                  Logout
                 </Button>
-              </Link>
-              <Link to="/register">
-                <Button variant="outlined" startIcon={<HowToRegIcon />}>
-                  Register
-                </Button>
-              </Link>
-            </Box>
-          )}
+              </>
+            }
+          />
+        </div>
+      ) : (
+        <Box sx={{ margin: 'auto', display: 'flex' }}>
+          <Link to="/login">
+            <Button
+              sx={{ marginRight: '1rem' }}
+              variant="outlined"
+              startIcon={<LoginIcon />}
+            >
+              login
+            </Button>
+          </Link>
+          <Link to="/register">
+            <Button variant="outlined" startIcon={<HowToRegIcon />}>
+              Register
+            </Button>
+          </Link>
         </Box>
-      </Container>
-    </Box>
+      )}
+    </div>
+    // <Box
+    //   sx={{
+    //     backgroundColor: themeBackgroundColor,
+    //     display: 'flex',
+    //     flexDirection: 'column',
+    //     color: 'white',
+    //     position: 'fixed',
+    //     top: 0,
+    //     width: '100%',
+    //     zIndex: '999',
+    //   }}
+    // >
+    //   <Container sx={{ display: 'flex', margin: 'auto', my: 4 }}>
+    //     <Box
+    //       sx={{
+    //         display: 'flex',
+    //       }}
+    //     >
+    //       <RequestQuoteIcon fontSize="large" />
+    //       <Typography
+    //         sx={{ marginLeft: '1rem' }}
+    //         variant="h6"
+    //         component="h1"
+    //         gutterBottom
+    //       >
+    //         Money Manager
+    //       </Typography>
+    //     </Box>
+    //     <Box
+    //       sx={{
+    //         margin: 'auto',
+    //         marginRight: '0',
+    //         display: 'flex',
+    //         flexDirection: 'column',
+    //       }}
+    //     >
+    //       {userDetails.fullName ? (
+    //         <Box sx={{ margin: 'auto', display: 'flex' }}>
+    //           <AccountDrawer
+    //             button={
+    //               <Avatar sx={{ bgcolor: 'blue' }}>
+    //                 {userDetails.fullName[0]}
+    //               </Avatar>
+    //             }
+    //             sliderItems={
+    //               <>
+    //                 <Typography
+    //                   sx={{ marginRight: '1rem' }}
+    //                   variant="h6"
+    //                   component="h1"
+    //                 >
+    //                   {userDetails.fullName ? `${userDetails.fullName}` : ''}
+    //                 </Typography>
+    //                 <Button
+    //                   onClick={(e) => {
+    //                     handleLogout();
+    //                   }}
+    //                   sx={{ marginRight: '1rem' }}
+    //                   variant="outlined"
+    //                   startIcon={<LogoutIcon fontSize="inherit" />}
+    //                 >
+    //                   Logout
+    //                 </Button>
+    //               </>
+    //             }
+    //           />
+    //         </Box>
+    //       ) : (
+    //         <Box sx={{ margin: 'auto', display: 'flex' }}>
+    //           <Link to="/login">
+    //             <Button
+    //               sx={{ marginRight: '1rem' }}
+    //               variant="outlined"
+    //               startIcon={<LoginIcon />}
+    //             >
+    //               login
+    //             </Button>
+    //           </Link>
+    //           <Link to="/register">
+    //             <Button variant="outlined" startIcon={<HowToRegIcon />}>
+    //               Register
+    //             </Button>
+    //           </Link>
+    //         </Box>
+    //       )}
+    //     </Box>
+    //   </Container>
+    // </Box>
   );
 }

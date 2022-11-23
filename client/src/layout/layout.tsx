@@ -6,13 +6,16 @@ import { Sidebar } from './sidebar';
 
 export default function Layout(props: any) {
   return (
-    <>
-      <NavBar />
+    <div className="content-wrapper">
+      <div className="row"></div>
+      <div className="row">
+        <Sidebar />
 
-      <Sidebar />
-      <div className="main-container container">
-        <div>{props.title}</div>
-        {props.children}
+        <div className="col-9">
+          <NavBar />
+          <div className="main-container container">{props.title}</div>
+          {props.children}
+        </div>
       </div>
 
       <Footer />
@@ -26,6 +29,6 @@ export default function Layout(props: any) {
           marginBottom: '2rem',
         }}
       /> */}
-    </>
+    </div>
   );
 }
