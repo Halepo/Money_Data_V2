@@ -13,6 +13,7 @@ import RedirectTo from './components/RedirectHome';
 import LoginUI from './pages/auth/login/login';
 import Register from './pages/auth/register/register';
 
+//comment
 export default function App() {
   useEffect(() => {
     checkCachedJwtStatus();
