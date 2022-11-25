@@ -4,12 +4,11 @@ import { logger } from '../classes/consoleLoggerClass';
 import { IExpense } from 'src/interfaces/expense';
 
 export class ExpenseRepository {
-    public async registerExpense(newAccount: IExpense): Promise<any> {
+    public async registerExpense(newExpense: IExpense): Promise<any> {
         logger.infoData("Registering expense..");
         let result = await db.collection('Expense').insertOne(
-            newAccount
+            newExpense
             , { upsert: true, returnOriginal: false });
-
         logger.infoData(result, 'Registered Expense')
         if (result.ops[0]) return result.ops[0]
     };
