@@ -1,17 +1,18 @@
 {
-    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
-    "editor.formatOnPaste": false, // required
-    "editor.formatOnType": false, // required
-    "editor.formatOnSave": true, // optional
-    "editor.formatOnSaveMode": "file", // required to format on save
-    "files.autoSave": "onFocusChange",
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
-    },
-    "[sass]": {
-        "editor.defaultFormatter": "syler.sass-indented"
-    },
-    "[typescript]": {
-        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
-    } // optional but recommended
-  }
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": false, // required
+  "editor.formatOnType": false, // required
+  "editor.formatOnSave": true, // optional
+  "editor.formatOnSaveMode": "file", // required to format on save
+  "files.autoSave": "onFocusChange",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[sass]": {
+    "editor.defaultFormatter": "syler.sass-indented"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "githubPullRequests.ignoredPullRequestBranches": ["master"] // optional but recommended
+}
