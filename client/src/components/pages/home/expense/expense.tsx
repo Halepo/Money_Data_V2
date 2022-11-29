@@ -52,14 +52,15 @@ export default function Expenses() {
           return (
             <div key={expense._id}>
               <div>{moment(expense.created).format('LLLL')}</div>
-              <h3>{expense.amount} Birr</h3>
-              <div>
-                {expense.reason}{' '}
+              <div style={{ display: 'flex' }}>
+                <h3
+                  style={{ marginRight: '1rem' }}
+                >{`${expense.amount} Birr `}</h3>
+                <span style={{ marginRight: '1rem' }}>{expense.reason}</span>
                 <small>
                   <i>{expense.description}</i>
-                </small>{' '}
+                </small>
               </div>
-
               <hr />
             </div>
           );
