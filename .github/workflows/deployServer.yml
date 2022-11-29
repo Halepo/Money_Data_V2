@@ -24,18 +24,24 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: 🔨 Build
+      - name: 🔨 Build server
         run: |
           cd server
           npm install
           npx webpack
-             
+
+      - name: 🔨 Build Client
+        run: |
+          cd client
+          npm install
+          npm run build
+
       - name: 🚚 List output files
         run: |
           git reset --hard
-          cd server
+          cd server/build
           ls
-          
+
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.3.2
         with:

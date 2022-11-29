@@ -14,5 +14,6 @@
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "githubPullRequests.ignoredPullRequestBranches": ["master"] // optional but recommended
+  "githubPullRequests.ignoredPullRequestBranches": ["master"],
+  "liveServer.settings.port": 5502 // optional but recommended
 }
