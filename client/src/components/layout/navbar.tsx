@@ -1,6 +1,6 @@
 import './navbar.sass';
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 import jwtDecode from 'jwt-decode';
 import { Avatar } from '@mui/material';
 
@@ -24,16 +24,15 @@ export default function NavBar({ sidebarWidth }: { sidebarWidth: number }) {
   const [registerExpenseModalOpen, setRegisterExpenseModalOpen] =
     useState(false);
 
-  const { userDetails } = useAuth();
+  const { userDetails, setUserDetails } = useAuth();
   const decodedJWT: IDecodedJWT = jwtDecode(userDetails.data.accessToken);
   const name = decodedJWT.userName;
 
   console.log('NavBar Rendered!');
 
-  const navigate = useNavigate();
   const handleLogout = () => {
     AuthService.destroyCachedJwt();
-    navigate('/login');
+    setUserDetails({});
   };
 
   return (

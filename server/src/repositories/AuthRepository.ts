@@ -37,18 +37,41 @@ export class AuthRepository {
           expiresIn: '5h',
         }
       );
-      const refreshToken = jwt.sign(
+      const newRefreshToken = jwt.sign(
         { user_id: user._id },
         process.env.TOKEN_KEY,
         {
           expiresIn: '24h',
         }
       );
-
-      let resUser = { user, token, refreshToken };
+      let resUser = { user, token, newRefreshToken };
       return resUser;
     }
   }
+
+  public async updateUserRefreshTokenArray(
+    refreshTokenArray: string[],
+    userId
+  ): Promise<any> {
+    let User = await db.collection('User').findOneAndUpdate(
+      {
+        _id: new ObjectId(userId),
+      },
+      {
+        $set: {
+          refreshToken: refreshTokenArray,
+        },
+      },
+      { upsert: true, returnDocument: 'after' }
+    );
+    console.log(User.value);
+    return User.value;
+  }
+
+  public async refresh(token): Promise<any> {}
+
+  public async logout(): Promise<any> {}
+
   public async register(
     name: string,
     email: string,
@@ -121,6 +144,19 @@ export class AuthRepository {
   public async findUserById(id: ObjectId): Promise<any> {
     logger.infoData(`Finding user by id [${id}]...`);
     let user = await db.collection('User').findOne({ _id: id });
+    logger.infoData(user, 'user');
+    if (user) return user;
+  }
+
+  public async findUserByRefreshToken(refreshToken: {
+    refreshToken: string;
+  }): Promise<any> {
+    logger.infoData(
+      `Finding user by refreshToken [${JSON.stringify(refreshToken)}]...`
+    );
+    let user = await db
+      .collection('User')
+      .findOne({ refreshToken: refreshToken.refreshToken });
     logger.infoData(user, 'user');
     if (user) return user;
   }

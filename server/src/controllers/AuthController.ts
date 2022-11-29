@@ -4,12 +4,129 @@ import { logger } from '../classes/consoleLoggerClass';
 import { ErrorCode } from '../shared/error-codes';
 import { Service } from 'src/services';
 import { loginSchema, registerSchema } from '../routes/auth/schema';
-import { Request, Response } from 'express';
+import e, { Request, Response } from 'express';
 
 export class AuthController {
   public constructor(private readonly _service: Service) {}
   //login
   public login: any = async (req: Request, res: Response): Promise<void> => {
+    requestInterceptor(req.body);
+    try {
+      if (req.body || req.params) {
+        //get cookies
+        const cookies = req.signedCookies;
+        console.log(`cookie available at login: ${JSON.stringify(cookies)}`);
+        let validationBody = {
+          email: req.body.email,
+          password: req.body.password,
+        };
+        const result = loginSchema.validate(validationBody);
+        logger.logData('validation result', result);
+        if (!result.error) {
+          logger.infoData(result.value);
+          if (Object.keys(result.value).length === 0) {
+            return ResponseBuilder.badRequest(
+              ErrorCode.Invalid,
+              'request body is required and must be not empty',
+              res
+            );
+          }
+          let email = result.value.email;
+          let password = result.value.password;
+
+          let loggedInUser = await this._service.loginUser(email, password);
+
+          logger.infoData(loggedInUser, 'loggedInUser');
+
+          if (loggedInUser) {
+            let foundUser = loggedInUser.user;
+            let { newRefreshToken } = loggedInUser;
+
+            // if no refresh token in db and Check if we have same refresh token in DB
+            let newRefreshTokenArray: string[] = !foundUser.refreshToken
+              ? []
+              : !cookies?.jwt
+              ? foundUser.refreshToken
+              : foundUser.refreshToken.filter((rt) => rt !== cookies.jwt);
+
+            if (cookies?.jwt) {
+              /*
+            Scenario added here:
+                1) User logs in but never uses RT and does not logout
+                2) RT is stolen
+                3) If 1 & 2, reuse detection is needed to clear all RTs when user logs in
+            */
+              const refreshToken = cookies.jwt;
+              const foundToken = await this._service.findUserByRefreshToken({
+                refreshToken,
+              });
+
+              // Detected refresh token reuse!
+              if (!foundToken) {
+                console.log('attempted refresh token reuse at login!');
+                // clear out ALL previous refresh tokens
+                newRefreshTokenArray = [];
+              }
+
+              res.clearCookie('jwt', {
+                httpOnly: true,
+                sameSite: 'none',
+                secure: true,
+              });
+            }
+
+            const result = await this._service.updateUserRefreshTokenArray(
+              [...newRefreshTokenArray, newRefreshToken],
+              foundUser._id
+            );
+            console.log(result);
+
+            // Creates Secure Cookie with refresh token
+            let cookieOptions = {
+              maxAge: 1000 * 60 * 15, // would expire after 15 minutes
+              httpOnly: true, // The cookie only accessible by the web server
+              signed: true, // Indicates if the cookie should be signed
+              secure: true,
+              sameSite: 'none' as const,
+            };
+
+            res.cookie('jwt', newRefreshToken, cookieOptions);
+            const { token } = loggedInUser;
+            return ResponseBuilder.ok(
+              { message: 'Successfully logged in', data: { token } },
+              res
+            );
+          } else {
+            return ResponseBuilder.notFound(
+              '404',
+              'Credentials do not match! Please check your email or password!',
+              res
+            );
+          }
+        } else {
+          logger.infoData('error happened');
+          return ResponseBuilder.badRequest(
+            ErrorCode.Invalid,
+            result.error.details[0].message,
+            res
+          );
+        }
+      } else {
+        logger.errorData('body parameters not found');
+        return ResponseBuilder.badRequest(
+          ErrorCode.Invalid,
+          'body parameters not found',
+          res
+        );
+      }
+    } catch (error) {
+      logger.errorData(error);
+      return ResponseBuilder.internalServerError(error, res);
+    }
+  };
+
+  //refresh
+  public refresh: any = async (req: Request, res: Response): Promise<void> => {
     requestInterceptor(req.body);
     try {
       if (req.body || req.params) {
