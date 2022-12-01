@@ -1,18 +1,11 @@
-import React, { createContext, useEffect, useState } from 'react';
-import { ICachedJWT, ICachedJWTEmpty } from '../helpers/interface/authTypes';
-import AuthService from '../helpers/services/AuthService';
+import { createContext, useState } from 'react';
 
 export const UserDetailsContext: any = createContext({});
 
-const UserDetailContextProvider = (props: any) => {
-  let fetchedUserDetails: ICachedJWT | ICachedJWTEmpty =
-    AuthService.getCachedJwt();
-  const [userDetails, setUserDetails] = useState({
-    isLoggedIn: fetchedUserDetails.accessToken ? true : false,
-    data: fetchedUserDetails.accessToken ? fetchedUserDetails : {},
-  });
+const AuthProvider = (props: any) => {
+  const [auth, setAuth] = useState({});
 
-  const value = { userDetails, setUserDetails };
+  const value = { auth, setAuth };
   return (
     <UserDetailsContext.Provider value={value}>
       {props.children}
@@ -20,4 +13,4 @@ const UserDetailContextProvider = (props: any) => {
   );
 };
 
-export default UserDetailContextProvider;
+export default AuthProvider;
