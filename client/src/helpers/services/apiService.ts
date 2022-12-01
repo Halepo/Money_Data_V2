@@ -1,13 +1,8 @@
-import axios from 'axios';
+import axios from './axios';
 import jwtDecode from 'jwt-decode';
-import useAuth from '../hooks/useAuth';
-import {
-  ICachedJWT,
-  ICachedJWTEmpty,
-  IDecodedJWT,
-} from '../interface/authTypes';
+import { IDecodedJWT } from '../interface/authTypes';
 import AuthService from './AuthService';
-
+import useAuth from '../hooks/useAuth';
 const BASE_URL = 'http://localhost:4001/api';
 
 type IRequest = {
@@ -30,14 +25,11 @@ export const MakeRequest = async (requestParams: {
   data: Object | null;
   needAuthorization: boolean;
 }) => {
-  const userDetail: any | {} = AuthService.getCachedJwt();
-
-  if (Object.keys(userDetail).length > 0) {
-    const decodedJWT: IDecodedJWT = jwtDecode(userDetail.accessToken);
+  const auth = { token: '000' };
+  if (Object.keys(auth.token).length > 0) {
+    const decodedJWT: IDecodedJWT = jwtDecode(auth.token);
     let userId: any = decodedJWT?.user_id;
-    console.log(
-      `Fetching for userId [${userId}] from [${BASE_URL}/${requestParams.url}]`
-    );
+    console.log(`Fetching for userId [${userId}] from [/${requestParams.url}]`);
     const headers: THeaders = AuthService.returnAuthHeader();
     console.log('header', headers);
     let requestHeaders: THeaders | {};

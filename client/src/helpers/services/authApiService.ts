@@ -1,17 +1,26 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
+import axios from './axios';
 
-const API_URL = 'http://localhost:4001/';
-const LOGIN_URL = API_URL + 'api/auth/login';
-const REFRESH_URL = API_URL + '/users/refreshToken';
-const REGISTER_URL = API_URL + 'api/auth/register';
+const LOGIN_URL = '/auth/login';
+const REFRESH_URL = '/auth/refresh';
+const REGISTER_URL = '/auth/register';
 
 const BearerHeader = (token: string) => {
   let config = {
     headers: {
+      ...headerConfig.headers,
       Authorization: 'Bearer ' + token,
     },
   };
   return config;
+};
+
+const headerConfig = {
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
+  withCredentials: true,
 };
 
 //This file is all about api calling functions!
@@ -22,24 +31,16 @@ export async function login(username: string, password: string) {
     email: username,
   };
 
-  let config = {
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    withCredentials: true,
-  };
-
   return await axios
-    .post(LOGIN_URL, bodyData, config)
+    .post(LOGIN_URL, bodyData, headerConfig)
     .then((response: AxiosResponse<any, any>) => {
       return response;
     });
 }
 
-export async function refreshToken(token: string) {
+export async function refresh() {
   return await axios
-    .post(REFRESH_URL, BearerHeader(token))
+    .get(REFRESH_URL, headerConfig)
     .then((response: AxiosResponse<any, any>) => {
       return response;
     });

@@ -1,4 +1,4 @@
-import { refreshToken } from './authApiService';
+import { refresh } from './authApiService';
 import jwtDecode, { JwtPayload } from 'jwt-decode';
 
 import { iAuthService } from '../interface/authService';
@@ -46,10 +46,9 @@ export class AuthService implements iAuthService {
 
   refreshToken() {
     let jwt = this.getCachedJwt();
-    let refreshTokenToken = jwt.refreshToken;
     this.destroyCachedJwt();
     try {
-      jwt.accessToken = refreshToken(refreshTokenToken);
+      jwt.accessToken = refresh();
       this.saveCachedJwt(jwt);
       return jwt;
     } catch (error) {
