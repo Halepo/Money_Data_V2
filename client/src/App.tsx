@@ -7,6 +7,7 @@ import Home from './components/pages/home/home';
 import Logout from './components/pages/auth/logout';
 import Unauthorized from './components/pages/auth/unauthorized';
 import Pages from './components/pages/pages';
+import PersistLogin from './components/shared/PersistLogin';
 
 export default function App() {
   return (
@@ -18,9 +19,11 @@ export default function App() {
       <Route path="logout" element={<Logout />} />
 
       {/* pages */}
-      <Route element={<RequireAuth />}>
-        <Route path="/*" element={<Pages />} />
-        <Route path="unauthorized" element={<Unauthorized />} />
+      <Route element={<PersistLogin />}>
+        <Route element={<RequireAuth />}>
+          <Route path="/*" element={<Pages />} />
+          <Route path="unauthorized" element={<Unauthorized />} />
+        </Route>
       </Route>
     </Routes>
   );

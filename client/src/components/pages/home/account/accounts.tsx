@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './accounts.sass';
-import { MakeRequest } from '../../../../helpers/services/apiService';
+import useAxiosPrivate from '../../../../helpers/hooks/useAxiosPrivate';
 import { IAccount } from '../../../../helpers/interface/account';
 
 import AccountCard from './accountCard';
@@ -10,34 +10,28 @@ import useAuth from '../../../../helpers/hooks/useAuth';
 import { decodeJWT } from '../../../../helpers/services/utils';
 import CardContainer from '../../../shared/cardContainer';
 export default function Accounts() {
+  const axiosPrivate = useAxiosPrivate();
+  const { auth }: any = useAuth();
+  const userId = decodeJWT(auth.token).user_id;
   //register account modal
   const [registerAccountModalOpen, setRegisterAccountModalOpen] =
     useState(false);
 
-  const { userDetails }: any = useAuth();
   const [accounts, setAccounts] = useState([]);
-
-  const fetchAccount = () => {
-    const userId = decodeJWT(userDetails.data.accessToken).user_id;
-    console.log(`Fetching accounts for userId [${userId}]`);
-    const account = async (userId: string) => {
-      const response: any = await MakeRequest({
-        url: `account?user_id=${userId}`,
-        method: 'get',
-        data: null,
-        needAuthorization: true,
-      });
-      console.log(response, 'res');
-      if (response.length > 0) setAccounts(response);
-    };
-    account(userId).catch(console.error);
-  };
 
   //update account list on account modal change
   useEffect(() => {
-    return () => {
-      fetchAccount();
+    const userId = decodeJWT(auth.token).user_id;
+    console.log(`Fetching account for userId [${userId}]`);
+    const account = async (userId: string) => {
+      const response: any = await axiosPrivate.get(`account?user_id=${userId}`);
+      console.log('Response', response.data.data);
+      if (response.data.data.length > 0) {
+        setAccounts(response.data.data);
+        return response;
+      }
     };
+    account(userId).catch(console.error);
   }, [registerAccountModalOpen]);
 
   const HeadContent = () => {
@@ -77,7 +71,7 @@ export default function Accounts() {
         <RegisterAccountModal
           open={registerAccountModalOpen}
           setOpen={setRegisterAccountModalOpen}
-          userId={userDetails.data.userId}
+          userId={userId}
         />
       </>
     );

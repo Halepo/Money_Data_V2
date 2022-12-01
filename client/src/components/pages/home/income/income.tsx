@@ -6,28 +6,25 @@ import { MakeRequest } from '../../../../helpers/services/apiService';
 import useAuth from '../../../../helpers/hooks/useAuth';
 import { decodeJWT } from '../../../../helpers/services/utils';
 import CardContainer from '../../../shared/cardContainer';
+import useAxiosPrivate from '../../../../helpers/hooks/useAxiosPrivate';
 export default function Incomes() {
-  const { userDetails }: any = useAuth();
+  const { auth }: any = useAuth();
   const [incomes, setIncomes] = useState([]);
 
-  const fetchIncomes = () => {
-    const userId = decodeJWT(userDetails.data.accessToken).user_id;
-    console.log(`Fetching incomes for userId [${userId}]`);
-    const account = async (userId: string) => {
-      const response: any = await MakeRequest({
-        url: `income?user_id=${userId}`,
-        method: 'get',
-        data: null,
-        needAuthorization: true,
-      });
-      console.log(response, 'res');
-      if (response.length > 0) setIncomes(response);
-    };
-    account(userId).catch(console.error);
-  };
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
-    fetchIncomes();
+    const userId = decodeJWT(auth.token).user_id;
+    console.log(`Fetching income for userId [${userId}]`);
+    const income = async (userId: string) => {
+      const response: any = await axiosPrivate.get(`income?user_id=${userId}`);
+      console.log('Response', response.data.data);
+      if (response.data.data.length > 0) {
+        setIncomes(response.data.data);
+        return response;
+      }
+    };
+    income(userId).catch(console.error);
   }, []);
 
   //update account list on account modal change

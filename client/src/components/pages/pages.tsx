@@ -4,7 +4,10 @@ import Layout from '../layout/layout';
 import NotFound from '../shared/404';
 import Home from './home/home';
 
+import useRefreshToken from '../../helpers/hooks/useRefreshToken';
+
 export default function Pages() {
+  const refresh = useRefreshToken();
   console.log('pages rendered');
   return (
     <Routes>
@@ -13,7 +16,11 @@ export default function Pages() {
         <Route path="/" element={<Home />}></Route>
         <Route
           path="transactions"
-          element={<div>Welcome to Transactions: Coming soon</div>}
+          element={
+            <div>
+              <button onClick={() => refresh()}>Refresh</button>
+            </div>
+          }
         ></Route>
         <Route
           path="accounts"

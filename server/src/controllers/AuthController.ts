@@ -5,6 +5,7 @@ import { ErrorCode } from '../shared/error-codes';
 import { Service } from 'src/services';
 import { loginSchema, registerSchema } from '../routes/auth/schema';
 import e, { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 
 export class AuthController {
   public constructor(private readonly _service: Service) {}
@@ -63,7 +64,7 @@ export class AuthController {
 
               // Detected refresh token reuse!
               if (!foundToken) {
-                console.log('attempted refresh token reuse at login!');
+                console.log('Attempted refresh token reuse at login!');
                 // clear out ALL previous refresh tokens
                 newRefreshTokenArray = [];
               }
@@ -129,63 +130,82 @@ export class AuthController {
   public refresh: any = async (req: Request, res: Response): Promise<void> => {
     requestInterceptor(req.body);
     try {
-      if (req.body || req.params) {
-        let validationBody = {
-          email: req.body.email,
-          password: req.body.password,
-        };
-        const result = loginSchema.validate(validationBody);
-        logger.logData('validation result', result);
-        if (!result.error) {
-          logger.infoData(result.value);
-          if (Object.keys(result.value).length === 0) {
-            return ResponseBuilder.badRequest(
-              ErrorCode.Invalid,
-              'request body is required and must be not empty',
-              res
-            );
-          }
-          let email = result.value.email;
-          let password = result.value.password;
-
-          let loggedInUser = await this._service.loginUser(email, password);
-
-          logger.infoData(loggedInUser, 'loggedInUser');
-
-          if (loggedInUser) {
-            //add cookie
-            let options = {
+      logger.logData('Refreshing token...');
+      const cookie = req.signedCookies;
+      logger.infoData(cookie);
+      res.clearCookie('jwt', {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        signed: true,
+      });
+      if (cookie.jwt) {
+        const oldRefreshToken = cookie.jwt;
+        let foundUser = await this._service.findUserByRefreshToken(
+          oldRefreshToken
+        );
+        if (!foundUser) {
+          jwt.verify(
+            oldRefreshToken,
+            process.env.TOKEN_KEY,
+            async (err, decoded) => {
+              if (err)
+                return ResponseBuilder.forbidden(
+                  ErrorCode.Forbidden,
+                  'Forbidden request.',
+                  res
+                ); //Forbidden
+              console.log('attempted refresh token reuse!');
+              const hackedUser =
+                await this._service.findExistingUserByEmailOrName(
+                  decoded.userName,
+                  ''
+                );
+              if (hackedUser) {
+                console.log('hacked user', hackedUser);
+                const result = await this._service.updateUserRefreshTokenArray(
+                  [],
+                  hackedUser._id
+                );
+                console.log(result);
+              }
+            }
+          );
+          return ResponseBuilder.forbidden(
+            ErrorCode.Forbidden,
+            'Forbidden request.',
+            res
+          ); //Forbidden;
+        } else {
+          let updatedUser = await this._service.refreshToken(cookie.jwt);
+          if (updatedUser) {
+            const { token, newRefreshToken } = updatedUser;
+            // Creates Secure Cookie with refresh token
+            let cookieOptions = {
               maxAge: 1000 * 60 * 15, // would expire after 15 minutes
               httpOnly: true, // The cookie only accessible by the web server
               signed: true, // Indicates if the cookie should be signed
+              secure: true,
+              sameSite: 'none' as const,
             };
 
-            res.cookie('Token', loggedInUser.refreshToken, options);
-            const { user, token } = loggedInUser;
+            res.cookie('jwt', newRefreshToken, cookieOptions);
             return ResponseBuilder.ok(
-              { message: 'Successfully logged in', data: { user, token } },
+              { message: 'Successfully refreshed', data: { token } },
               res
             );
           } else {
-            return ResponseBuilder.notFound(
-              '404',
-              'Credentials do not match! Please check your email or password!',
+            return ResponseBuilder.forbidden(
+              ErrorCode.Forbidden,
+              'Forbidden, No user found with token: ',
               res
             );
           }
-        } else {
-          logger.infoData('error happened');
-          return ResponseBuilder.badRequest(
-            ErrorCode.Invalid,
-            result.error.details[0].message,
-            res
-          );
         }
       } else {
-        logger.errorData('body parameters not found');
         return ResponseBuilder.badRequest(
           ErrorCode.Invalid,
-          'body parameters not found',
+          'No cookies in request.',
           res
         );
       }
@@ -194,6 +214,37 @@ export class AuthController {
       return ResponseBuilder.internalServerError(error, res);
     }
   };
+
+  //register
+  public logout: any = async (req: Request, res: Response): Promise<void> => {
+    requestInterceptor(req.body);
+    try {
+      const cookie = req.signedCookies;
+
+      logger.logData('logging out');
+      logger.infoData(cookie);
+      if (cookie.jwt) {
+        await this._service.logout(cookie.jwt);
+        res.clearCookie('jwt', {
+          httpOnly: true,
+          sameSite: 'none',
+          secure: true,
+          signed: true,
+        });
+        return ResponseBuilder.ok('Logged Out Successfully', res);
+      } else {
+        return ResponseBuilder.badRequest(
+          ErrorCode.Invalid,
+          'Empty or no cookie received!',
+          res
+        );
+      }
+    } catch (error) {
+      logger.errorData(error);
+      return ResponseBuilder.internalServerError(error, res);
+    }
+  };
+
   //register
   public register: any = async (req: Request, res: Response): Promise<void> => {
     requestInterceptor(req.body);

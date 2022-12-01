@@ -51,6 +51,24 @@ export class Service {
       logger.errorData('error data:', error);
     }
   }
+  public async refreshToken(oldRefreshToken: string) {
+    try {
+      const newRefreshToken = await this.AuthRepository.refreshToken(
+        oldRefreshToken
+      );
+      if (newRefreshToken) return newRefreshToken;
+    } catch (error) {
+      logger.errorData('error data:', error);
+    }
+  }
+  public async logout(refreshToken: string) {
+    try {
+      const newRefreshToken = await this.AuthRepository.logout(refreshToken);
+      if (newRefreshToken) return newRefreshToken;
+    } catch (error) {
+      logger.errorData('error data:', error);
+    }
+  }
   public async findExistingUserByEmailOrName(name: string, email: string) {
     try {
       const existingUser = this.AuthRepository.findExistingUserByEmailOrName(

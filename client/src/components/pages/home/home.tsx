@@ -6,7 +6,6 @@ import Incomes from '../home/income/income';
 
 export default function Home(props: any) {
   console.log('Home rendered!');
-
   return (
     <div className="home-wrapper">
       <Accounts />

@@ -1,5 +1,4 @@
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
+import './accountCard.sass';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
@@ -25,31 +24,26 @@ export default function AccountCard({
   created,
 }: IAccount) {
   return (
-    <Card
-      sx={{
-        display: 'inline-block',
-        minHeight: '100%',
-        margin: '.5rem',
-      }}
-    >
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Last Transaction : Income [0 ETB]
-        </Typography>
-        <Typography variant="h5" component="div">
-          {accountName}
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          Bank: {bank}
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          Account Number: {accountNumber}
-        </Typography>
-        <Typography variant="body2">Balance : {accountBalance} Birr</Typography>
-      </CardContent>
-      <CardActions sx={{ bottom: 0 }}>
-        <Button size="small">See Transactions</Button>
-      </CardActions>
-    </Card>
+    <div className="account-card-wrapper">
+      <div>
+        <h5>{accountName}</h5>
+        <p className="mb-2">Bank: {bank}</p>
+        <p className="mb-2">
+          <small>
+            <i>Account Number: </i>
+          </small>
+          {accountNumber}
+        </p>
+        <p>
+          <small>
+            <i>Balance : </i>
+          </small>
+          {accountBalance} Birr
+        </p>
+      </div>
+      <div>
+        <button className="btn btn-outline-secondary">See Transactions</button>
+      </div>
+    </div>
   );
 }

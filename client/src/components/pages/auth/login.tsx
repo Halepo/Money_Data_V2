@@ -1,23 +1,16 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import './login.sass';
 
-import AuthService from '../../../helpers/services/AuthService';
 import { login } from '../../../helpers/services/authApiService';
-
 import useAuth from '../../../helpers/hooks/useAuth';
-
-import {
-  ICachedJWT,
-  ICachedJWTEmpty,
-} from '../../../helpers/interface/authTypes';
 import RedirectTo from '../../shared/RedirectTo';
 import { FormError } from '../../shared/FormError';
 
 export default function Login(props: any) {
   console.log('Login rendered!');
-  const { userDetails, setUserDetails }: any = useAuth();
-  console.log('user Details from login', userDetails);
+  const { auth, setAuth }: any = useAuth();
+  console.log('user Details from login', auth);
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -38,11 +31,7 @@ export default function Login(props: any) {
       console.log('response', response);
       if (response.data.data.token) {
         console.log('successfully logged in!');
-        const userInfo: ICachedJWT | ICachedJWTEmpty =
-          AuthService.returnAccessTokenAsCachedJwt(response.data);
-        console.log(userInfo);
-        AuthService.saveCachedJwt(userInfo);
-        setUserDetails({ isLoggedIn: true, data: userInfo });
+        setAuth({ token: response.data.data.token });
         setError({});
         navigate(from, { replace: true });
       }
@@ -57,7 +46,7 @@ export default function Login(props: any) {
     }
   }
 
-  return userDetails.isLoggedIn ? (
+  return auth.token ? (
     RedirectTo('')
   ) : (
     <div className="login-wrapper">

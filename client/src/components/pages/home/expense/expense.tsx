@@ -3,34 +3,28 @@ import './expenses.sass';
 import moment from 'moment';
 import { MakeRequest } from '../../../../helpers/services/apiService';
 
+import useAxiosPrivate from '../../../../helpers/hooks/useAxiosPrivate';
 import useAuth from '../../../../helpers/hooks/useAuth';
 import { decodeJWT } from '../../../../helpers/services/utils';
 import CardContainer from '../../../shared/cardContainer';
 export default function Expenses() {
-  const { userDetails }: any = useAuth();
+  const { auth }: any = useAuth();
   const [expenses, setExpenses] = useState([]);
-
-  const fetchAccount = () => {
-    const userId = decodeJWT(userDetails.data.accessToken).user_id;
-    console.log(`Fetching expenses for userId [${userId}]`);
-    const account = async (userId: string) => {
-      const response: any = await MakeRequest({
-        url: `expense?user_id=${userId}`,
-        method: 'get',
-        data: null,
-        needAuthorization: true,
-      });
-      console.log(response, 'res');
-      if (response.length > 0) setExpenses(response);
-    };
-    account(userId).catch(console.error);
-  };
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
-    fetchAccount();
+    const userId = decodeJWT(auth.token).user_id;
+    console.log(`Fetching expense for userId [${userId}]`);
+    const expense = async (userId: string) => {
+      const response: any = await axiosPrivate.get(`expense?user_id=${userId}`);
+      console.log('Response', response.data.data);
+      if (response.data.data.length > 0) {
+        setExpenses(response.data.data);
+        return response;
+      }
+    };
+    expense(userId).catch(console.error);
   }, []);
-
-  //update account list on account modal change
 
   const HeadContent = () => {
     return (

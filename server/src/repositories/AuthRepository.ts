@@ -68,9 +68,72 @@ export class AuthRepository {
     return User.value;
   }
 
-  public async refresh(token): Promise<any> {}
+  public async refreshToken(oldRefreshToken: string): Promise<any> {
+    console.log('oldRefreshToken', oldRefreshToken);
+    let User = await db
+      .collection('User')
+      .findOne({ refreshToken: oldRefreshToken });
+    console.log('Found user with this refresh token: ', User);
 
-  public async logout(): Promise<any> {}
+    const { user_id } = jwt.decode(oldRefreshToken);
+
+    if (User) {
+      const { name, role, email } = User;
+      const filteredRefreshToken = User.refreshToken
+        ? User.refreshToken.filter((token) => token != oldRefreshToken)
+        : [];
+      const newRefreshToken = jwt.sign(
+        { user_id: user_id },
+        process.env.TOKEN_KEY,
+        {
+          expiresIn: '24h',
+        }
+      );
+      filteredRefreshToken.push(newRefreshToken);
+      let updatedUser = await db.collection('User').findOneAndUpdate(
+        { refreshToken: oldRefreshToken },
+        {
+          $set: {
+            refreshToken: filteredRefreshToken,
+          },
+        },
+        { upsert: true, returnDocument: 'after' }
+      );
+      if (updatedUser.value) {
+        console.log('Updated User', updatedUser.value);
+        // Create tokens
+        const token = jwt.sign(
+          { user_id: user_id, userName: name, role: role, email: email },
+          process.env.TOKEN_KEY,
+          {
+            expiresIn: '5h',
+          }
+        );
+        let resUser = { user: updatedUser.value, token, newRefreshToken };
+        return resUser;
+      }
+    }
+  }
+
+  public async logout(refreshToken: string): Promise<any> {
+    let User = db.collection('User').findOne({ refreshToken: refreshToken });
+
+    if (User) {
+      const filteredRefreshToken = User.refreshToken.filter(
+        (token) => token === refreshToken
+      );
+      let updatedUser = db.collection('User').findOneAndUpdate(
+        { refreshToken: refreshToken },
+        {
+          $set: {
+            refreshToken: filteredRefreshToken,
+          },
+        },
+        { upsert: true, returnDocument: 'after' }
+      );
+      return updatedUser.value;
+    }
+  }
 
   public async register(
     name: string,

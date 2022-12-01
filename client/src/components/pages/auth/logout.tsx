@@ -4,10 +4,10 @@ import useAuth from '../../../helpers/hooks/useAuth';
 import AuthService from '../../../helpers/services/AuthService';
 
 export default function Logout() {
-  const { setUserDetails } = useAuth();
+  const { setAuth } = useAuth();
   useEffect(() => {
     AuthService.destroyCachedJwt();
-    setUserDetails({ isLoggedIn: false, data: {} });
+    setAuth({});
   }, []);
 
   return <Navigate to="/login" replace />;

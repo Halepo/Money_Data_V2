@@ -24,15 +24,15 @@ export default function NavBar({ sidebarWidth }: { sidebarWidth: number }) {
   const [registerExpenseModalOpen, setRegisterExpenseModalOpen] =
     useState(false);
 
-  const { userDetails, setUserDetails } = useAuth();
-  const decodedJWT: IDecodedJWT = jwtDecode(userDetails.data.accessToken);
+  const { auth, setAuth } = useAuth();
+  const decodedJWT: IDecodedJWT = jwtDecode(auth.token);
   const name = decodedJWT.userName;
 
   console.log('NavBar Rendered!');
 
   const handleLogout = () => {
     AuthService.destroyCachedJwt();
-    setUserDetails({});
+    setAuth({});
   };
 
   return (
