@@ -7,17 +7,17 @@ import useAuth from '../../../helpers/hooks/useAuth';
 import { FormError } from '../../shared/formError';
 
 export default function Login(props: any) {
-  console.log('Login rendered!');
+  console.log("Login rendered!");
   const { auth, setAuth }: any = useAuth();
-  console.log('user Details from login', auth);
+  console.log("user Details from login", auth);
   const navigate = useNavigate();
 
   const location = useLocation();
-  const from = location.state?.from?.pathname || '/';
+  const from = location.state?.from?.pathname || "/";
 
   //states for username and password
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState({});
 
   useEffect(() => {
@@ -27,9 +27,9 @@ export default function Login(props: any) {
   async function handleLogin(e: any) {
     try {
       let response: any = await login(email, password);
-      console.log('response', response);
+      console.log("response", response);
       if (response.data.data.token) {
-        console.log('successfully logged in!');
+        console.log("successfully logged in!");
         setAuth({ token: response.data.data.token });
         setError({});
         navigate(from, { replace: true });
@@ -49,13 +49,12 @@ export default function Login(props: any) {
     <Navigate to="/" state={{ from: location }} replace />
   ) : (
     <div className="login-wrapper">
-      <section className="container login-container card">
+      <section className="login-container">
         <form className="login-form-container">
-          <h3>Welcome to MoneyData</h3>
-          <p>Please login </p>
-          <hr className="login-container-divider" />
+          <h3 className="login-header">Welcome to MoneyData</h3>
+          <hr className="login-divider" />
           <div className="form-group">
-            <label htmlFor="standard-email-input">Email address</label>
+            <label htmlFor="standard-email-input">Email</label>
             <input
               tabIndex={1}
               className="login-input-field form-control"
@@ -63,18 +62,10 @@ export default function Login(props: any) {
               required
               id="standard-email-input"
               type="email"
-              aria-describedby="emailHelp"
               placeholder="Enter email"
               autoComplete="current-email"
             />
-            <small
-              id="emailHelp"
-              className="login-form-small form-text text-muted"
-            >
-              We'll never share your email with anyone else.
-            </small>
           </div>
-
           <div className="form-group">
             <label htmlFor="standard-password-input">Password</label>
             <input
@@ -83,22 +74,15 @@ export default function Login(props: any) {
               required
               id="standard-password-input"
               type="password"
-              aria-describedby="passwordHelp"
               placeholder="Enter email"
               autoComplete="current-password"
             />
-            <small
-              id="passwordHelp"
-              className="login-form-small form-text text-muted"
-            >
-              We'll never share your password with anyone else.
-            </small>
           </div>
 
           <div className="login-button-container">
             <button
               type="button"
-              className="btn btn-outline-secondary"
+              className="btn btn-dark"
               onClick={(e) => {
                 handleLogin(e);
               }}
@@ -106,7 +90,7 @@ export default function Login(props: any) {
               Login
             </button>
           </div>
-          {Object.keys(error).length > 0 ? <FormError error={error} /> : ''}
+          {Object.keys(error).length > 0 ? <FormError error={error} /> : ""}
         </form>
       </section>
     </div>

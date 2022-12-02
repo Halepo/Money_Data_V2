@@ -1,26 +1,29 @@
 .login-wrapper
     width: 100vw
     height: 100vh
-    background-color: #e6e3d0
+    background-color: #212529
 
 .login-container
     padding: 1rem
+    max-width: 40%
     position: relative
     top: 15vh
-    justify-content: center
+    margin: auto
+    background-color: white
+    border-radius: 10px
     align-items: center
     .login-form-container
         display: flex
         flex-direction: column
-        max-width: 400px
-        align-content: center
-        justify-content: center
-    label
-        margin-top: 1rem
-    .login-container-divider
-        width: 60%
+        padding: 20px
+        .form-group
+           margin-bottom: 20px
+        .login-header 
+           text-align: center
+    .login-divider
+        width: 100%
+        margin-bottom: 30px
 
 .login-button-container
-    margin-top: 1rem
     display: flex
-    margin-bottom: 1rem
+    margin: auto
