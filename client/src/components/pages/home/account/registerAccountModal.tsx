@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 
 import { MakeRequest } from '../../../../helpers/services/apiService';
-import { FormError } from '../../../shared/FormError';
+import { FormError } from '../../../shared/formError';
 
 type props = {
   open: boolean;

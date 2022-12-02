@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { Navigate, useLocation, useNavigate } from 'react-router';
 import './login.sass';
 
 import { login } from '../../../helpers/services/authApiService';
 import useAuth from '../../../helpers/hooks/useAuth';
-import RedirectTo from '../../shared/RedirectTo';
-import { FormError } from '../../shared/FormError';
+import { FormError } from '../../shared/formError';
 
 export default function Login(props: any) {
   console.log('Login rendered!');
@@ -47,7 +46,7 @@ export default function Login(props: any) {
   }
 
   return auth.token ? (
-    RedirectTo('')
+    <Navigate to="/" state={{ from: location }} replace />
   ) : (
     <div className="login-wrapper">
       <section className="container login-container card">

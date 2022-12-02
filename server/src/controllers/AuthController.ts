@@ -132,7 +132,7 @@ export class AuthController {
     try {
       logger.logData('Refreshing token...');
       const cookie = req.signedCookies;
-      logger.infoData(cookie);
+      logger.infoData('cookie', cookie);
       res.clearCookie('jwt', {
         httpOnly: true,
         sameSite: 'none',
@@ -220,9 +220,8 @@ export class AuthController {
     requestInterceptor(req.body);
     try {
       const cookie = req.signedCookies;
-
-      logger.logData('logging out');
-      logger.infoData(cookie);
+      logger.logData('logging out...');
+      logger.infoData('cookie', cookie);
       if (cookie.jwt) {
         await this._service.logout(cookie.jwt);
         res.clearCookie('jwt', {

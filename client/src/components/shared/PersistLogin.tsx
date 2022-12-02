@@ -15,7 +15,9 @@ export default function PersistLogin() {
     let ignore = false;
     const verifyRefreshToken = async () => {
       try {
-        await refresh();
+        const newAccessToken = await refresh();
+        console.log('New Access Token', newAccessToken);
+        setAuth({ token: newAccessToken });
       } catch (error) {
         console.log(error);
       } finally {

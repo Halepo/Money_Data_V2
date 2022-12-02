@@ -1,24 +1,23 @@
 import './navbar.sass';
 import { useState } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import jwtDecode from 'jwt-decode';
 import { Avatar } from '@mui/material';
-
-import AuthService from '../../helpers/services/AuthService';
 import { IDecodedJWT } from '../../helpers/interface/authTypes';
 import useAuth from '../../helpers/hooks/useAuth';
 
 //Components
-import { AccountDrawer } from './accountDrawer';
+import AccountDrawer from './accountDrawer';
 import RegisterExpenseModal from '../shared/RegisterExpenseModal';
-import { CallReceived } from '@mui/icons-material';
 
 export default function NavBar({ sidebarWidth }: { sidebarWidth: number }) {
+  const navigate = useNavigate();
   const location = useLocation();
+  const currentPath = location.pathname;
   const Path =
-    location.pathname === '/'
+    currentPath === '/'
       ? 'Home'
-      : location.pathname[1]?.toUpperCase() + location.pathname?.substring(2);
+      : currentPath[1]?.toUpperCase() + location.pathname?.substring(2);
 
   //register modal
   const [registerExpenseModalOpen, setRegisterExpenseModalOpen] =
@@ -31,8 +30,8 @@ export default function NavBar({ sidebarWidth }: { sidebarWidth: number }) {
   console.log('NavBar Rendered!');
 
   const handleLogout = () => {
-    AuthService.destroyCachedJwt();
-    setAuth({});
+    console.log('handle running...');
+    return navigate('/logout');
   };
 
   return (

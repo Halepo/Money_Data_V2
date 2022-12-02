@@ -3,7 +3,7 @@ import { Box, TextField, Divider } from '@mui/material';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { FormError } from './FormError';
+import { FormError } from './formError';
 import { MakeRequest } from '../../helpers/services/apiService';
 
 // import CategoryLookup from '../../../components/lookups/categoryLookup';
