@@ -116,17 +116,21 @@ export class AuthRepository {
   }
 
   public async logout(refreshToken: string): Promise<any> {
-    let User = db.collection('User').findOne({ refreshToken: refreshToken });
+    let User = await db
+      .collection('User')
+      .findOne({ refreshToken: refreshToken });
+
+    console.log('Logging out user:', User);
 
     if (User) {
-      const filteredRefreshToken = User.refreshToken.filter(
-        (token) => token === refreshToken
+      const filteredRefreshTokenArray = User.refreshToken.filter(
+        (token) => token != refreshToken
       );
       let updatedUser = db.collection('User').findOneAndUpdate(
         { refreshToken: refreshToken },
         {
           $set: {
-            refreshToken: filteredRefreshToken,
+            refreshToken: filteredRefreshTokenArray,
           },
         },
         { upsert: true, returnDocument: 'after' }

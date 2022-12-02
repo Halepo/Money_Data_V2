@@ -12,15 +12,19 @@ const webpackConfig = (): Configuration => ({
   entry: './src/index.tsx',
   ...(process.env.production || !process.env.development
     ? {}
-    : { devtool: 'eval-source-map' }),
-
+    : { devtool: 'source-map' }),
+  //TODO will investigate and edit this...
+  devtool: 'source-map',
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
     plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
   },
   output: {
     path: path.join(__dirname, '/dist'),
-    filename: '[name].js',
+    //TODO and this...
+    filename: '[name].[hash:8].js',
+    sourceMapFilename: '[name].[hash:8].map',
+    chunkFilename: '[id].[hash:8].js',
   },
   module: {
     rules: [

@@ -4,7 +4,7 @@ import AuthService from '../../../helpers/services/AuthService';
 import { register } from '../../../helpers/services/authApiService';
 import { useNavigate } from 'react-router';
 
-import { FormError } from '../../shared/FormError';
+import { FormError } from '../../shared/formError';
 
 export default function Register(props: any) {
   const navigate = useNavigate();

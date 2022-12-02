@@ -63,8 +63,8 @@ export class Service {
   }
   public async logout(refreshToken: string) {
     try {
-      const newRefreshToken = await this.AuthRepository.logout(refreshToken);
-      if (newRefreshToken) return newRefreshToken;
+      const updatedUser = await this.AuthRepository.logout(refreshToken);
+      if (updatedUser) return updatedUser;
     } catch (error) {
       logger.errorData('error data:', error);
     }

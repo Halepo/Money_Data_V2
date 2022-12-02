@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 import axios from './axios';
 
 const LOGIN_URL = '/auth/login';
+const LOGOUT_URL = '/auth/logout';
 const REFRESH_URL = '/auth/refresh';
 const REGISTER_URL = '/auth/register';
 
@@ -33,6 +34,14 @@ export async function login(username: string, password: string) {
 
   return await axios
     .post(LOGIN_URL, bodyData, headerConfig)
+    .then((response: AxiosResponse<any, any>) => {
+      return response;
+    });
+}
+
+export async function logout() {
+  return await axios
+    .post(LOGOUT_URL, headerConfig)
     .then((response: AxiosResponse<any, any>) => {
       return response;
     });
