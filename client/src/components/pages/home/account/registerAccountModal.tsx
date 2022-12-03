@@ -1,15 +1,9 @@
-import { useEffect, useState } from 'react';
-import { Box, TextField, Divider } from '@mui/material';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import { useState } from 'react';
 
 import { MakeRequest } from '../../../../helpers/services/apiService';
 import { FormError } from '../../../shared/formError';
 
 type props = {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   userId: string;
 };
 
@@ -21,7 +15,7 @@ type TNewAccount = {
   bank: string;
 };
 
-export default function RegisterAccountModal({ open, setOpen, userId }: props) {
+export default function RegisterAccountModal({ userId }: props) {
   console.log('register account modal rendered');
   const [error, setError] = useState('');
   const [name, setName] = useState('');
@@ -31,7 +25,6 @@ export default function RegisterAccountModal({ open, setOpen, userId }: props) {
   const [description, setDescription] = useState('');
 
   // const handleOpen = () => setModalOpen(true);
-  const handleClose = () => setOpen(false);
   const handleRegister = async (): Promise<void> => {
     const newAccount = {
       user_id: userId,
@@ -50,7 +43,7 @@ export default function RegisterAccountModal({ open, setOpen, userId }: props) {
         needAuthorization: true,
       });
       console.log(registered, 'registered');
-      setOpen(false);
+      // TODO close modal here
     } catch (error: any) {
       if (error?.response?.data?.error) {
         let errorData = error.response.data.error;
@@ -61,93 +54,118 @@ export default function RegisterAccountModal({ open, setOpen, userId }: props) {
   };
 
   return (
-    <Modal
-      sx={{ minWidth: 'lg' }}
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
+    <div
+      className="modal fade"
+      id="registerAccountModal"
+      tabIndex={-1}
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
     >
-      <Box
-        sx={{
-          position: 'absolute' as 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          bgcolor: 'background.paper',
-          border: '0px solid #000',
-          borderRadius: '.4rem',
-          boxShadow: 24,
-          p: 4,
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Typography variant="h5">Register New Account</Typography>
-          <Divider
-            sx={{
-              width: '80%',
-              height: '.1rem',
-              backgroundColor: 'gray',
-              marginBottom: '2rem',
-            }}
-          />
-          <TextField
-            sx={{ marginBottom: '1rem' }}
-            onChange={(e) => setName(e.target.value)}
-            required
-            id="account_name"
-            label="Account Name"
-          />
-          <TextField
-            sx={{ marginBottom: '1rem' }}
-            onChange={(e) => {
-              let accountBalance: number = Number(e.target.value);
-              return setBalance(accountBalance);
-            }}
-            required
-            id="account_balance"
-            label="Initial Balance"
-            type="number"
-          />
-          <TextField
-            sx={{ marginBottom: '1rem' }}
-            onChange={(e) => {
-              let description: string = e.target.value;
-              return setDescription(description);
-            }}
-            id="account_Description"
-            label="Description"
-          />
-          <TextField
-            sx={{ marginBottom: '1rem' }}
-            onChange={(e) => setNumber(e.target.value)}
-            id="account_number"
-            label="Account Number"
-            required
-          />
-          <TextField
-            sx={{ marginBottom: '1rem' }}
-            onChange={(e) => setBank(e.target.value)}
-            id="bank"
-            label="Bank"
-            required
-          />
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h1 className="modal-title fs-5" id="exampleModalLabel">
+              Register New Account
+            </h1>
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div className="modal-body">
+            <div className="form-group">
+              <label htmlFor="standard-username-input">Account Name</label>
+              <input
+                tabIndex={1}
+                className="register-account-input-field form-control"
+                onChange={(e) => setName(e.target.value)}
+                required
+                id="standard-name-input"
+                type="username"
+                placeholder="Enter username"
+                autoComplete="current-username"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="standard-initial-balance-input">
+                Initial Balance
+              </label>
+              <input
+                tabIndex={1}
+                className="register-account-input-field form-control"
+                onChange={(e) => {
+                  let accountBalance: number = Number(e.target.value);
+                  return setBalance(accountBalance);
+                }}
+                required
+                id="standard-initial-balance-input"
+                type="number"
+                placeholder="Enter Initial Balance"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="standard-description-input">Description</label>
+              <input
+                tabIndex={1}
+                className="register-account-input-field form-control"
+                onChange={(e) => {
+                  let description: string = e.target.value;
+                  return setDescription(description);
+                }}
+                required
+                id="standard-description-input"
+                type="number"
+                placeholder="Enter Description"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="standard-account-number-input">
+                Account Number
+              </label>
+              <input
+                tabIndex={1}
+                className="register-account-input-field form-control"
+                onChange={(e) => setNumber(e.target.value)}
+                required
+                id="standard-account-number-input"
+                type="number"
+                placeholder="Enter Account Number"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="standard-account-number-input">Bank</label>
+              <input
+                tabIndex={1}
+                className="register-account-input-field form-control"
+                onChange={(e) => setBank(e.target.value)}
+                required
+                id="standard-account-number-input"
+                type="number"
+                placeholder="Enter Your Bank Name"
+              />
+            </div>
+          </div>
           {Object.keys(error).length > 0 ? <FormError error={error} /> : ''}
-        </Box>
-        <Button color="success" variant="outlined" onClick={handleRegister}>
-          Register
-        </Button>
-        <Button color="error" variant="outlined" onClick={handleClose}>
-          Cancel
-        </Button>
-      </Box>
-    </Modal>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleRegister}
+              className="btn btn-outline-secondary accounts-section-button"
+            >
+              Register account
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

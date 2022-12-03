@@ -36,14 +36,14 @@ export default function Accounts() {
 
   const HeadContent = () => {
     return (
-      <>
-        <button
-          className="btn btn-outline-secondary accounts-section-button"
-          onClick={() => setRegisterAccountModalOpen(true)}
-        >
-          Create Money Account
-        </button>
-      </>
+      <button
+        type="button"
+        className="btn btn-outline-secondary accounts-section-button"
+        data-bs-toggle="modal"
+        data-bs-target="#registerAccountModal"
+      >
+        Create Account
+      </button>
     );
   };
 
@@ -68,11 +68,8 @@ export default function Accounts() {
             );
           })
         )}
-        <RegisterAccountModal
-          open={registerAccountModalOpen}
-          setOpen={setRegisterAccountModalOpen}
-          userId={userId}
-        />
+
+        <RegisterAccountModal userId={userId} />
       </>
     );
   };
