@@ -1,13 +1,14 @@
-import { ReactElement, useEffect, useState } from 'react';
-import { Box, Button, TextField, Typography, Divider } from '@mui/material';
-import AuthService from '../../../helpers/services/AuthService';
+import { useEffect, useState } from 'react';
 import { register } from '../../../helpers/services/authApiService';
-import { useNavigate } from 'react-router';
+import { Navigate, useLocation, useNavigate } from 'react-router';
+import './register.sass';
 
 import { FormError } from '../../shared/formError';
+import useAuth from '../../../helpers/hooks/useAuth';
 
 export default function Register(props: any) {
   const navigate = useNavigate();
+  const { auth } = useAuth();
   //states for username and password
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
@@ -15,16 +16,23 @@ export default function Register(props: any) {
   const [name, setName] = useState('');
   const [error, setError] = useState({});
 
-  //functions to handle login form
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
+
+  useEffect(() => {
+    setError({});
+  }, [password, repeatPassword, email, name]);
+
+  //functions to handle register form
   async function handleRegister(e: any) {
-    //send username and password to login method
+    //send username and password to register method
     e.preventDefault();
     try {
       let response: any = await register(name, email, password, repeatPassword);
       console.log('response', response);
       if (response.data.data._id) {
         console.log('successfully Registered!');
-        navigate('/login');
+        navigate(from, { replace: true });
       }
     } catch (error: any) {
       console.log(error);
@@ -39,67 +47,79 @@ export default function Register(props: any) {
     }
   }
 
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Typography variant="h5">Register</Typography>
-      <Divider
-        sx={{
-          width: '80%',
-          height: '.1rem',
-          backgroundColor: 'gray',
-          marginBottom: '2rem',
-        }}
-      />
-      <TextField
-        sx={{ marginBottom: '1rem' }}
-        onChange={(e) => setName(e.target.value)}
-        required
-        id="standard-username-input"
-        label="Full Name"
-      />
-      <TextField
-        sx={{ marginBottom: '1rem' }}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        id="standard-email-input"
-        label="Email"
-      />
-      <TextField
-        sx={{ marginBottom: '1rem' }}
-        onChange={(e) => setPassword(e.target.value)}
-        id="standard-password-input"
-        label="Password"
-        type="password"
-        required
-      />
-      <TextField
-        sx={{ marginBottom: '1rem' }}
-        onChange={(e) => setRepeatPassword(e.target.value)}
-        id="standard-password-input"
-        label="Repeat Password"
-        type="password"
-        required
-      />
-      <Box sx={{ display: 'flex', marginBottom: '1rem' }}>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          onClick={(e) => {
-            handleRegister(e);
-          }}
-        >
-          Register
-        </Button>
-      </Box>
-      {Object.keys(error).length > 0 ? <FormError error={error} /> : ''}
-    </Box>
+  return auth.token ? (
+    <Navigate to="/" state={{ from: location }} replace />
+  ) : (
+    <div className="register-wrapper">
+      <section className="register-container">
+        <form className="register-form-container">
+          <h3 className="register-header">Register to MoneyData</h3>
+          <hr className="register-divider" />
+          <div className="form-group">
+            <label htmlFor="standard-username-input">Full Name</label>
+            <input
+              tabIndex={1}
+              className="register-input-field form-control"
+              onChange={(e) => setName(e.target.value)}
+              required
+              id="standard-username-input"
+              type="username"
+              placeholder="Enter username"
+              autoComplete="current-username"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="standard-email-input">Email</label>
+            <input
+              tabIndex={1}
+              className="register-input-field form-control"
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              id="standard-email-input"
+              type="email"
+              placeholder="Enter email"
+              autoComplete="current-email"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="standard-password-input">Password</label>
+            <input
+              className="register-input-field form-control"
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              id="standard-password-input"
+              type="password"
+              placeholder="Enter email"
+              autoComplete="current-password"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="standard-repeat-password-input">
+              Repeat Password
+            </label>
+            <input
+              className="register-input-field form-control"
+              onChange={(e) => setRepeatPassword(e.target.value)}
+              required
+              id="standard-repeat-password-input"
+              type="password"
+              placeholder="Confirm Password"
+            />
+          </div>
+          <div className="register-button-container">
+            <button
+              type="button"
+              className="btn btn-dark"
+              onClick={(e) => {
+                handleRegister(e);
+              }}
+            >
+              Register
+            </button>
+          </div>
+          {Object.keys(error).length > 0 ? <FormError error={error} /> : ''}
+        </form>
+      </section>
+    </div>
   );
 }
