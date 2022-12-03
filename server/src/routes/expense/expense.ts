@@ -7,7 +7,7 @@ const service: Service = new Service;
 const controller: ExpenseController = new ExpenseController(service);
 const registerExpense = controller.registerExpense;
 const getAllExpense = controller.getAllExpense;
-const deleteIncome = controller.deleteExpense;
+const deleteExpense = controller.deleteExpense;
 
 const router: Router = express.Router();
 
@@ -18,6 +18,6 @@ router.post('/', isAuthorized, registerExpense);
 router.get('/', isAuthorized, getAllExpense);
 
 // DELETE /expense/register
-router.delete('/', isAuthorized, deleteIncome);
+router.delete('/', isAuthorized, deleteExpense);
 
 export default router;
