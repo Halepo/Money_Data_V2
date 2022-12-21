@@ -7,6 +7,7 @@ import income from './income/income';
 import category from './category/category';
 import transaction from './transaction/transaction';
 import { swaggerSpecs } from './swagger';
+import { Request, Response } from 'express';
 
 const express = require('express');
 const app = express();
