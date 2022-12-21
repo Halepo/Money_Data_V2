@@ -1,4 +1,4 @@
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 
 /**
  * @swagger
@@ -7,22 +7,28 @@ const Joi = require('@hapi/joi');
  *     Auth:
  *       type: object
  *       required:
- *         - title
- *         - author
+ *         - name
+ *         - email
+ *         - password
+ *         - passwordConfirmation
  *       properties:
- *         id:
+ *         name:
  *           type: string
- *           description: The auto-generated id of the book
- *         title:
+ *           description: Full name for the user
+ *         email:
  *           type: string
- *           description: The book title
- *         author:
+ *           description: email to login with
+ *         password:
  *           type: string
- *           description: The book author
+ *           description: Password to login with
+ *         passwordConfirmation:
+ *           type: string
+ *           description: Confirmation of password
  *       example:
- *         id: d5fE_asz
- *         title: The New Turing Omnibus
- *         author: Alexander K. Dewdney
+ *         name: example name
+ *         email: example@example.com
+ *         password: example
+ *         passwordConfirmation: example
  */
 
 /**
@@ -33,48 +39,12 @@ const Joi = require('@hapi/joi');
  */
 
 export const loginSchema = Joi.object({
-  email: Joi.string()
-    .required()
-    .error(() => {
-      return {
-        message: 'email is required and must be a valid string!',
-      };
-    }),
-  password: Joi.string()
-    .required()
-    .error(() => {
-      return {
-        message: 'password is required and must be a valid string!',
-      };
-    }),
+  email: Joi.string().required(),
+  password: Joi.string().required(),
 });
 export const registerSchema = Joi.object({
-  name: Joi.string()
-    .required()
-    .error(() => {
-      return {
-        message: 'email is required and must be a valid string!',
-      };
-    }),
-  email: Joi.string()
-    .required()
-    .error(() => {
-      return {
-        message: 'email is required and must be a valid string!',
-      };
-    }),
-  password: Joi.string()
-    .required()
-    .error(() => {
-      return {
-        message: 'password is required and must be a valid string!',
-      };
-    }),
-  passwordConfirmation: Joi.string()
-    .required()
-    .error(() => {
-      return {
-        message: 'password is required and must be a valid string!',
-      };
-    }),
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  password: Joi.string().required(),
+  passwordConfirmation: Joi.string().required(),
 });
