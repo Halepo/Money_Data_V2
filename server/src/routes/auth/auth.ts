@@ -15,17 +15,38 @@ const router: Router = express.Router();
  * @swagger
  * /auth/login:
  *   post:
- *     summary: Logging in
+ *     description: Login to the application
  *     tags: [Auth]
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: email
+ *         description: User's email.
+ *         in: jsonData
+ *         required: true
+ *         type: string
+ *       - name: password
+ *         description: User's password.
+ *         in: jsonData
+ *         required: true
+ *         type: string
+ *     requestBody:
+ *       - name: email
+ *         description: User's email.
+ *         in: jsonData
+ *         required: true
+ *         type: string
+ *       - name: password
+ *         description: User's password.
+ *         in: jsonData
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
- *         description: The list of the books
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Auth'
+ *         description: login
+ *         schema:
+ *           type: object
+ *           $ref: '#/components/schemas/Auth'
  */
 router.post('/login', login);
 
@@ -39,15 +60,6 @@ router.post('/login', login);
  *       application/json:
  *         schema:
  *           $ref: '#/components/schemas/Auth'
- *       application/xml:
- *         schema:
- *           $ref: '#/components/schemas/Auth'
- *       application/x-www-form-urlencoded:
- *         schema:
- *           $ref: '#/components/schemas/Auth'
- *       text/plain:
- *         schema:
- *           type: string
  *   post:
  *     summary: Register new user
  *     tags: [Auth]
