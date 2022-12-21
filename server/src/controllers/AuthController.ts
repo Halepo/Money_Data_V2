@@ -4,14 +4,14 @@ import { logger } from '../classes/consoleLoggerClass';
 import { ErrorCode } from '../shared/error-codes';
 import { Service } from 'src/services';
 import { loginSchema, registerSchema } from '../routes/auth/schema';
-import e, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
 export class AuthController {
   public constructor(private readonly _service: Service) {}
   //login
   public login: any = async (req: Request, res: Response): Promise<void> => {
-    requestInterceptor(req.body);
+    requestInterceptor(req);
     try {
       if (req.body || req.params) {
         //get cookies
@@ -99,7 +99,7 @@ export class AuthController {
             );
           } else {
             return ResponseBuilder.notFound(
-              '404',
+              ErrorCode.NotFound,
               'Credentials do not match! Please check your email or password!',
               res
             );
@@ -128,7 +128,7 @@ export class AuthController {
 
   //refresh
   public refresh: any = async (req: Request, res: Response): Promise<void> => {
-    requestInterceptor(req.body);
+    requestInterceptor(req);
     try {
       logger.logData('Refreshing token...');
       const cookie = req.signedCookies;
@@ -217,7 +217,7 @@ export class AuthController {
 
   //register
   public logout: any = async (req: Request, res: Response): Promise<void> => {
-    requestInterceptor(req.body);
+    requestInterceptor(req);
     try {
       const cookie = req.signedCookies;
       logger.logData('logging out...');
@@ -231,12 +231,6 @@ export class AuthController {
           signed: true,
         });
         return ResponseBuilder.ok('Logged Out Successfully', res);
-      } else {
-        return ResponseBuilder.badRequest(
-          ErrorCode.Invalid,
-          'Empty or no cookie received!',
-          res
-        );
       }
     } catch (error) {
       logger.errorData(error);
@@ -246,7 +240,7 @@ export class AuthController {
 
   //register
   public register: any = async (req: Request, res: Response): Promise<void> => {
-    requestInterceptor(req.body);
+    requestInterceptor(req);
     try {
       if (req.body || req.params) {
         let validationBody = {

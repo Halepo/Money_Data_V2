@@ -21,7 +21,7 @@ export class IncomeController {
     req: Request,
     res: Response
   ): Promise<void> => {
-    requestInterceptor(req.body);
+    requestInterceptor(req);
     try {
       if (req.body || req.params) {
         let validationBody = {
@@ -102,7 +102,7 @@ export class IncomeController {
     req: Request,
     res: Response
   ): Promise<void> => {
-    // requestInterceptor(req.query);
+    // requestInterceptor(req);
     logger.infoData(req.query);
     try {
       if (req.query) {
@@ -165,7 +165,7 @@ export class IncomeController {
     req: Request,
     res: Response
   ): Promise<void> => {
-    // requestInterceptor(req.query);
+    // requestInterceptor(req);
     logger.infoData(req.query);
     try {
       if (req.query) {
@@ -225,7 +225,7 @@ export class IncomeController {
     req: Request,
     res: Response
   ): Promise<void> => {
-    requestInterceptor(req.body);
+    requestInterceptor(req);
     try {
       if (req.body || req.params) {
         let validationBody = {
