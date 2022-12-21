@@ -16,6 +16,6 @@ export class InternalServerErrorResult extends ErrorResult {}
 
 export class NotFoundResult extends ErrorResult {}
 
-export class UnAuthrorizedResult extends ErrorResult {}
+export class UnAuthorizedResult extends ErrorResult {}
 
 // tslint:enable
