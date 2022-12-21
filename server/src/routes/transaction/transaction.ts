@@ -1,27 +1,27 @@
 import express, { Router } from 'express';
-import { IncomeController } from 'src/controllers/IncomeController';
+import { TransactionController } from 'src/controllers/TransactionController';
 import { isAuthorized } from 'src/middlewares/authorizationMiddleware';
 import { Service } from 'src/services';
 
 const service: Service = new Service();
-const controller: IncomeController = new IncomeController(service);
-const registerIncome = controller.registerIncome;
-const getIncome = controller.getIncome;
-const deleteIncome = controller.deleteIncome;
-const editIncome = controller.editIncome;
+const controller: TransactionController = new TransactionController(service);
+const registerTransaction = controller.registerTransaction;
+const getTransaction = controller.getTransaction;
+const deleteTransaction = controller.deleteTransaction;
+// const editTransaction = controller.editTransaction;
 
 const router: Router = express.Router();
 
 // GET /income/
-router.get('/', isAuthorized, getIncome);
+router.get('/', isAuthorized, getTransaction);
 
 // POST /income/register
-router.post('/', isAuthorized, registerIncome);
+router.post('/', isAuthorized, registerTransaction);
 
 // DELETE /income/delete
-router.delete('/', isAuthorized, deleteIncome);
+router.delete('/', isAuthorized, deleteTransaction);
 
 // PATCH /income/delete
-router.patch('/', isAuthorized, editIncome);
+// router.patch('/', isAuthorized, editTransaction);
 
 export default router;
