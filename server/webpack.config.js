@@ -14,7 +14,10 @@ module.exports = {
     mode: 'development',
     watch: false,
     entry: entries,
-    devtool: 'source-map',
+    ...(process.env.production || !process.env.development
+        ? {}
+        : { devtool: 'eval-source-map' }),
+    devtool: 'eval-source-map',
     resolve: {
         // Add `.ts` and `.tsx` as a resolvable extension.
         extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.jsx'],
