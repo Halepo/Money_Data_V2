@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import useAxiosPrivate from "../../../helpers/hooks/useAxiosPrivate";
 import { decodeJWT } from "../../../helpers/services/utils";
 import useAuth from "../../../helpers/hooks/useAuth";
+import moment from "moment";
 
 export default function transactionsDataTable(props: any) {
   const { auth }: any = useAuth();
@@ -77,9 +78,9 @@ export default function transactionsDataTable(props: any) {
               <td>{transaction.userId}</td>
               <td>{transaction.accountId}</td>
               <td>{transaction.categoryId}</td>
-              <td>{transaction.amount}</td>
+              <td>{`${transaction.amount} Birr `}</td>
               <td>{transaction.reason}</td>
-              <td>{transaction.created}</td>
+              <td>{moment(transaction.created).format("LLLL")}</td>
             </tr>
           );
         })}
