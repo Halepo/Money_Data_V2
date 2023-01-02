@@ -1,27 +1,21 @@
-import React, { useContext } from 'react';
-import { Routes, Route } from 'react-router';
-import Layout from '../layout/layout';
-import NotFound from '../shared/404';
-import Home from './home/home';
+import React, { useContext } from "react";
+import { Routes, Route } from "react-router";
+import Layout from "../layout/layout";
+import NotFound from "../shared/404";
+import Home from "./home/home";
+import Transactions from "../pages/transactions/transactions";
 
-import useRefreshToken from '../../helpers/hooks/useRefreshToken';
+import useRefreshToken from "../../helpers/hooks/useRefreshToken";
 
 export default function Pages() {
   const refresh = useRefreshToken();
-  console.log('pages rendered');
+  console.log("pages rendered");
   return (
     <Routes>
       <Route element={<Layout />}>
         <Route path="home" element={<Home />}></Route>
         <Route path="/" element={<Home />}></Route>
-        <Route
-          path="transactions"
-          element={
-            <div>
-              <button onClick={() => refresh()}>Refresh</button>
-            </div>
-          }
-        ></Route>
+        <Route path="transactions" element={<Transactions />}></Route>
         <Route
           path="accounts"
           element={<div>Welcome to Accounts: Coming soon</div>}
