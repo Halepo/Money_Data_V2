@@ -1,4 +1,5 @@
 import "./dashboard.css";
+import TransactionsDataTable from "../transactions/transactionsDataTable";
 
 export default function Dashboard(props: any) {
   console.log("dashboard rendered!");
@@ -115,9 +116,7 @@ export default function Dashboard(props: any) {
             <div className="card-header pb-0 pt-3 bg-transparent">
               <h6 className="text-capitalize">Overview</h6>
               <p className="text-sm mb-0">
-                <i className="fa fa-arrow-up text-success" aria-hidden="true">
-                  ::before
-                </i>
+                <i className="bi bi-arrow-up"></i>
                 <span className="font-weight-bold">4% more</span> " in 2021 "
               </p>
             </div>
@@ -129,7 +128,7 @@ export default function Dashboard(props: any) {
         <div className="col-lg-5">Do another chart here</div>
       </div>
       <div className="row mt-4">
-        <div className="col-lg-7 mb-lg-0 mb-4">
+        <div className="col-lg-12 mb-lg-0 mb-4">
           <div className="card">
             <div className="card-header pb-0 p-3">
               <div className="d-flex justify-content-between">
@@ -137,18 +136,20 @@ export default function Dashboard(props: any) {
               </div>
             </div>
             <div className="table-responsive">
-              <table className="table align-items-center "></table>
+              <table className="table align-items-center ">
+                <TransactionsDataTable />
+              </table>
             </div>
           </div>
         </div>
-        <div className="col-lg-5">
+        {/* <div className="col-lg-5">
           <div className="card">
             <div className="card-header pb-0 p-3">
               <h6 className="mb-0">Categories</h6>
             </div>
             <div className="card-body p-3"></div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
