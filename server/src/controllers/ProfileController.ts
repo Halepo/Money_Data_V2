@@ -6,29 +6,29 @@ import { ErrorCode } from '../shared/error-codes';
 import { Service } from 'src/services';
 import { Request, Response } from 'express';
 import {
-  deleteTransactionSchema,
-  editTransactionSchema,
-  fetchAllTransactionSchema,
-  registerTransactionSchema,
-} from '@routes/transaction/schema';
-import { ITransaction } from 'src/interfaces/transactionInterface';
+  deleteProfileSchema,
+  editProfileSchema,
+  fetchAllProfileSchema,
+  registerProfileSchema,
+} from '@routes/profile/schema';
+import { IProfile } from 'src/interfaces/profileInterface';
 import { requestValidator } from 'src/classes/requestValidator';
 import moment, { now } from 'moment';
 
-export class TransactionController {
+export class ProfileController {
   public constructor(private readonly _service: Service) {}
 
-  // TODO Create new transaction
-  // TODO Get transactions by month, day and year (default is month), category, expense || income || transfer, with pagination
-  // TODO Get transaction stats by month, day and year i.e total income, total expense
-  // TODO Get pending transactions and transfers
-  // TODO Get transaction by transaction Id
-  // TODO Edit transaction by Id
+  // TODO Create new profile
+  // TODO Get profiles by month, day and year (default is month), category, expense || income || transfer, with pagination
+  // TODO Get profile stats by month, day and year i.e total income, total expense
+  // TODO Get pending profiles and transfers
+  // TODO Get profile by profile Id
+  // TODO Edit profile by Id
   // ? TODO Transfer amount to another account for self or other user ??? (payment???)
-  // TODO Delete transaction by Id
+  // TODO Delete profile by Id
 
   //register
-  public registerTransaction: any = async (
+  public registerProfile: any = async (
     req: Request,
     res: Response
   ): Promise<void> => {
@@ -55,7 +55,7 @@ export class TransactionController {
         // borrowUserId: req.body.borrowUserId,
         // borrowToReturnBy: req.body.borrowToReturnBy,
       },
-      schema: registerTransactionSchema,
+      schema: registerProfileSchema,
     };
     let result = requestValidator.validateRequest(res, validationBody);
     if (result) {
@@ -74,7 +74,7 @@ export class TransactionController {
       if (!dateTime || moment(dateTime).isAfter(new Date())) dateTime = created;
 
       // TODO check if userId and accountId are valid...
-      const newTransaction: ITransaction = {
+      const newProfile: IProfile = {
         userId: new ObjectId(userId),
         accountId: new ObjectId(accountId),
         categoryId: new ObjectId(categoryId),
@@ -85,31 +85,29 @@ export class TransactionController {
         created,
         dateTime,
       };
-      let registeredTransaction = await this._service.registerTransaction(
-        newTransaction
-      );
-      logger.infoData(registeredTransaction, 'registeredTransaction');
-      if (registeredTransaction) {
+      let registeredProfile = await this._service.registerProfile(newProfile);
+      logger.infoData(registeredProfile, 'registeredProfile');
+      if (registeredProfile) {
         return ResponseBuilder.ok(
           {
             message: 'Successfully Registered',
-            data: registeredTransaction,
+            data: registeredProfile,
           },
           res
         );
       } else {
         return ResponseBuilder.configurationError(
           ErrorCode.GeneralError,
-          'Error registering transaction!',
+          'Error registering profile!',
           res
         );
       }
     }
   };
 
-  //fetch all transaction
+  //fetch all profile
   //TODO add support for filtering by date (default by month)
-  public getTransaction: any = async (
+  public getProfile: any = async (
     req: Request,
     res: Response
   ): Promise<void> => {
@@ -123,66 +121,49 @@ export class TransactionController {
         pageLimit: req.query.page_limit,
         startDate: req.query.start_date,
         endDate: req.query.end_date,
-        // TODO get transaction by type or reason
+        // TODO get profile by type or reason
         type: req.query.type,
         reason: req.query.reason,
       },
-      schema: fetchAllTransactionSchema,
+      schema: fetchAllProfileSchema,
     };
     let result = requestValidator.validateRequest(res, validationBody);
     if (result) {
-      let {
-        userId,
-        accountId,
-        page,
-        pageLimit,
-        type,
-        reason,
-        startDate,
-        endDate,
-      } = result.value;
-      let formattedStartDate;
-      let formattedEndDate;
-      if (startDate) formattedStartDate = new Date(startDate);
-      if (endDate) formattedEndDate = new Date(endDate);
+      let { userId, accountId, page, pageLimit, startDate, endDate } =
+        result.value;
+
+      let formattedStartDate = new Date(startDate);
+      let formattedEndDate = new Date(endDate);
       logger.infoData({
         startDate: formattedStartDate,
         endDate: formattedStartDate,
       });
-      // TODO userId, accountId validate
-      let transactions = await this._service.getTransaction(
+      let allProfile = await this._service.getAllProfile(
         userId,
         accountId,
         page,
         pageLimit,
         formattedStartDate,
-        formattedEndDate,
-        type,
-        reason
+        formattedEndDate
       );
-      logger.infoData(transactions, 'All transaction');
-      if (transactions) {
+      logger.infoData(allProfile, 'All profile');
+      if (allProfile) {
         return ResponseBuilder.ok(
-          {
-            message: 'Successfully Fetched',
-            data: transactions.data,
-            next: transactions.next,
-            previous: transactions.previous,
-          },
+          { message: 'Successfully Fetched', data: allProfile },
           res
         );
       } else {
         return ResponseBuilder.configurationError(
           ErrorCode.GeneralError,
-          'Error fetching transactions!',
+          'Error fetching profiles!',
           res
         );
       }
     }
   };
 
-  //Delete Transaction
-  public deleteTransaction: any = async (
+  //Delete Profile
+  public deleteProfile: any = async (
     req: Request,
     res: Response
   ): Promise<void> => {
@@ -192,12 +173,12 @@ export class TransactionController {
       body: {
         id: req.query.id,
       },
-      schema: deleteTransactionSchema,
+      schema: deleteProfileSchema,
     };
     let result = requestValidator.validateRequest(res, validationBody);
     if (result) {
       let id = result.value.id;
-      let deleted = await this._service.deleteTransaction(id);
+      let deleted = await this._service.deleteProfile(id);
       if (deleted) {
         return ResponseBuilder.ok(
           { message: 'Successfully Deleted', data: deleted },
@@ -206,15 +187,15 @@ export class TransactionController {
       } else {
         return ResponseBuilder.configurationError(
           ErrorCode.GeneralError,
-          'Error deleting transaction!',
+          'Error deleting profile!',
           res
         );
       }
     }
   };
 
-  //Edit Transaction
-  public editTransaction: any = async (
+  //Edit Profile
+  public editProfile: any = async (
     req: Request,
     res: Response
   ): Promise<void> => {
@@ -228,7 +209,7 @@ export class TransactionController {
         reason: req.body.reason,
         description: req.body.description,
       },
-      schema: editTransactionSchema,
+      schema: editProfileSchema,
     };
     let result = requestValidator.validateRequest(res, validationBody);
     if (result) {
@@ -236,27 +217,24 @@ export class TransactionController {
       //TODO check userId and accountId...
 
       // TODO check the update function ...
-      const update: ITransaction = {
+      const update: IProfile = {
         id: new ObjectId(id),
         categoryId: new ObjectId(categoryId),
         amount: amount,
         reason: reason,
         description: description,
       };
-      let updatedTransaction = await this._service.updateTransaction(
-        id,
-        update
-      );
-      logger.infoData(updatedTransaction, 'updatedTransaction');
-      if (updatedTransaction) {
+      let updatedProfile = await this._service.updateProfile(id, update);
+      logger.infoData(updatedProfile, 'updatedProfile');
+      if (updatedProfile) {
         return ResponseBuilder.ok(
-          { message: 'Successfully updated', data: updatedTransaction },
+          { message: 'Successfully updated', data: updatedProfile },
           res
         );
       } else {
         return ResponseBuilder.configurationError(
           ErrorCode.GeneralError,
-          'Error updating transaction!',
+          'Error updating profile!',
           res
         );
       }

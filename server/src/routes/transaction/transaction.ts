@@ -8,20 +8,20 @@ const controller: TransactionController = new TransactionController(service);
 const registerTransaction = controller.registerTransaction;
 const getTransaction = controller.getTransaction;
 const deleteTransaction = controller.deleteTransaction;
-// const editTransaction = controller.editTransaction;
+const editTransaction = controller.editTransaction;
 
 const router: Router = express.Router();
 
-// GET /income/
+// GET /transaction/
 router.get('/', isAuthorized, getTransaction);
 
-// POST /income/register
+// POST /transaction/register
 router.post('/', isAuthorized, registerTransaction);
 
-// DELETE /income/delete
+// DELETE /transaction/delete
 router.delete('/', isAuthorized, deleteTransaction);
 
-// PATCH /income/delete
-// router.patch('/', isAuthorized, editTransaction);
+// PATCH /transaction/delete
+router.patch('/', isAuthorized, editTransaction);
 
 export default router;

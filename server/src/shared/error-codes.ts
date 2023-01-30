@@ -10,5 +10,5 @@ export const ErrorCode = {
   MissingPermission: 'MISSING_PERMISSION',
   UNAUTHORIZED: 'UNAUTHORIZED',
   Forbidden: 'FORBIDDEN',
-  NotFound: 'NOTFOUND',
+  NotFound: 'NOT_FOUND',
 };

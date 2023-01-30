@@ -154,8 +154,6 @@ export class AuthRepository {
       created: new Date().toISOString(),
     };
 
-    logger.infoData(userData, 'userData');
-
     // Create user in our database
     const options = { upsert: true, returnDocument: 'after' };
     const registeredUser = await db
@@ -204,14 +202,12 @@ export class AuthRepository {
     let existingAccount = await db
       .collection('User')
       .findOne({ $or: [{ name: name }, { email: email }] });
-    console.log(existingAccount);
     if (existingAccount) return existingAccount;
   }
 
   public async findUserById(id: ObjectId): Promise<any> {
     logger.infoData(`Finding user by id [${id}]...`);
     let user = await db.collection('User').findOne({ _id: id });
-    logger.infoData(user, 'user');
     if (user) return user;
   }
 
@@ -224,7 +220,6 @@ export class AuthRepository {
     let user = await db
       .collection('User')
       .findOne({ refreshToken: refreshToken.refreshToken });
-    logger.infoData(user, 'user');
     if (user) return user;
   }
 }

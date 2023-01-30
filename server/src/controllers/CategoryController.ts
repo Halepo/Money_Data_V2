@@ -1,11 +1,10 @@
-import { ObjectId } from 'bson';
 import { ResponseBuilder } from '../shared/response-builder';
 import { requestInterceptor } from '../interceptors/interceptor';
 import { logger } from '../classes/consoleLoggerClass';
 import { ErrorCode } from '../shared/error-codes';
 import { Service } from '../services';
 import { Request, Response } from 'express';
-import { ICategory } from '../interfaces/category';
+import { ICategory } from '../interfaces/categoryInterface';
 import {
   createCategorySchema,
   deleteCategorySchema,

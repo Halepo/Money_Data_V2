@@ -6,7 +6,7 @@ import routes from './routes/routes';
 import { corsOptions } from './config/configurations';
 
 import { createConn } from './config/database';
-//create db connection if live in prods
+// TODO create db connection if live in prods
 // process.env.ENVIRONMENT === 'prod' ? createConn() : '';
 
 const port = process.env.PORT || process.env.API_PORT;

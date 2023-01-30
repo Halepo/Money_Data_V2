@@ -9,7 +9,7 @@ import {
   createAccountSchema,
   getAllAccountsSchema,
 } from '@routes/account/schema';
-import { IAccount } from 'src/interfaces/account';
+import { IAccount } from 'src/interfaces/accountInterface';
 
 export class AccountController {
   public constructor(private readonly _service: Service) {}
