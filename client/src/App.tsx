@@ -1,12 +1,12 @@
 import './App.sass';
 import { Routes, Route } from 'react-router';
-import Login from './components/pages/auth/login';
-import RequireAuth from './components/shared/RequireAuth';
-import Logout from './components/pages/auth/logout';
-import Unauthorized from './components/pages/auth/unauthorized';
-import Pages from './components/pages/pages';
-import PersistLogin from './components/shared/PersistLogin';
-import Register from './components/pages/auth/register';
+import Login from './pages/auth/login';
+import RequireAuth from './components/RequireAuth';
+import Logout from './pages/auth/logout';
+import Unauthorized from './pages/auth/unauthorized';
+import Pages from './pages/pages';
+import PersistLogin from './components/PersistLogin';
+import Register from './pages/auth/register';
 
 export default function App() {
   return (
