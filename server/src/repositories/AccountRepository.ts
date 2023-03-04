@@ -13,7 +13,7 @@ export class AccountRepository {
     if (result.ops[0]) return result.ops[0];
   }
 
-  public async findExistingAccountByNumberOrName(
+  public async findAccountByNumberOrName(
     userId: string,
     name: string,
     number: number
@@ -30,11 +30,27 @@ export class AccountRepository {
     if (existingAccount) return existingAccount;
   }
 
-  public async getAllAccounts(userId: string): Promise<any> {
-    logger.infoData(`Finding all accounts for [${userId}]`);
+  public async getAccounts(
+    userId: string,
+    id,
+    balance,
+    name,
+    bank,
+    number,
+    description
+  ): Promise<any> {
+    let fetchParams: any = { userId: new ObjectId(userId) };
+    if (id) fetchParams._id = new ObjectId(id);
+    if (balance) fetchParams.balance = Number(balance);
+    if (name) fetchParams.accountName = name;
+    if (bank) fetchParams.bank = bank;
+    if (number) fetchParams.accountNumber = Number(number);
+    if (description) fetchParams.description = description;
+
+    logger.infoData(`Finding all accounts ${JSON.stringify(fetchParams)}`);
     let allAccounts = await db
       .collection('Account')
-      .find({ userId: new ObjectId(userId) })
+      .find(fetchParams)
       .toArray();
     if (allAccounts) return allAccounts;
   }

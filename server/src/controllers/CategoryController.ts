@@ -9,7 +9,9 @@ import {
   createCategorySchema,
   deleteCategorySchema,
   editCategorySchema,
+  getTransactionSchema,
 } from '../routes/category/schema';
+import { requestValidator } from 'src/classes/requestValidator';
 export class CategoryController {
   public constructor(private readonly _service: Service) {}
 
@@ -88,30 +90,57 @@ export class CategoryController {
   };
 
   //fetch all Category
-  public getAllCategory: any = async (
+  public getCategory: any = async (
     req: Request,
     res: Response
   ): Promise<void> => {
-    // requestInterceptor(req);
-    logger.infoData('Getting all category');
-    try {
-      let allCategory = await this._service.getAllCategory();
-      logger.infoData(allCategory, 'All Category');
-      if (allCategory) {
-        return ResponseBuilder.ok(
-          { message: 'Successfully Fetched', data: allCategory },
-          res
+    requestInterceptor(req);
+    //TODO get category by ID
+    let validationBody = {
+      required: true,
+      body: {
+        id: req.query.id,
+        category: req.query.category,
+        description: req.query.description,
+        category_for: req.query.category_for,
+      },
+      schema: getTransactionSchema,
+    };
+
+    let result = requestValidator.validateRequest(res, validationBody);
+    if (result) {
+      const {
+        id,
+        category,
+        description,
+        category_for: categoryFor,
+      } = result.value;
+
+      logger.infoData('Getting categories');
+      try {
+        let fetchedCategory = await this._service.getCategory(
+          id,
+          category,
+          description,
+          categoryFor
         );
-      } else {
-        return ResponseBuilder.configurationError(
-          ErrorCode.GeneralError,
-          'Error fetching Category!',
-          res
-        );
+        logger.infoData(fetchedCategory, 'All Category');
+        if (fetchedCategory) {
+          return ResponseBuilder.ok(
+            { message: 'Successfully Fetched', data: fetchedCategory },
+            res
+          );
+        } else {
+          return ResponseBuilder.configurationError(
+            ErrorCode.GeneralError,
+            'Error fetching Category!',
+            res
+          );
+        }
+      } catch (error) {
+        logger.errorData(error);
+        return ResponseBuilder.internalServerError(error, res);
       }
-    } catch (error) {
-      logger.errorData(error);
-      return ResponseBuilder.internalServerError(error, res);
     }
   };
 

@@ -8,22 +8,6 @@ const User = require('../models/User');
 
 //check the interface implementation.... //implements IProgram<Program>
 export class AuthRepository {
-  public async anotherOne(email: string, password: string): Promise<any> {
-    logger.infoData('Logging in..');
-    let result = await db.collection('Program').findOneAndUpdate(
-      {
-        _id: new ObjectId('000'),
-      },
-      {
-        $push: {
-          something: 'something',
-        },
-      },
-      { upsert: true, returnOriginal: false }
-    );
-    return result;
-  }
-
   public async login(email: string, password: string): Promise<any> {
     logger.infoData('Logging in..');
     let user = await db.collection('User').findOne({ email: email });
@@ -190,13 +174,13 @@ export class AuthRepository {
     }
   }
 
-  public async findExistingUserByEmailOrName(
+  public async findUserByEmailOrName(
     name: string,
     email: string
   ): Promise<any> {
     logger.infoData(
-      `Finding existing user by number [${email ? email : ''}] or name [${
-        name ? name : ''
+      `Finding existing user by [${email ? `email : ${email}` : ''}] [${
+        name ? `name : ${name}` : ''
       }]...`
     );
     let existingAccount = await db

@@ -19,8 +19,9 @@ export const editTransactionSchema = Joi.object({
   description: Joi.string(),
   dateTime: Joi.date(),
 });
-export const fetchAllTransactionSchema = Joi.object({
-  userId: Joi.string().hex().length(24).required(),
+export const fetchTransactionSchema = Joi.object({
+  userId: Joi.string().hex().length(24),
+  id: Joi.string().hex().length(24),
   accountId: Joi.string().hex().length(24),
   page: Joi.number(),
   pageLimit: Joi.number(),

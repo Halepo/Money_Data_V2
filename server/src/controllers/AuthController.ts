@@ -156,11 +156,10 @@ export class AuthController {
                   res
                 ); //Forbidden
               console.log('attempted refresh token reuse!');
-              const hackedUser =
-                await this._service.findExistingUserByEmailOrName(
-                  decoded.userName,
-                  ''
-                );
+              const hackedUser = await this._service.findUserByEmailOrName(
+                decoded.userName,
+                ''
+              );
               if (hackedUser) {
                 console.log('hacked user', hackedUser);
                 const result = await this._service.updateUserRefreshTokenArray(
@@ -268,8 +267,10 @@ export class AuthController {
 
           //check passwords match validation
           if (password === passwordConfirmation) {
-            let existingUser =
-              await this._service.findExistingUserByEmailOrName(name, email);
+            let existingUser = await this._service.findUserByEmailOrName(
+              name,
+              email
+            );
             if (!existingUser) {
               let registeredUser = await this._service.registerUser(
                 name,

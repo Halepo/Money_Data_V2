@@ -15,6 +15,7 @@ export class TransactionRepository {
 
   public async fetchTransaction(
     userId: string,
+    id: string,
     accountId: string,
     page: number,
     pageLimit: number,
@@ -24,7 +25,9 @@ export class TransactionRepository {
     reason: string
   ): Promise<any> {
     logger.infoData('Fetching Transactions...');
-    let fetchParams: any = { userId: new ObjectId(userId) };
+    let fetchParams: any = {};
+    if (id) fetchParams._id = new ObjectId(id);
+    if (userId) fetchParams.userId = new ObjectId(userId);
     if (accountId) fetchParams.accountId = new ObjectId(accountId);
     if (type) fetchParams.type = type;
     if (reason) fetchParams.reason = reason;
@@ -42,11 +45,13 @@ export class TransactionRepository {
 
     let results: { data?: Object; next?: Object; previous?: Object } = {};
 
+    logger.infoData(fetchParams);
+
     let result = await db
       .collection('Transaction')
       .find(fetchParams)
       .limit(pageLimit)
-      .skip(page)
+      .skip(startIndex)
       .toArray();
 
     let resultCount = await db

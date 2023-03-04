@@ -66,9 +66,9 @@ export class Service {
       logger.errorData('error data:', error);
     }
   }
-  public async findExistingUserByEmailOrName(name: string, email: string) {
+  public async findUserByEmailOrName(name: string, email: string) {
     try {
-      const existingUser = this.AuthRepository.findExistingUserByEmailOrName(
+      const existingUser = this.AuthRepository.findUserByEmailOrName(
         name,
         email
       );
@@ -96,27 +96,38 @@ export class Service {
       logger.errorData('error data:', error);
     }
   }
-  public async findExistingAccountByNumberOrName(
-    userId,
-    name: string,
-    number: number
-  ) {
+  public async findAccountByNumberOrName(userId, name: string, number: number) {
     try {
-      const existingUser =
-        this.AccountRepository.findExistingAccountByNumberOrName(
-          userId,
-          name,
-          number
-        );
+      const existingUser = this.AccountRepository.findAccountByNumberOrName(
+        userId,
+        name,
+        number
+      );
       if (existingUser) return existingUser;
     } catch (error) {
       logger.errorData('error data:', error);
     }
   }
 
-  public async getAllAccounts(userId: string) {
+  public async getAccounts(
+    userId: string,
+    id,
+    balance,
+    name,
+    bank,
+    number,
+    description
+  ) {
     try {
-      const allAccounts = this.AccountRepository.getAllAccounts(userId);
+      const allAccounts = this.AccountRepository.getAccounts(
+        userId,
+        id,
+        balance,
+        name,
+        bank,
+        number,
+        description
+      );
       if (allAccounts) return allAccounts;
     } catch (error) {
       logger.errorData('error data:', error);
@@ -135,6 +146,7 @@ export class Service {
   }
   public async getTransaction(
     userId: string,
+    id: string,
     accountId: string,
     page: number,
     pageLimit: number,
@@ -146,6 +158,7 @@ export class Service {
     try {
       const registeredTransaction = this.TransactionRepository.fetchTransaction(
         userId,
+        id,
         accountId,
         page,
         pageLimit,
@@ -191,9 +204,14 @@ export class Service {
       logger.errorData('error data:', error);
     }
   }
-  public async getAllCategory() {
+  public async getCategory(id, category, description, categoryFor) {
     try {
-      const registeredTransaction = this.CategoryRepository.fetchAllCategory();
+      const registeredTransaction = this.CategoryRepository.fetchCategory(
+        id,
+        category,
+        description,
+        categoryFor
+      );
       if (registeredTransaction) return registeredTransaction;
     } catch (error) {
       logger.errorData('error data:', error);

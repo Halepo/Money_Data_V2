@@ -8,7 +8,7 @@ import { Request, Response } from 'express';
 import {
   deleteTransactionSchema,
   editTransactionSchema,
-  fetchAllTransactionSchema,
+  fetchTransactionSchema,
   registerTransactionSchema,
 } from '@routes/transaction/schema';
 import { ITransaction } from 'src/interfaces/transactionInterface';
@@ -118,21 +118,24 @@ export class TransactionController {
       required: req.query ? true : false,
       body: {
         userId: req.query.user_id,
+        id: req.query.id,
         accountId: req.query.account_id,
         page: req.query.page,
         pageLimit: req.query.page_limit,
         startDate: req.query.start_date,
         endDate: req.query.end_date,
         // TODO get transaction by type or reason
+        // TODO get transaction by category
         type: req.query.type,
         reason: req.query.reason,
       },
-      schema: fetchAllTransactionSchema,
+      schema: fetchTransactionSchema,
     };
     let result = requestValidator.validateRequest(res, validationBody);
     if (result) {
       let {
         userId,
+        id,
         accountId,
         page,
         pageLimit,
@@ -152,6 +155,7 @@ export class TransactionController {
       // TODO userId, accountId validate
       let transactions = await this._service.getTransaction(
         userId,
+        id,
         accountId,
         page,
         pageLimit,
