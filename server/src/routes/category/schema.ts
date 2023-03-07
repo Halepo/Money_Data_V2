@@ -3,7 +3,7 @@ const Joi = require('joi');
 export const createCategorySchema = Joi.object({
   category: Joi.string().required(),
   description: Joi.string(),
-  category_for: Joi.string().valid('expense', 'income').required(),
+  transaction_type: Joi.string().valid('expense', 'income').required(),
 });
 
 export const deleteCategorySchema = Joi.object({
@@ -14,5 +14,5 @@ export const editCategorySchema = Joi.object({
   id: Joi.string().hex().length(24).required(),
   category: Joi.string().required(),
   description: Joi.string(),
-  category_for: Joi.string().valid('expense', 'income'),
+  transaction_type: Joi.string().valid('expense', 'income', 'transfer'),
 });

@@ -136,22 +136,26 @@ export class Service {
   public async getTransaction(
     userId: string,
     accountId: string,
+    categoryId: string,
     page: number,
     pageLimit: number,
     startDate: Date,
     endDate: Date,
     type: string,
+    currency: string,
     reason: string
   ) {
     try {
       const registeredTransaction = this.TransactionRepository.fetchTransaction(
         userId,
         accountId,
+        categoryId,
         page,
         pageLimit,
         startDate,
         endDate,
         type,
+        currency,
         reason
       );
       if (registeredTransaction) return registeredTransaction;

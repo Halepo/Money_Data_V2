@@ -24,7 +24,7 @@ export class CategoryController {
         let validationBody = {
           category: req.body.category,
           description: req.body.description,
-          category_for: req.body.category_for,
+          transaction_type: req.body.transaction_type,
         };
         const result = createCategorySchema.validate(validationBody);
         logger.logData('validation result', result);
@@ -40,7 +40,7 @@ export class CategoryController {
           let category = result.value.category;
           let description = result.value.description;
           let created = new Date().toISOString();
-          let categoryFor = result.value.category_for;
+          let transactionType = result.value.transaction_type;
 
           //check userId and accountId...
           //
@@ -49,7 +49,7 @@ export class CategoryController {
             category: category,
             description: description,
             created: created,
-            categoryFor: categoryFor,
+            transactionType: transactionType,
           };
           let createdCategory = await this._service.createCategory(newCategory);
           logger.infoData(createdCategory, 'createdCategory');
@@ -198,12 +198,12 @@ export class CategoryController {
             let id = result.value.id;
             let category = result.value.category;
             let description = result.value.description;
-            let categoryFor = result.value.categoryFor;
+            let transactionType = result.value.transactionType;
 
             const update: any = {
               category: category,
               description: description,
-              categoryFor: categoryFor,
+              transactionType: transactionType,
             };
             let updatedCategory = await this._service.editCategory(id, update);
             logger.infoData(updatedCategory, 'updatedCategory');
