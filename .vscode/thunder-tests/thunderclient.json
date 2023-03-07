@@ -1,0 +1,299 @@
+[
+  {
+    "_id": "360c28a3-c506-401c-9dd3-c729e771ae9f",
+    "colId": "05a6be79-25d9-4e87-bf28-2a6b4ccef798",
+    "containerId": "",
+    "name": "POST Login",
+    "url": "{{baseUrl}}/api/auth/login",
+    "method": "POST",
+    "sortNum": 10000,
+    "created": "2023-03-07T19:32:58.091Z",
+    "modified": "2023-03-07T19:34:39.753Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "formencoded",
+      "raw": "",
+      "form": [
+        {
+          "name": "email",
+          "value": "tesfshca@gmail.com"
+        },
+        {
+          "name": "password",
+          "value": "password"
+        }
+      ]
+    },
+    "tests": []
+  },
+  {
+    "_id": "ba593e5c-d076-4051-9cdc-8ddcfa5b2204",
+    "colId": "05a6be79-25d9-4e87-bf28-2a6b4ccef798",
+    "containerId": "",
+    "name": "POST Register",
+    "url": "{{baseUrl}}/api/auth/login",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2023-03-07T19:35:07.611Z",
+    "modified": "2023-03-07T19:35:32.516Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "formencoded",
+      "raw": "",
+      "form": [
+        {
+          "name": "email",
+          "value": "tesfshca@gmail.com"
+        },
+        {
+          "name": "password",
+          "value": "password"
+        },
+        {
+          "name": "repeatPassword",
+          "value": "password"
+        }
+      ]
+    },
+    "tests": []
+  },
+  {
+    "_id": "1e7ab591-4f35-4d36-bcc6-d21400237b29",
+    "colId": "71a47684-30cb-469b-b77a-a620adbc54ba",
+    "containerId": "",
+    "name": "POST Create Category",
+    "url": "{{baseUrl}}/api/category",
+    "method": "POST",
+    "sortNum": 5000,
+    "created": "2023-03-07T19:37:52.134Z",
+    "modified": "2023-03-07T20:24:15.310Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "formencoded",
+      "raw": "",
+      "form": [
+        {
+          "name": "category",
+          "value": "62e3928cc82243611c6ad6c1"
+        },
+        {
+          "name": "description",
+          "value": "62e3928cc82243611c6ad6c4"
+        },
+        {
+          "name": "transaction_type",
+          "value": "asdf"
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{token}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "deb8fe67-6ff9-432c-9ead-343f3208c423",
+    "colId": "a86ae142-9970-475f-92cf-47aac1473f3d",
+    "containerId": "",
+    "name": "POST Create new Transaction",
+    "url": "{{baseUrl}}/api/transaction",
+    "method": "POST",
+    "sortNum": 10000,
+    "created": "2023-03-07T20:19:25.042Z",
+    "modified": "2023-03-07T21:46:27.433Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "formencoded",
+      "raw": "",
+      "form": [
+        {
+          "name": "user_id",
+          "value": "62e3928cc82243611c6ad6c1"
+        },
+        {
+          "name": "account_id",
+          "value": "6407a82c3dee441c5dabebeb"
+        },
+        {
+          "name": "category_id",
+          "value": "6407ac40bb43d6207bab8e7e"
+        },
+        {
+          "name": "type",
+          "value": "expense"
+        },
+        {
+          "name": "amount",
+          "value": "900"
+        },
+        {
+          "name": "currency",
+          "value": "ETB"
+        },
+        {
+          "name": "reason",
+          "value": "Ate shiro"
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{token}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "f76dec1d-d5d9-43e2-8a0f-b92df4bdd0bc",
+    "colId": "53267d27-d18f-4f64-a18e-ebadff3403c2",
+    "containerId": "",
+    "name": "POST Create Account",
+    "url": "{{baseUrl}}/api/account",
+    "method": "POST",
+    "sortNum": 5000,
+    "created": "2023-03-07T20:26:28.244Z",
+    "modified": "2023-03-07T22:42:44.067Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "formencoded",
+      "raw": "",
+      "form": [
+        {
+          "name": "user_id",
+          "value": "62e3928cc82243611c6ad6c1"
+        },
+        {
+          "name": "account_name",
+          "value": "Cash"
+        },
+        {
+          "name": "bank",
+          "value": "",
+          "isDisabled": true
+        },
+        {
+          "name": "account_number",
+          "value": "",
+          "isDisabled": true
+        },
+        {
+          "name": "account_description",
+          "value": "Cash on hand"
+        },
+        {
+          "name": "account_balance",
+          "value": "",
+          "isDisabled": true
+        },
+        {
+          "name": "default_currency",
+          "value": "ETB"
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{token}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "0afb49d6-1ee3-4a97-801a-5e95a0ec99c8",
+    "colId": "53267d27-d18f-4f64-a18e-ebadff3403c2",
+    "containerId": "",
+    "name": "GET Fetch Accounts",
+    "url": "{{baseUrl}}/api/account?user_id=62e3928cc82243611c6ad6c1",
+    "method": "GET",
+    "sortNum": 15000,
+    "created": "2023-03-07T21:18:03.691Z",
+    "modified": "2023-03-07T21:18:32.679Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "user_id",
+        "value": "62e3928cc82243611c6ad6c1",
+        "isPath": false
+      }
+    ],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{token}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "4d799441-d4ba-4679-8f72-e42e001acbf5",
+    "colId": "71a47684-30cb-469b-b77a-a620adbc54ba",
+    "containerId": "",
+    "name": "GET fetch categories",
+    "url": "{{baseUrl}}/api/category",
+    "method": "GET",
+    "sortNum": 15000,
+    "created": "2023-03-07T21:21:38.063Z",
+    "modified": "2023-03-07T21:28:02.368Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{token}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "af343331-276b-4f5a-9475-09e06d2ae32d",
+    "colId": "a86ae142-9970-475f-92cf-47aac1473f3d",
+    "containerId": "",
+    "name": "GET Fetch Transactions",
+    "url": "{{baseUrl}}/api/transaction?user_id=62e3928cc82243611c6ad6c1&type=income&id=6407b08d0f91852417f4a3b5",
+    "method": "GET",
+    "sortNum": 20000,
+    "created": "2023-03-07T21:47:39.867Z",
+    "modified": "2023-03-07T22:41:28.544Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "user_id",
+        "value": "62e3928cc82243611c6ad6c1",
+        "isPath": false
+      },
+      {
+        "name": "category_id",
+        "value": "6407ac40bb43d6207bab8e7e",
+        "isDisabled": true,
+        "isPath": false
+      },
+      {
+        "name": "account_id",
+        "value": "6407a82c3dee441c5dabebeb",
+        "isDisabled": true,
+        "isPath": false
+      },
+      {
+        "name": "type",
+        "value": "income",
+        "isPath": false
+      },
+      {
+        "name": "currency",
+        "value": "ETB",
+        "isDisabled": true,
+        "isPath": false
+      },
+      {
+        "name": "id",
+        "value": "6407b08d0f91852417f4a3b5",
+        "isPath": false
+      }
+    ],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{token}}"
+    },
+    "tests": []
+  }
+]

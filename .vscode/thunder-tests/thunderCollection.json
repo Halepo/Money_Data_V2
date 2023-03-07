@@ -1,0 +1,30 @@
+[
+  {
+    "_id": "05a6be79-25d9-4e87-bf28-2a6b4ccef798",
+    "colName": "Auth",
+    "created": "2023-03-07T19:32:58.089Z",
+    "sortNum": 10000,
+    "folders": []
+  },
+  {
+    "_id": "a86ae142-9970-475f-92cf-47aac1473f3d",
+    "colName": "Transaction",
+    "created": "2023-03-07T19:38:03.880Z",
+    "sortNum": 20000,
+    "folders": []
+  },
+  {
+    "_id": "71a47684-30cb-469b-b77a-a620adbc54ba",
+    "colName": "Category",
+    "created": "2023-03-07T20:19:33.740Z",
+    "sortNum": 30000,
+    "folders": []
+  },
+  {
+    "_id": "53267d27-d18f-4f64-a18e-ebadff3403c2",
+    "colName": "Account",
+    "created": "2023-03-07T20:26:28.234Z",
+    "sortNum": 40000,
+    "folders": []
+  }
+]
