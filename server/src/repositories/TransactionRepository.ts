@@ -6,6 +6,8 @@ import moment from 'moment';
 
 export class TransactionRepository {
   public async registerTransaction(newTransaction: ITransaction): Promise<any> {
+    logger.infoData('Validating Request');
+
     logger.infoData('Registering transaction..');
     let result = await db
       .collection('Transaction')
@@ -16,17 +18,21 @@ export class TransactionRepository {
   public async fetchTransaction(
     userId: string,
     accountId: string,
+    categoryId: string,
     page: number,
     pageLimit: number,
     startDate: Date,
     endDate: Date,
     type: string,
+    currency: string,
     reason: string
   ): Promise<any> {
     logger.infoData('Fetching Transactions...');
     let fetchParams: any = { userId: new ObjectId(userId) };
     if (accountId) fetchParams.accountId = new ObjectId(accountId);
+    if (categoryId) fetchParams.categoryId = new ObjectId(categoryId);
     if (type) fetchParams.type = type;
+    if (currency) fetchParams.currency = currency;
     if (reason) fetchParams.reason = reason;
     // TODO Test this
     if (startDate && moment(startDate).isValid())
@@ -42,11 +48,47 @@ export class TransactionRepository {
 
     let results: { data?: Object; next?: Object; previous?: Object } = {};
 
+    //TODO check currency issue ---
+
     let result = await db
       .collection('Transaction')
-      .find(fetchParams)
-      .limit(pageLimit)
-      .skip(page)
+      .aggregate([
+        {
+          $match: fetchParams, // filter by fetchParams
+        },
+        {
+          $lookup: {
+            from: 'User',
+            let: { userId: '$userId' },
+            pipeline: [{ $match: { $expr: { $eq: ['$_id', '$$userId'] } } }],
+            as: 'user',
+          },
+        },
+        {
+          $lookup: {
+            from: 'Account',
+            let: { accountId: '$accountId' },
+            pipeline: [{ $match: { $expr: { $eq: ['$_id', '$$accountId'] } } }],
+            as: 'account',
+          },
+        },
+        {
+          $lookup: {
+            from: 'Category',
+            let: { categoryId: '$categoryId' },
+            pipeline: [
+              { $match: { $expr: { $eq: ['$_id', '$$categoryId'] } } },
+            ],
+            as: 'category',
+          },
+        },
+        {
+          $skip: page, // skip page number of documents
+        },
+        {
+          $limit: pageLimit, // limit number of documents per page
+        },
+      ])
       .toArray();
 
     let resultCount = await db
@@ -72,6 +114,31 @@ export class TransactionRepository {
       return results;
     }
   }
+
+  // [({
+  //   _id: '63b5a35abc9679245e8bf10b',
+  //   userId: '62e3928cc82243611c6ad6c1',
+  //   accountId: '62e39ff42279827ce345c6bc',
+  //   categoryId: '62e65bca55aacc2f09adc3a0',
+  //   type: 'income',
+  //   amount: 23000,
+  //   reason: 'Demoz',
+  //   description: 'payment form someone',
+  //   created: '2023-01-04T16:03:38.943Z',
+  //   dateTime: '2022-12-24T21:00:00.000Z',
+  // },
+  // {
+  //   _id: '63b5a372bc9679245e8bf10c',
+  //   userId: '62e3928cc82243611c6ad6c1',
+  //   accountId: '62e39ff42279827ce345c6bc',
+  //   categoryId: '62e65bca55aacc2f09adc3a0',
+  //   type: 'income',
+  //   amount: 23000,
+  //   reason: 'Demoz',
+  //   description: 'payment form someone',
+  //   created: '2023-01-04T16:04:02.938Z',
+  //   dateTime: '2022-11-24T21:00:00.000Z',
+  // })];
 
   public async updateTransaction(
     id: string,

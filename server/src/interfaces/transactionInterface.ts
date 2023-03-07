@@ -7,6 +7,7 @@ export interface ITransaction {
   categoryId: ObjectId;
   type: string;
   amount: number;
+  currency?: string;
   reason?: string;
   description?: string;
   created: Date;
