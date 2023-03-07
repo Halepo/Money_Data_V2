@@ -1,3 +1,5 @@
+import { ObjectId } from 'bson';
+import { db } from 'src/config/database';
 import { ErrorCode } from 'src/shared/error-codes';
 import { ResponseBuilder } from 'src/shared/response-builder';
 import { logger } from './consoleLoggerClass';
@@ -47,6 +49,26 @@ class RequestValidator {
       logger.errorData(error);
       return ResponseBuilder.internalServerError(error, res);
     }
+  }
+
+  async validateCollectionItems(collections: string[], ids: ObjectId[]) {
+    // Define a function that queries a collection by id and returns a document
+    async function findDocument(collectionName, id) {
+      let document = await db
+        .collection(collectionName)
+        .findOne({ _id: new ObjectId(id) });
+      return document;
+    }
+
+    logger.infoData('Validating Request');
+    // Use promise.all to query all collections in parallel and store the results in an array
+    let results = await Promise.all(
+      collections.map((collection, index) =>
+        findDocument(collection, ids[index])
+      )
+    );
+
+    return results;
   }
 }
 export const requestValidator = new RequestValidator();
