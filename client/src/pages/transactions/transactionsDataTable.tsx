@@ -4,6 +4,14 @@ import { decodeJWT } from '../../helpers/services/utils';
 import useAuth from '../../helpers/hooks/useAuth';
 import moment from 'moment';
 
+import {
+  UilMoneyInsert,
+  UilMoneyWithdraw,
+  UilEdit,
+  UilEye,
+  UilTrashAlt,
+} from '@iconscout/react-unicons';
+
 export default function transactionsDataTable(props: any) {
   const { auth }: any = useAuth();
   const [transactions, setTransactions] = useState([]);
@@ -43,6 +51,14 @@ export default function transactionsDataTable(props: any) {
     );
   };
 
+  const TableFilters = () => {
+    return (
+      <div>
+        <p>Some filters</p>
+      </div>
+    );
+  };
+
   useEffect(() => {
     const userId = decodeJWT(auth.token).user_id;
     console.log(`Fetching transactions for userId [${userId}]`);
@@ -60,34 +76,71 @@ export default function transactionsDataTable(props: any) {
   }, []);
 
   return (
-    <table className="table table-striped table-hover table-bordered">
-      <thead>
-        <tr>
-          <th>User ID</th>
-          <th>Account ID</th>
-          <th>Category ID</th>
-          <th>Amount</th>
-          <th>Reason</th>
-          <th>Created At</th>
-        </tr>
-      </thead>
-      <tbody>
-        {transactions.map((transaction, index) => {
-          return (
-            <tr key={index}>
-              <td>{transaction.userId}</td>
-              <td>{transaction.accountId}</td>
-              <td>{transaction.categoryId}</td>
-              <td>{`${transaction.amount} Birr `}</td>
-              <td>{transaction.reason}</td>
-              <td>{moment(transaction.created).format('LLLL')}</td>
-            </tr>
-          );
-        })}
-      </tbody>
-      <tfoot>
-        <TablePagination />
-      </tfoot>
-    </table>
+    <div className="col-lg-12 mb-lg-0 mb-4">
+      <div className="card">
+        <div className="card-header pb-0 p-3">
+          <div className="d-flex justify-content-between">
+            <h6 className="mb-2">Recent Transactions</h6>
+            <p className="text-sm mb-0">
+              <i className="bi bi-arrow-up"></i>
+              <span className="font-weight-bold">4% more</span> " in 2021 "
+            </p>
+          </div>
+        </div>
+        <div className="table-responsive">
+          <table className="table align-items-center ">
+            <TableFilters />
+            <table className="table table-striped table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Type</th>
+                  <th>Account</th>
+                  <th>Category</th>
+                  <th>Amount</th>
+                  <th>Reason</th>
+                  <th>Created At</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {transactions.map((transaction, index) => {
+                  return (
+                    <tr key={index}>
+                      <td style={{ display: 'none' }}>{index}</td>
+                      <td>{index}</td>
+                      {transaction.type == 'income' ? (
+                        <td style={{ backgroundColor: 'rgb(144 255 163)' }}>
+                          <UilMoneyInsert /> Income
+                        </td>
+                      ) : (
+                        <td style={{ backgroundColor: 'rgb(255 144 144)' }}>
+                          <UilMoneyWithdraw /> Expence
+                        </td>
+                      )}
+                      <td>
+                        {transaction.account[0].accountName}{' '}
+                        <small>
+                          [Balance: {transaction.account[0].accountBalance}]
+                        </small>
+                      </td>
+                      <td>{transaction.category[0].category}</td>
+                      <td>{`${transaction.amount} ${transaction.currency}`}</td>
+                      <td>{transaction.reason}</td>
+                      <td>{moment(transaction.created).format('LLLL')}</td>
+                      <td>
+                        <UilEdit /> <UilEye /> <UilTrashAlt />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+              <tfoot></tfoot>
+            </table>
+            <TablePagination />
+          </table>
+        </div>
+      </div>
+    </div>
   );
 }
