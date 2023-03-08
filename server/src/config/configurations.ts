@@ -1,4 +1,8 @@
-export const whitelist = ['http://localhost:3000', 'http://localhost:5174']; //white list consumers
+export const whitelist = [
+  'http://localhost:3000',
+  'http://localhost:5174',
+  'http://localhost:5173',
+]; //white list consumers
 export const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
