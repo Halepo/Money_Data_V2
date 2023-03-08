@@ -1,20 +1,23 @@
-import "./layout.sass";
-import { Outlet } from "react-router";
-import NavBar from "./navbar";
-import { Sidebar } from "./sidebar";
+import './layout.sass';
+import { Outlet } from 'react-router';
+import NavBar from './navbar';
+import { Sidebar } from './sidebar';
+import useUI from '../../helpers/hooks/useUI';
 
 // TODO add footer if needed
 export default function Layout() {
-  const sidebarWidth = 240;
+  const { sidebarWidth } = useUI();
+
   return (
     <div className="layout-wrapper">
-      <Sidebar width={sidebarWidth + "px"} />
+      <Sidebar />
       <div className="content-wrapper">
-        <NavBar sidebarWidth={sidebarWidth} />
+        <NavBar />
         <div
           className="main-container"
           style={{
-            marginLeft: sidebarWidth + sidebarWidth * 0.15 + "px",
+            marginLeft: `calc(2rem + ${sidebarWidth}px)`,
+            marginRight: '.1rem',
           }}
         >
           <Outlet />

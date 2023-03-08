@@ -7,22 +7,25 @@ import Unauthorized from './pages/auth/unauthorized';
 import Pages from './pages/pages';
 import PersistLogin from './components/PersistLogin';
 import Register from './pages/auth/register';
+import UIProvider from './helpers/context/UIContext';
 
 export default function App() {
   return (
-    <Routes>
-      <Route element={<PersistLogin />}>
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
-        <Route path="logout" element={<Logout />} />
+    <UIProvider>
+      <Routes>
+        <Route element={<PersistLogin />}>
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="logout" element={<Logout />} />
 
-        {/* pages */}
+          {/* pages */}
 
-        <Route element={<RequireAuth />}>
-          <Route path="/*" element={<Pages />} />
-          <Route path="unauthorized" element={<Unauthorized />} />
+          <Route element={<RequireAuth />}>
+            <Route path="/*" element={<Pages />} />
+            <Route path="unauthorized" element={<Unauthorized />} />
+          </Route>
         </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </UIProvider>
   );
 }
