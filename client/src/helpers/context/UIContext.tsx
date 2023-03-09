@@ -5,14 +5,24 @@ export const UIContext: any = createContext({});
 const UIProvider = (props: any) => {
   //TODO save this in user profiles (settings)
   const [sidebarWidth, setSidebarWidth] = useState(240);
-  const [sidebarExpanded, setSidebarExpanded] = useState(true);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+
+  const toggleSidebarExpanded = () => {
+    if (sidebarWidth == 240) {
+      setSidebarWidth(88);
+      setIsSidebarExpanded(false);
+    } else {
+      setSidebarWidth(240);
+      setIsSidebarExpanded(true);
+    }
+  };
 
   const value = {
     sidebarWidth,
-    setSidebarWidth,
-    sidebarExpanded,
-    setSidebarExpanded,
+    isSidebarExpanded,
+    toggleSidebarExpanded,
   };
+
   return (
     <UIContext.Provider value={value}>{props.children}</UIContext.Provider>
   );
