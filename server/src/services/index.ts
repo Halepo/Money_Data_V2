@@ -148,11 +148,13 @@ export class Service {
     userId: string,
     id: string,
     accountId: string,
+    categoryId: string,
     page: number,
     pageLimit: number,
     startDate: Date,
     endDate: Date,
     type: string,
+    currency: string,
     reason: string
   ) {
     try {
@@ -160,11 +162,13 @@ export class Service {
         userId,
         id,
         accountId,
+        categoryId,
         page,
         pageLimit,
         startDate,
         endDate,
         type,
+        currency,
         reason
       );
       if (registeredTransaction) return registeredTransaction;

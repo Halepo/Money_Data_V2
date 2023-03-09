@@ -4,11 +4,8 @@ import TransactionsDataTable from './transactionsDataTable';
 export default function transactions(props: any) {
   console.log('transaction rendered!');
   return (
-    <>
-      <CardContainer
-        cardTitle="Transactions"
-        bodyContent={<TransactionsDataTable />}
-      />
-    </>
+    <div className="mt-3">
+      <TransactionsDataTable />
+    </div>
   );
 }

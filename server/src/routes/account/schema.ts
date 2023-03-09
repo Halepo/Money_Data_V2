@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require('joi').extend(require('joi-currency-code'));
 
 /**
  * @swagger
@@ -35,8 +35,9 @@ const Joi = require('joi');
 
 export const createAccountSchema = Joi.object({
   userId: Joi.string().hex().length(24).required(),
-  balance: Joi.number().required(),
   name: Joi.string().required(),
+  balance: Joi.number(),
+  defaultCurrency: Joi.string().currency(),
   bank: Joi.string(),
   number: Joi.string(),
   description: Joi.string(),

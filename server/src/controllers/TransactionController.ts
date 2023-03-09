@@ -14,6 +14,7 @@ import {
 import { ITransaction } from 'src/interfaces/transactionInterface';
 import { requestValidator } from 'src/classes/requestValidator';
 import moment, { now } from 'moment';
+import { db } from 'src/config/database';
 
 export class TransactionController {
   public constructor(private readonly _service: Service) {}
@@ -41,6 +42,7 @@ export class TransactionController {
         categoryId: req.body.category_id,
         type: req.body.type, //expense, income or transfer
         amount: req.body.amount,
+        currency: req.body.currency,
         reason: req.body.reason,
         description: req.body.description,
         dateTime: req.body.date_time,
@@ -59,48 +61,109 @@ export class TransactionController {
     };
     let result = requestValidator.validateRequest(res, validationBody);
     if (result) {
-      let {
-        userId,
-        accountId,
-        categoryId,
-        type,
-        amount,
-        reason,
-        description,
-        dateTime,
-      } = result.value;
+      try {
+        let {
+          userId,
+          accountId,
+          categoryId,
+          type,
+          amount,
+          currency,
+          reason,
+          description,
+          dateTime,
+        } = result.value;
 
-      let created = new Date();
-      if (!dateTime || moment(dateTime).isAfter(new Date())) dateTime = created;
+        let created = new Date();
+        if (!dateTime || moment(dateTime).isAfter(new Date()))
+          dateTime = created;
 
-      // TODO check if userId and accountId are valid...
-      const newTransaction: ITransaction = {
-        userId: new ObjectId(userId),
-        accountId: new ObjectId(accountId),
-        categoryId: new ObjectId(categoryId),
-        type,
-        amount,
-        reason,
-        description,
-        created,
-        dateTime,
-      };
-      let registeredTransaction = await this._service.registerTransaction(
-        newTransaction
-      );
-      logger.infoData(registeredTransaction, 'registeredTransaction');
-      if (registeredTransaction) {
-        return ResponseBuilder.ok(
-          {
-            message: 'Successfully Registered',
-            data: registeredTransaction,
-          },
-          res
+        // TODO check if userId and accountId are valid...
+        const newTransaction: ITransaction = {
+          userId: new ObjectId(userId),
+          accountId: new ObjectId(accountId),
+          categoryId: new ObjectId(categoryId),
+          type,
+          amount,
+          currency,
+          reason,
+          description,
+          created,
+          dateTime,
+        };
+
+        // Define an array of collections and ids
+        let collections = ['User', 'Account', 'Category'];
+        let ids = [
+          newTransaction.userId,
+          newTransaction.accountId,
+          newTransaction.categoryId,
+        ];
+
+        let results = await requestValidator.validateCollectionItems(
+          collections,
+          ids
         );
-      } else {
+
+        // Destructure the results array into variables
+        let [user, account, category] = results;
+
+        // Check if any of the variables is null or undefined
+        if (!user || !account || !category) {
+          // Throw an error with the name of the missing variable
+          let missingVariable = [user, account, category].findIndex(
+            (element) => !element
+          );
+          throw new Error(`Invalid ${collections[missingVariable]} ID`);
+        } else if (category.transactionType != newTransaction.type) {
+          throw new Error(
+            `Category is for ${category.transactionType}. Please change!`
+          );
+        } else if (
+          category.transactionType != 'income' &&
+          account.accountBalance < newTransaction.amount
+        ) {
+          //will do currency conversion here
+          throw new Error(
+            `Amount is more than what you have in that account i.e ${account.accountBalance} ${account.defaultCurrency}!`
+          );
+        } else {
+          //add or subtract from account
+          let newAccountBalance = 0;
+          if (category.transactionType == 'income') {
+            newAccountBalance = account.accountBalance += newTransaction.amount;
+          } else {
+            newAccountBalance = account.accountBalance -= newTransaction.amount;
+          }
+
+          account = await db
+            .collection('Account')
+            .findOneAndUpdate(
+              { _id: new ObjectId(account._id) },
+              { $set: { accountBalance: newAccountBalance } }
+            );
+          logger.infoData('Altered Account : ', account);
+        }
+
+        let registeredTransaction = await this._service.registerTransaction(
+          newTransaction
+        );
+        logger.infoData(registeredTransaction, 'registeredTransaction');
+        if (registeredTransaction) {
+          return ResponseBuilder.ok(
+            {
+              message: 'Successfully Registered',
+              data: registeredTransaction,
+            },
+            res
+          );
+        } else {
+          throw new Error('Error registering transaction!');
+        }
+      } catch (error) {
         return ResponseBuilder.configurationError(
           ErrorCode.GeneralError,
-          'Error registering transaction!',
+          error.message,
           res
         );
       }
@@ -120,6 +183,7 @@ export class TransactionController {
         userId: req.query.user_id,
         id: req.query.id,
         accountId: req.query.account_id,
+        categoryId: req.query.category_id,
         page: req.query.page,
         pageLimit: req.query.page_limit,
         startDate: req.query.start_date,
@@ -127,42 +191,46 @@ export class TransactionController {
         // TODO get transaction by type or reason
         // TODO get transaction by category
         type: req.query.type,
+        currency: req.query.currency,
         reason: req.query.reason,
       },
       schema: fetchTransactionSchema,
     };
     let result = requestValidator.validateRequest(res, validationBody);
     if (result) {
-      let {
-        userId,
-        id,
-        accountId,
-        page,
-        pageLimit,
-        type,
-        reason,
-        startDate,
-        endDate,
-      } = result.value;
-      let formattedStartDate;
-      let formattedEndDate;
-      if (startDate) formattedStartDate = new Date(startDate);
-      if (endDate) formattedEndDate = new Date(endDate);
-      logger.infoData({
-        startDate: formattedStartDate,
-        endDate: formattedStartDate,
-      });
-      // TODO userId, accountId validate
-      let transactions = await this._service.getTransaction(
-        userId,
-        id,
-        accountId,
-        page,
-        pageLimit,
-        formattedStartDate,
-        formattedEndDate,
-        type,
-        reason
+      try {
+        let {
+          userId,
+          accountId,
+          categoryId,
+          page,
+          pageLimit,
+          type,
+          currency,
+          reason,
+          startDate,
+          endDate,
+        } = result.value;
+        let formattedStartDate;
+        let formattedEndDate;
+        if (startDate) formattedStartDate = new Date(startDate);
+        if (endDate) formattedEndDate = new Date(endDate);
+        logger.infoData({
+          startDate: formattedStartDate,
+          endDate: formattedStartDate,
+        });
+        // TODO userId, accountId validate
+        let transactions = await this._service.getTransaction(
+          userId,
+          accountId,
+          categoryId,
+          page,
+          pageLimit,
+          formattedStartDate,
+          formattedEndDate,
+          type,
+          currency,
+          reason
       );
       logger.infoData(transactions, 'All transaction');
       if (transactions) {
@@ -180,7 +248,28 @@ export class TransactionController {
           ErrorCode.GeneralError,
           'Error fetching transactions!',
           res
+
         );
+        logger.infoData(transactions, 'All transaction');
+        if (transactions) {
+          return ResponseBuilder.ok(
+            {
+              message: 'Successfully Fetched',
+              data: transactions.data,
+              next: transactions.next,
+              previous: transactions.previous,
+            },
+            res
+          );
+        } else {
+          return ResponseBuilder.configurationError(
+            ErrorCode.GeneralError,
+            'Error fetching transactions!',
+            res
+          );
+        }
+      } catch (error) {
+        return ResponseBuilder.internalServerError(error, error.message);
       }
     }
   };

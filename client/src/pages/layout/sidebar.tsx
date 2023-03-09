@@ -1,58 +1,59 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
-import "./sidebar.sass";
+import * as React from 'react';
+import { Link } from 'react-router-dom';
+import './sidebar.sass';
 
-type Anchor = "left";
+import {
+  UilAngleDoubleLeft,
+  UilAngleDoubleRight,
+  UilInvoice,
+} from '@iconscout/react-unicons';
 
-export function Sidebar({ width }: { width: string }) {
-  const [state, setState] = React.useState({ left: false });
+import useUI from '../../helpers/hooks/useUI';
+import { sidebarItems } from './sidebarItems';
 
-  const toggleDrawer =
-    (anchor: Anchor, open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
-      ) {
-        return;
-      }
-      setState({ ...state, [anchor]: open });
-    };
+type Anchor = 'left';
 
-  const anchor: Anchor = "left";
+export function Sidebar() {
+  const { isSidebarExpanded, sidebarWidth, toggleSidebarExpanded } = useUI();
+  const anchor: Anchor = 'left';
+  //make good animation
+  const toggleDrawer = () => toggleSidebarExpanded();
 
   return (
-    <div className="sidebar-wrapper" style={{ minWidth: width }}>
-      <div className="row sidebar-title-container">
-        <div className="col-4">
-          <i className="bi bi-box2-fill nav-icon"></i>
-        </div>
-        <div className="col-8">
-          <p className="font-weight-bolder">MONEY MANAGER</p>
-        </div>
+    <div
+      className="sidebar-wrapper"
+      style={{ minWidth: sidebarWidth + 'px', maxWidth: sidebarWidth + 'px' }}
+    >
+      <div className="sidebar-title-container">
+        <button onClick={toggleDrawer} className="btn expand-sidebar-button">
+          {isSidebarExpanded ? (
+            <UilAngleDoubleLeft width="4rem" height="2rem" />
+          ) : (
+            <UilAngleDoubleRight width="4rem" height="2rem" />
+          )}
+        </button>
+        <UilInvoice width="3rem" height="3rem" />
+        {isSidebarExpanded ? (
+          <p className="font-weight-bolder">Money Data</p>
+        ) : (
+          ''
+        )}
       </div>
-      <p className="small-text">Product of HaLePo</p>
+
       <hr />
-      <nav className="sidebar-links-container flex-column">
-        <Link className="btn btn-outline-secondary nav-link" to="/home">
-          Home
-        </Link>
-        <Link className="btn btn-outline-secondary nav-link" to="/transactions">
-          Transactions
-        </Link>
-        <Link className="btn btn-outline-secondary nav-link" to="/accounts">
-          Accounts
-        </Link>
-        <Link className="btn btn-outline-secondary nav-link" to="/budget">
-          Budget
-        </Link>
-        <Link className="btn btn-outline-secondary nav-link" to="/statistics">
-          Statistics
-        </Link>
-        <Link className="btn btn-outline-secondary nav-link" to="/settings">
-          Settings
-        </Link>
+      <nav className="sidebar-links-container">
+        {sidebarItems.map((item) => {
+          return (
+            <Link className="sidebar-navigation-link" to={item.name}>
+              <div className="icon">{item.icon}</div>
+              <div className="name">
+                {isSidebarExpanded
+                  ? item.name.charAt(0).toUpperCase() + item.name.slice(1)
+                  : ''}
+              </div>
+            </Link>
+          );
+        })}
       </nav>
     </div>
   );

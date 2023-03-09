@@ -7,6 +7,7 @@ import { Service } from 'src/services';
 import { Request, Response } from 'express';
 import { createAccountSchema, getAccountsSchema } from '@routes/account/schema';
 import { IAccount } from 'src/interfaces/accountInterface';
+import { db } from 'src/config/database';
 import { requestValidator } from 'src/classes/requestValidator';
 
 export class AccountController {
@@ -29,6 +30,7 @@ export class AccountController {
         let validationBody = {
           userId: req.body.user_id,
           balance: req.body.account_balance,
+          defaultCurrency: req.body.default_currency,
           bank: req.body.bank,
           number: req.body.account_number,
           name: req.body.account_name,
@@ -47,11 +49,34 @@ export class AccountController {
           }
           let userId = result.value.userId;
           let balance = result.value.balance;
+          let defaultCurrency = result.value.defaultCurrency;
           let bank = result.value.bank;
           let number = result.value.number;
           let name = result.value.name;
           let description = result.value.description;
-          //find existing user for validation
+
+          //validating balance
+          if (!balance) {
+            balance = 0;
+          }
+
+          // Validating userId
+          let collections = ['User'];
+          let ids = [new ObjectId(userId)];
+
+          let validationResults =
+            await requestValidator.validateCollectionItems(collections, ids);
+
+          let [user] = validationResults;
+
+          // Check if any of the variables is null or undefined
+          if (!user) {
+            return ResponseBuilder.badRequest(
+              ErrorCode.Invalid,
+              'Invalid User ID',
+              res
+            );
+          }
 
           //check passwords match validation
           let existingAccount = await this._service.findAccountByNumberOrName(
@@ -63,6 +88,7 @@ export class AccountController {
             const newAccount: IAccount = {
               userId: new ObjectId(userId),
               accountBalance: balance,
+              defaultCurrency: defaultCurrency,
               accountName: name,
               bank: bank,
               accountNumber: number,
@@ -111,7 +137,7 @@ export class AccountController {
       }
     } catch (error) {
       logger.errorData(error);
-      return ResponseBuilder.internalServerError(error, res);
+      return ResponseBuilder.internalServerError(error, error.message);
     }
   };
 

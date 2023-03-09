@@ -1,0 +1,30 @@
+[
+  {
+    "_id": "c3231656-3496-47bf-8f26-7eef09346685",
+    "colId": "history",
+    "containerId": "",
+    "name": "localhost:4001/api/auth/login",
+    "url": "localhost:4001/api/auth/login",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2023-03-07T19:32:24.000Z",
+    "modified": "2023-03-07T19:32:24.000Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "formencoded",
+      "raw": "",
+      "form": [
+        {
+          "name": "email",
+          "value": "tesfshca@gmail.com"
+        },
+        {
+          "name": "password",
+          "value": "password"
+        }
+      ]
+    },
+    "tests": []
+  }
+]
