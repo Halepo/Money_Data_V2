@@ -201,6 +201,7 @@ export class TransactionController {
       try {
         let {
           userId,
+          id,
           accountId,
           categoryId,
           page,
@@ -222,6 +223,7 @@ export class TransactionController {
         // TODO userId, accountId validate
         let transactions = await this._service.getTransaction(
           userId,
+          id,
           accountId,
           categoryId,
           page,
@@ -231,24 +233,6 @@ export class TransactionController {
           type,
           currency,
           reason
-      );
-      logger.infoData(transactions, 'All transaction');
-      if (transactions) {
-        return ResponseBuilder.ok(
-          {
-            message: 'Successfully Fetched',
-            data: transactions.data,
-            next: transactions.next,
-            previous: transactions.previous,
-          },
-          res
-        );
-      } else {
-        return ResponseBuilder.configurationError(
-          ErrorCode.GeneralError,
-          'Error fetching transactions!',
-          res
-
         );
         logger.infoData(transactions, 'All transaction');
         if (transactions) {
