@@ -16,17 +16,7 @@ export default function Home(props: any) {
           <StatCard />
           <StatCard />
 
-          <div className="row mt-4">
-            <TransactionsDataTable />
-            <div className="col-lg-5">
-              <div className="card">
-                <div className="card-header pb-0 p-3">
-                  <h6 className="mb-0">Categories</h6>
-                </div>
-                <div className="card-body p-3">Hey</div>
-              </div>
-            </div>
-          </div>
+          <TransactionsDataTable />
 
           <div className="row mt-4"></div>
           <div className="col-lg-7 mb-lg-0 mb-4">

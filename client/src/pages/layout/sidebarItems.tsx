@@ -5,9 +5,6 @@ import {
   UilMoneyBill,
   UilGraphBar,
   UilSlidersVAlt,
-  UilAngleDoubleLeft,
-  UilAngleDoubleRight,
-  UilInvoice,
 } from '@iconscout/react-unicons';
 
 // the links
