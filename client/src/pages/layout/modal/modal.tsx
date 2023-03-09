@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+import CustomButton from '../../../components/shared/customButton';
 import './modal.sass';
 
 // const ModalTrigger = () => {
@@ -13,25 +15,36 @@ import './modal.sass';
 //   );
 // };
 
-export default function Modal() {
+export default function Modal(props: any) {
+  console.log(props);
+
+  const buttonName: any = props.buttonName ? props.buttonName : 'Open Modal';
+  const buttonIcon: any = props.buttonIcon ? props.buttonIcon : '';
+  const modalContent: any = props.modalContent ? props.modalContent : '';
+  const buttonMaxWidth: any = props.buttonMaxWidth
+    ? props.buttonMaxWidth
+    : '16rem';
+
   return (
-    <div>
-      <button
+    <div style={{ maxWidth: buttonMaxWidth }}>
+      <CustomButton
+        width="inherit"
+        icon={buttonIcon}
+        name={buttonName}
         type="button"
-        className="btn btn btn-secondary p-2 m-2"
-        data-bs-toggle="modal"
-        data-bs-target="#custom-modal-right"
-      >
-        Custom Modal Right
-      </button>
-      <button
+        className=""
+        dataBsToggle="modal"
+        dataBsTarget="#custom-modal-right"
+      ></CustomButton>
+
+      {/* <button
         type="button"
         className="btn btn btn-secondary p-2 m-2"
         data-bs-toggle="modal"
         data-bs-target="#custom-modal-left"
       >
         Custom Modal left
-      </button>
+      </button> */}
       <div
         className="modal right"
         id="custom-modal-right"
@@ -40,11 +53,12 @@ export default function Modal() {
         style={{ display: 'none' }}
         aria-hidden="true"
       >
+        {modalContent}
         <div className="modal-dialog  modal-dialog-zee">
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="modal-title">
-                Modal title
+                Modal Title
               </h1>
               <button
                 type="button"
@@ -53,14 +67,7 @@ export default function Modal() {
                 aria-label="Close"
               ></button>
             </div>
-            <div className="modal-body">
-              <p>
-                This is some placeholder content to show a vertically centered
-                modal.
-              </p>
-              <br />
-              <p>Just like that.</p>
-            </div>
+            <div className="modal-body">{props.modalContent}</div>
             <div className="modal-footer">
               <button type="button" className="btn btn-primary">
                 Save changes
@@ -71,51 +78,6 @@ export default function Modal() {
                 data-bs-dismiss="modal"
               >
                 Close
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        className="modal left"
-        id="custom-modal-left"
-        tabIndex={-1}
-        aria-labelledby="modal-title"
-        style={{ display: 'none' }}
-        aria-hidden="true"
-      >
-        <div className="modal-dialog  modal-dialog-zee-l">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="modal-title">
-                Modal title
-              </h1>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <p>
-                This is some placeholder content to show a vertically centered
-                modal.
-              </p>
-              <br />
-              <p>Just like that.</p>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-              <button type="button" className="btn btn-primary">
-                Save changes
               </button>
             </div>
           </div>
