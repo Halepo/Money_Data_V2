@@ -13,10 +13,20 @@ export class CategoryRepository {
     if (result.ops[0]) return result.ops[0];
   }
 
-  public async fetchAllCategory(): Promise<any> {
-    logger.infoData('Fetching Category...');
-    let result = await db.collection('Category').find().toArray();
+  public async fetchCategory(
+    id,
+    category,
+    description,
+    categoryFor
+  ): Promise<any> {
+    let fetchParams: any = {};
+    if (id) fetchParams._id = new ObjectId(id);
+    if (category) fetchParams.category = category;
+    if (description) fetchParams.description = description;
+    if (categoryFor) fetchParams.categoryFor = categoryFor;
 
+    logger.infoData('Fetching Category...');
+    let result = await db.collection('Category').find(fetchParams).toArray();
     if (result) return result;
   }
 

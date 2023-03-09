@@ -5,17 +5,14 @@ import { logger } from '../classes/consoleLoggerClass';
 import { ErrorCode } from '../shared/error-codes';
 import { Service } from 'src/services';
 import { Request, Response } from 'express';
-import {
-  createAccountSchema,
-  getAllAccountsSchema,
-} from '@routes/account/schema';
+import { createAccountSchema, getAccountsSchema } from '@routes/account/schema';
 import { IAccount } from 'src/interfaces/accountInterface';
 import { db } from 'src/config/database';
 import { requestValidator } from 'src/classes/requestValidator';
 
 export class AccountController {
   public constructor(private readonly _service: Service) {}
-  // TODO Create new account
+  // TODO Create new account Check privilege and add created on and by
   // TODO Get all accounts for user by, account name, bank
   // TODO Get account stats by month, day and year i.e, account balance, total number of transactions, total in, total out
   // TODO Get account by account Id
@@ -82,12 +79,11 @@ export class AccountController {
           }
 
           //check passwords match validation
-          let existingAccount =
-            await this._service.findExistingAccountByNumberOrName(
-              userId,
-              name,
-              number
-            );
+          let existingAccount = await this._service.findAccountByNumberOrName(
+            userId,
+            name,
+            number
+          );
           if (!existingAccount) {
             const newAccount: IAccount = {
               userId: new ObjectId(userId),
@@ -146,58 +142,54 @@ export class AccountController {
   };
 
   //get all accounts
-  public getAllAccounts: any = async (
+  public getAccounts: any = async (
     req: Request,
     res: Response
   ): Promise<void> => {
     requestInterceptor(req);
     try {
-      if (req.body || req.query) {
-        let validationBody = {
+      let validationBody = {
+        required: !!req.query,
+        body: {
+          id: req.query.id,
           userId: req.query.user_id,
-        };
-        const result = getAllAccountsSchema.validate(validationBody);
-        logger.logData('validation result', result);
-        if (!result.error) {
-          logger.infoData(result.value);
-          if (Object.keys(result.value).length === 0) {
-            return ResponseBuilder.badRequest(
-              ErrorCode.Invalid,
-              'request body is required and must be not empty',
-              res
-            );
-          }
-          let userId = result.value.userId;
-          let allAccounts = await this._service.getAllAccounts(userId);
-          if (allAccounts) {
-            logger.infoData(allAccounts, 'allAccounts');
-            return ResponseBuilder.ok(
-              { message: 'Successfully fetched!', data: allAccounts },
-              res
-            );
-          } else {
-            logger.infoData('Error fetching accounts!');
-            return ResponseBuilder.badRequest(
-              ErrorCode.Invalid,
-              'Error fetching accounts!',
-              res
-            );
-          }
+          balance: req.query.balance,
+          name: req.query.name,
+          bank: req.query.bank,
+          number: req.query.number,
+          description: req.query.description,
+        },
+        schema: getAccountsSchema,
+      };
+
+      let result = requestValidator.validateRequest(res, validationBody);
+      if (result) {
+        const { id, userId, balance, name, bank, number, description } =
+          result.value;
+
+        let allAccounts = await this._service.getAccounts(
+          userId,
+          id,
+          balance,
+          name,
+          bank,
+          number,
+          description
+        );
+        if (allAccounts) {
+          logger.infoData(allAccounts, 'allAccounts');
+          return ResponseBuilder.ok(
+            { message: 'Successfully fetched!', data: allAccounts },
+            res
+          );
         } else {
-          logger.infoData('error happened');
+          logger.infoData('Error fetching accounts!');
           return ResponseBuilder.badRequest(
             ErrorCode.Invalid,
-            result.error.details[0].message,
+            'Error fetching accounts!',
             res
           );
         }
-      } else {
-        logger.errorData('body parameters not found');
-        return ResponseBuilder.badRequest(
-          ErrorCode.Invalid,
-          'body parameters not found',
-          res
-        );
       }
     } catch (error) {
       logger.errorData(error);

@@ -6,7 +6,7 @@ import { Service } from 'src/services';
 const service: Service = new Service();
 const controller: AccountController = new AccountController(service);
 const createAccount = controller.createAccount;
-const getAllAccounts = controller.getAllAccounts;
+const getAccounts = controller.getAccounts;
 
 const router: Router = express.Router();
 
@@ -44,6 +44,6 @@ router.post('/', isAuthorized, createAccount);
  *               items:
  *                 $ref: '#/components/schemas/Account'
  */
-router.get('/', isAuthorized, getAllAccounts);
+router.get('/', isAuthorized, getAccounts);
 
 export default router;

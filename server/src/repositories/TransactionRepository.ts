@@ -17,6 +17,7 @@ export class TransactionRepository {
 
   public async fetchTransaction(
     userId: string,
+    id: string,
     accountId: string,
     categoryId: string,
     page: number,
@@ -28,7 +29,9 @@ export class TransactionRepository {
     reason: string
   ): Promise<any> {
     logger.infoData('Fetching Transactions...');
-    let fetchParams: any = { userId: new ObjectId(userId) };
+    let fetchParams: any = {};
+    if (id) fetchParams._id = new ObjectId(id);
+    if (userId) fetchParams.userId = new ObjectId(userId);
     if (accountId) fetchParams.accountId = new ObjectId(accountId);
     if (categoryId) fetchParams.categoryId = new ObjectId(categoryId);
     if (type) fetchParams.type = type;

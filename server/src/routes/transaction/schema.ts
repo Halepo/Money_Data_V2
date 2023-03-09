@@ -24,8 +24,8 @@ export const editTransactionSchema = Joi.object({
 
 //TODO add currency
 export const fetchTransactionSchema = Joi.object({
+  userId: Joi.string().hex().length(24),
   id: Joi.string().hex().length(24),
-  userId: Joi.string().hex().length(24).required(),
   accountId: Joi.string().hex().length(24),
   categoryId: Joi.string().hex().length(24),
   page: Joi.number(),

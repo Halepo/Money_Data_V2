@@ -181,6 +181,7 @@ export class TransactionController {
       required: req.query ? true : false,
       body: {
         userId: req.query.user_id,
+        id: req.query.id,
         accountId: req.query.account_id,
         categoryId: req.query.category_id,
         page: req.query.page,
@@ -188,6 +189,7 @@ export class TransactionController {
         startDate: req.query.start_date,
         endDate: req.query.end_date,
         // TODO get transaction by type or reason
+        // TODO get transaction by category
         type: req.query.type,
         currency: req.query.currency,
         reason: req.query.reason,
@@ -229,6 +231,24 @@ export class TransactionController {
           type,
           currency,
           reason
+      );
+      logger.infoData(transactions, 'All transaction');
+      if (transactions) {
+        return ResponseBuilder.ok(
+          {
+            message: 'Successfully Fetched',
+            data: transactions.data,
+            next: transactions.next,
+            previous: transactions.previous,
+          },
+          res
+        );
+      } else {
+        return ResponseBuilder.configurationError(
+          ErrorCode.GeneralError,
+          'Error fetching transactions!',
+          res
+
         );
         logger.infoData(transactions, 'All transaction');
         if (transactions) {

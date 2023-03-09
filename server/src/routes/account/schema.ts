@@ -43,6 +43,12 @@ export const createAccountSchema = Joi.object({
   description: Joi.string(),
 });
 
-export const getAllAccountsSchema = Joi.object({
+export const getAccountsSchema = Joi.object({
+  id: Joi.string().hex().length(24),
   userId: Joi.string().hex().length(24).required(),
+  balance: Joi.number(),
+  name: Joi.string(),
+  bank: Joi.string(),
+  number: Joi.string(),
+  description: Joi.string(),
 });
