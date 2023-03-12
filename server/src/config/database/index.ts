@@ -1,1 +1,1 @@
-export { db, createConn } from './mongo'
+export { db, createConn } from './mongo';

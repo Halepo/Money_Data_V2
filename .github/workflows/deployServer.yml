@@ -2,9 +2,9 @@ name: 🚀 Deploy Server to HaLePo
 
 on:
   push:
-    branches: ['deploy']
+    branches: ["deploy"]
   pull_request:
-    branches: ['master']
+    branches: ["master"]
 
 jobs:
   build:
@@ -33,8 +33,8 @@ jobs:
       - name: 🔨 Build Client
         run: |
           cd client
-          npm install
-          npm run build
+          yarn install
+          yarn build
 
       - name: 🚚 List output files
         run: |

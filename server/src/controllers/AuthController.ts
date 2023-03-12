@@ -5,14 +5,18 @@ import { ErrorCode } from '../shared/error-codes';
 import { Service } from 'src/services';
 import { loginSchema, registerSchema } from '../routes/auth/schema';
 import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 
 export class AuthController {
   public constructor(private readonly _service: Service) {}
   //login
   public login: any = async (req: Request, res: Response): Promise<void> => {
-    requestInterceptor(req.body);
+    requestInterceptor(req);
     try {
       if (req.body || req.params) {
+        //get cookies
+        const cookies = req.signedCookies;
+        console.log(`cookie available at login: ${JSON.stringify(cookies)}`);
         let validationBody = {
           email: req.body.email,
           password: req.body.password,
@@ -36,22 +40,66 @@ export class AuthController {
           logger.infoData(loggedInUser, 'loggedInUser');
 
           if (loggedInUser) {
-            //add cookie
-            let options = {
+            let foundUser = loggedInUser.user;
+            let { newRefreshToken } = loggedInUser;
+
+            // if no refresh token in db and Check if we have same refresh token in DB
+            let newRefreshTokenArray: string[] = !foundUser.refreshToken
+              ? []
+              : !cookies?.jwt
+              ? foundUser.refreshToken
+              : foundUser.refreshToken.filter((rt) => rt !== cookies.jwt);
+
+            if (cookies?.jwt) {
+              /*
+            Scenario added here:
+                1) User logs in but never uses RT and does not logout
+                2) RT is stolen
+                3) If 1 & 2, reuse detection is needed to clear all RTs when user logs in
+            */
+              const refreshToken = cookies.jwt;
+              const foundToken = await this._service.findUserByRefreshToken({
+                refreshToken,
+              });
+
+              // Detected refresh token reuse!
+              if (!foundToken) {
+                console.log('Attempted refresh token reuse at login!');
+                // clear out ALL previous refresh tokens
+                newRefreshTokenArray = [];
+              }
+
+              res.clearCookie('jwt', {
+                httpOnly: true,
+                sameSite: 'none',
+                secure: true,
+              });
+            }
+
+            const result = await this._service.updateUserRefreshTokenArray(
+              [...newRefreshTokenArray, newRefreshToken],
+              foundUser._id
+            );
+            console.log(result);
+
+            // Creates Secure Cookie with refresh token
+            let cookieOptions = {
               maxAge: 1000 * 60 * 15, // would expire after 15 minutes
               httpOnly: true, // The cookie only accessible by the web server
               signed: true, // Indicates if the cookie should be signed
+              secure: true,
+              sameSite: 'none' as const,
             };
 
-            res.cookie('Token', loggedInUser.refreshToken, options);
-            const { user, token } = loggedInUser;
+            res.cookie('jwt', newRefreshToken, cookieOptions);
+            const { token } = loggedInUser;
             return ResponseBuilder.ok(
-              { message: 'Successfully logged in', data: { user, token } },
+              { message: 'Successfully logged in', data: { token } },
               res
             );
           } else {
             return ResponseBuilder.notFound(
-              '404',
+              ErrorCode.NotFound,
               'Credentials do not match! Please check your email or password!',
               res
             );
@@ -77,9 +125,121 @@ export class AuthController {
       return ResponseBuilder.internalServerError(error, res);
     }
   };
+
+  //refresh
+  public refresh: any = async (req: Request, res: Response): Promise<void> => {
+    requestInterceptor(req);
+    try {
+      logger.logData('Refreshing token...');
+      const cookie = req.signedCookies;
+      logger.infoData('cookie', cookie);
+      res.clearCookie('jwt', {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        signed: true,
+      });
+      if (cookie.jwt) {
+        const oldRefreshToken = cookie.jwt;
+        let foundUser = await this._service.findUserByRefreshToken(
+          oldRefreshToken
+        );
+        if (!foundUser) {
+          jwt.verify(
+            oldRefreshToken,
+            process.env.TOKEN_KEY,
+            async (err, decoded) => {
+              if (err)
+                return ResponseBuilder.forbidden(
+                  ErrorCode.Forbidden,
+                  'Forbidden request.',
+                  res
+                ); //Forbidden
+              console.log('attempted refresh token reuse!');
+              const hackedUser = await this._service.findUserByEmailOrName(
+                decoded.userName,
+                ''
+              );
+              if (hackedUser) {
+                console.log('hacked user', hackedUser);
+                const result = await this._service.updateUserRefreshTokenArray(
+                  [],
+                  hackedUser._id
+                );
+                console.log(result);
+              }
+            }
+          );
+          return ResponseBuilder.forbidden(
+            ErrorCode.Forbidden,
+            'Forbidden request.',
+            res
+          ); //Forbidden;
+        } else {
+          let updatedUser = await this._service.refreshToken(cookie.jwt);
+          if (updatedUser) {
+            const { token, newRefreshToken } = updatedUser;
+            // Creates Secure Cookie with refresh token
+            let cookieOptions = {
+              maxAge: 1000 * 60 * 15, // would expire after 15 minutes
+              httpOnly: true, // The cookie only accessible by the web server
+              signed: true, // Indicates if the cookie should be signed
+              secure: true,
+              sameSite: 'none' as const,
+            };
+
+            res.cookie('jwt', newRefreshToken, cookieOptions);
+            return ResponseBuilder.ok(
+              { message: 'Successfully refreshed', data: { token } },
+              res
+            );
+          } else {
+            return ResponseBuilder.forbidden(
+              ErrorCode.Forbidden,
+              'Forbidden, No user found with token: ',
+              res
+            );
+          }
+        }
+      } else {
+        return ResponseBuilder.badRequest(
+          ErrorCode.Invalid,
+          'No cookies in request.',
+          res
+        );
+      }
+    } catch (error) {
+      logger.errorData(error);
+      return ResponseBuilder.internalServerError(error, res);
+    }
+  };
+
+  //register
+  public logout: any = async (req: Request, res: Response): Promise<void> => {
+    requestInterceptor(req);
+    try {
+      const cookie = req.signedCookies;
+      logger.logData('logging out...');
+      logger.infoData('cookie', cookie);
+      if (cookie.jwt) {
+        await this._service.logout(cookie.jwt);
+        res.clearCookie('jwt', {
+          httpOnly: true,
+          sameSite: 'none',
+          secure: true,
+          signed: true,
+        });
+        return ResponseBuilder.ok('Logged Out Successfully', res);
+      }
+    } catch (error) {
+      logger.errorData(error);
+      return ResponseBuilder.internalServerError(error, res);
+    }
+  };
+
   //register
   public register: any = async (req: Request, res: Response): Promise<void> => {
-    requestInterceptor(req.body);
+    requestInterceptor(req);
     try {
       if (req.body || req.params) {
         let validationBody = {
@@ -107,8 +267,10 @@ export class AuthController {
 
           //check passwords match validation
           if (password === passwordConfirmation) {
-            let existingUser =
-              await this._service.findExistingUserByEmailOrName(name, email);
+            let existingUser = await this._service.findUserByEmailOrName(
+              name,
+              email
+            );
             if (!existingUser) {
               let registeredUser = await this._service.registerUser(
                 name,

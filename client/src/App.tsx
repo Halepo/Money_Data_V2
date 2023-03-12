@@ -1,27 +1,31 @@
 import './App.sass';
 import { Routes, Route } from 'react-router';
-import Login from './components/pages/auth/login';
-import NotFound from './components/shared/404';
-import RequireAuth from './components/shared/RequireAuth';
-import Home from './components/pages/home/home';
-import Logout from './components/pages/auth/logout';
-import Unauthorized from './components/pages/auth/unauthorized';
-import Pages from './components/pages/pages';
+import Login from './pages/auth/login';
+import RequireAuth from './components/RequireAuth';
+import Logout from './pages/auth/logout';
+import Unauthorized from './pages/auth/unauthorized';
+import Pages from './pages/pages';
+import PersistLogin from './components/PersistLogin';
+import Register from './pages/auth/register';
+import UIProvider from './helpers/context/UIContext';
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="links" element={<Login />} />
-      <Route path="login" element={<Login />} />
-      <Route path="register" element={<Login />} />
+    <UIProvider>
+      <Routes>
+        <Route element={<PersistLogin />}>
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="logout" element={<Logout />} />
 
-      <Route path="logout" element={<Logout />} />
+          {/* pages */}
 
-      {/* pages */}
-      <Route element={<RequireAuth />}>
-        <Route path="/*" element={<Pages />} />
-        <Route path="unauthorized" element={<Unauthorized />} />
-      </Route>
-    </Routes>
+          <Route element={<RequireAuth />}>
+            <Route path="/*" element={<Pages />} />
+            <Route path="unauthorized" element={<Unauthorized />} />
+          </Route>
+        </Route>
+      </Routes>
+    </UIProvider>
   );
 }

@@ -31,7 +31,7 @@ export type JWTAction = {
   type: string;
   JWT?: ICachedJWT;
 };
-export interface IFormError {
+export interface IformError {
   error: Object;
 }
 export type DispatchType = (args: JWTAction) => JWTAction;

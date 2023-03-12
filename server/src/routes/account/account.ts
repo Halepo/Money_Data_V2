@@ -1,19 +1,49 @@
-import express, { Router, Request, Response } from "express";
-import { AccountController } from "src/controllers/AccountController";
-import { isAuthorized } from "src/middlewares/authorizationMiddleware";
-import { Service } from "src/services";
+import express, { Router, Request, Response } from 'express';
+import { AccountController } from 'src/controllers/AccountController';
+import { isAuthorized } from 'src/middlewares/authorizationMiddleware';
+import { Service } from 'src/services';
 
-const service: Service = new Service;
+const service: Service = new Service();
 const controller: AccountController = new AccountController(service);
 const createAccount = controller.createAccount;
-const getAllAccounts = controller.getAllAccounts;
+const getAccounts = controller.getAccounts;
 
 const router: Router = express.Router();
 
-// POST /account/create
+/**
+ * @swagger
+ * /account:
+ *   post:
+ *     summary: Create new account
+ *     tags: [Account]
+ *     responses:
+ *       200:
+ *         description: The list of the books
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Account'
+ */
 router.post('/', isAuthorized, createAccount);
 
-// GET /account
-router.get('/', isAuthorized, getAllAccounts);
+/**
+ * @swagger
+ * /account:
+ *   get:
+ *     summary: Get accounts
+ *     tags: [Account]
+ *     responses:
+ *       200:
+ *         description: The list of the books
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Account'
+ */
+router.get('/', isAuthorized, getAccounts);
 
 export default router;
