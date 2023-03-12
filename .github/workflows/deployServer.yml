@@ -2,9 +2,9 @@ name: 🚀 Deploy Server to HaLePo
 
 on:
   push:
-    branches: ['deploy']
+    branches: ["deploy"]
   pull_request:
-    branches: ['master']
+    branches: ["master"]
 
 jobs:
   build:
