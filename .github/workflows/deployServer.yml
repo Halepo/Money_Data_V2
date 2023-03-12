@@ -27,19 +27,23 @@ jobs:
       - name: 🔨 Build server
         run: |
           cd server
-          yarn install
+          yarn
           yarn build
 
       - name: 🔨 Build Client
         run: |
           cd client
-          yarn install
+          yarn
           yarn build
 
       - name: 🚚 List output files
         run: |
           git reset --hard
           cd server/build
+          ls
+          cd ..
+          cd ..
+          cd client/build
           ls
 
       - name: 📂 Sync files
