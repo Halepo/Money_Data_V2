@@ -1,4 +1,4 @@
-const Joi = require('joi');
+import { JoiCustom } from 'src/shared/joi-custom';
 
 /**
  * @swagger
@@ -38,13 +38,13 @@ const Joi = require('joi');
  *   description: Authentication APIs
  */
 
-export const loginSchema = Joi.object({
-  email: Joi.string().required(),
-  password: Joi.string().required(),
+export const loginSchema = JoiCustom.object({
+  email: JoiCustom.string().required(),
+  password: JoiCustom.string().required(),
 });
-export const registerSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  password: Joi.string().required(),
-  passwordConfirmation: Joi.string().required(),
+export const registerSchema = JoiCustom.object({
+  name: JoiCustom.string().required(),
+  email: JoiCustom.string().required(),
+  password: JoiCustom.string().required(),
+  passwordConfirmation: JoiCustom.string().required(),
 });

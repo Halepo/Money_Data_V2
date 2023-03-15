@@ -1,25 +1,25 @@
-const Joi = require('joi');
+import { JoiCustom } from 'src/shared/joi-custom';
 
-export const getTransactionSchema = Joi.object({
-  id: Joi.string().hex().length(24),
-  category: Joi.string(),
-  description: Joi.string(),
-  category_for: Joi.string().valid('expense', 'income'),
+export const getTransactionSchema = JoiCustom.object({
+  id: JoiCustom.string().hex().length(24),
+  category: JoiCustom.string(),
+  description: JoiCustom.string(),
+  category_for: JoiCustom.string().valid('expense', 'income'),
 });
 
-export const createCategorySchema = Joi.object({
-  category: Joi.string().required(),
-  description: Joi.string(),
-  transaction_type: Joi.string().valid('expense', 'income').required(),
+export const createCategorySchema = JoiCustom.object({
+  category: JoiCustom.string().required(),
+  description: JoiCustom.string(),
+  transaction_type: JoiCustom.string().valid('expense', 'income').required(),
 });
 
-export const deleteCategorySchema = Joi.object({
-  id: Joi.string().hex().length(24).required(),
+export const deleteCategorySchema = JoiCustom.object({
+  id: JoiCustom.string().hex().length(24).required(),
 });
 
-export const editCategorySchema = Joi.object({
-  id: Joi.string().hex().length(24).required(),
-  category: Joi.string().required(),
-  description: Joi.string(),
-  transaction_type: Joi.string().valid('expense', 'income', 'transfer'),
+export const editCategorySchema = JoiCustom.object({
+  id: JoiCustom.string().hex().length(24).required(),
+  category: JoiCustom.string().required(),
+  description: JoiCustom.string(),
+  transaction_type: JoiCustom.string().valid('expense', 'income', 'transfer'),
 });

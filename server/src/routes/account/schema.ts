@@ -1,5 +1,4 @@
-const Joi = require('joi').extend(require('joi-currency-code'));
-
+import { JoiCustom } from 'src/shared/joi-custom';
 /**
  * @swagger
  * components:
@@ -33,22 +32,22 @@ const Joi = require('joi').extend(require('joi-currency-code'));
  *   description: Accounts APIs
  */
 
-export const createAccountSchema = Joi.object({
-  userId: Joi.string().hex().length(24).required(),
-  name: Joi.string().required(),
-  balance: Joi.number(),
-  defaultCurrency: Joi.string().currency(),
-  bank: Joi.string(),
-  number: Joi.string(),
-  description: Joi.string(),
+export const createAccountSchema = JoiCustom.object({
+  userId: JoiCustom.string().hex().length(24).required(),
+  name: JoiCustom.string().required(),
+  defaultCurrency: JoiCustom.currency().required(),
+  balance: JoiCustom.number(),
+  bank: JoiCustom.string(),
+  number: JoiCustom.string(),
+  description: JoiCustom.string(),
 });
 
-export const getAccountsSchema = Joi.object({
-  id: Joi.string().hex().length(24),
-  userId: Joi.string().hex().length(24).required(),
-  balance: Joi.number(),
-  name: Joi.string(),
-  bank: Joi.string(),
-  number: Joi.string(),
-  description: Joi.string(),
+export const getAccountsSchema = JoiCustom.object({
+  id: JoiCustom.string().hex().length(24),
+  userId: JoiCustom.string().hex().length(24).required(),
+  balance: JoiCustom.number(),
+  name: JoiCustom.string(),
+  bank: JoiCustom.string(),
+  number: JoiCustom.string(),
+  description: JoiCustom.string(),
 });
