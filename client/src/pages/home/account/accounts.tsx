@@ -4,7 +4,7 @@ import useAxiosPrivate from '../../../helpers/hooks/useAxiosPrivate';
 import { IAccount } from '../../../helpers/interface/account';
 
 import AccountCard from './accountCard';
-import RegisterAccountModal from './registerAccountModal';
+import RegisterAccountModal from './registerAccountForm';
 
 import useAuth from '../../../helpers/hooks/useAuth';
 import { decodeJWT } from '../../../helpers/services/utils';

@@ -1,0 +1,57 @@
+.custom-input-form-group
+    position: relative
+    display: flex
+    flex-direction: column
+    margin-bottom: 1rem
+    padding: .5rem
+    input,
+    select,
+    textarea,
+    button
+        position: relative
+    input:focus,
+    select:focus,
+    textarea:focus,
+    button:focus
+        outline-width: .1px
+        outline: none
+    input
+        padding: .5rem
+        border: none
+        input::active
+            border: none
+
+.custom-input-form-group::after
+    position: absolute
+    content: ''
+    height: 2px
+    bottom: -4px
+
+    margin: 0 auto
+    left: 0
+    right: 0
+    width: 50%
+    background: rgba(0, 0, 0, 0.125)
+
+    -o-transition: .5s
+    -ms-transition: .5s
+    -moz-transition: .5s
+    -webkit-transition: .5s
+    transition: .5s
+
+.custom-input-form-group:focus-within::after
+    content: ""
+    background-color: #212529
+    height: .2rem
+    width: 80%
+
+.custom-input-form-group:focus-within
+    input,
+    select,
+    textarea,
+    button
+        position: relative
+        color: #212529
+        background-color: #f0f0f0
+        border-color: #6c757d
+        shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125)

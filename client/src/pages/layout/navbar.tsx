@@ -50,7 +50,7 @@ export default function NavBar() {
       <a
         className="dropdown-toggle"
         role="button"
-        id="navbar-profile-menu"
+        id="navbar-profile-menu-toggle"
         data-bs-toggle="dropdown"
         aria-haspopup="true"
         aria-expanded="false"

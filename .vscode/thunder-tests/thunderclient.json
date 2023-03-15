@@ -104,7 +104,7 @@
     "method": "POST",
     "sortNum": 10000,
     "created": "2023-03-07T20:19:25.042Z",
-    "modified": "2023-03-07T21:46:27.433Z",
+    "modified": "2023-03-12T16:01:22.821Z",
     "headers": [],
     "params": [],
     "body": {
@@ -129,15 +129,23 @@
         },
         {
           "name": "amount",
-          "value": "900"
+          "value": "10"
         },
         {
           "name": "currency",
-          "value": "ETB"
+          "value": "etb"
         },
         {
           "name": "reason",
-          "value": "Ate shiro"
+          "value": "Trying out currency II"
+        },
+        {
+          "name": "description",
+          "value": "Some expense"
+        },
+        {
+          "name": "date_time",
+          "value": "1/11/2023"
         }
       ]
     },

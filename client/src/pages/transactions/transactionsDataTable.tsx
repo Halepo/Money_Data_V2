@@ -5,8 +5,8 @@ import useAuth from '../../helpers/hooks/useAuth';
 import moment from 'moment';
 
 import {
-  UilMoneyInsert,
-  UilMoneyWithdraw,
+  UilCornerRightDown,
+  UilCornerUpLeft,
   UilEdit,
   UilEye,
   UilTrashAlt,
@@ -14,6 +14,7 @@ import {
   UilStepBackwardAlt,
   UilBill,
 } from '@iconscout/react-unicons';
+import Modal from '../../components/shared/modal/modal';
 
 export default function transactionsDataTable(props: any) {
   const { auth }: any = useAuth();
@@ -113,18 +114,18 @@ export default function transactionsDataTable(props: any) {
                   </tr>
                 </thead>
                 <tbody>
-                  {transactions.map((transaction, index) => {
+                  {transactions.map((transaction: any, index) => {
                     return (
                       <tr key={index}>
                         <td style={{ display: 'none' }}>{index}</td>
                         <td>{index}</td>
                         {transaction.type == 'income' ? (
-                          <td style={{ backgroundColor: 'rgb(144 255 163)' }}>
-                            <UilMoneyInsert /> Income
+                          <td style={{ backgroundColor: 'rgb(206 255 219)' }}>
+                            <UilCornerRightDown /> Income
                           </td>
                         ) : (
-                          <td style={{ backgroundColor: 'rgb(255 144 144)' }}>
-                            <UilMoneyWithdraw /> Expence
+                          <td style={{ backgroundColor: 'rgb(255 206 206)' }}>
+                            <UilCornerUpLeft /> Expence
                           </td>
                         )}
                         <td>
@@ -137,8 +138,10 @@ export default function transactionsDataTable(props: any) {
                         <td>{`${transaction.amount} ${transaction.currency}`}</td>
                         <td>{transaction.reason}</td>
                         <td>{moment(transaction.created).format('LLLL')}</td>
-                        <td>
-                          <UilEdit /> <UilEye /> <UilTrashAlt />
+                        <td style={{ display: 'flex' }}>
+                          <Modal title="Edit" buttonIcon={<UilEdit />} />
+                          <Modal title="View" buttonIcon={<UilEye />} />
+                          <Modal title="Delete" buttonIcon={<UilTrashAlt />} />
                         </td>
                       </tr>
                     );

@@ -1,15 +1,72 @@
 import './home.sass';
 import TransactionsDataTable from '../transactions/transactionsDataTable';
 import StatCard from './components/statCard';
-import ActionButtons from './components/actionButtons';
-import Modal from '../layout/modal/modal';
+import Modal from '../../components/shared/modal/modal';
+
+import { RegisterAccountForm } from './account/registerAccountForm';
+import { UilPlusCircle } from '@iconscout/react-unicons';
+
+const NewContent = (): any => {
+  return (
+    <>
+      <div className="modal-body">
+        <p>
+          This is some placeholder content to show the scrolling behavior for
+          modals. We use repeated line breaks to demonstrate how content can
+          exceed minimum inner height, thereby showing inner scrolling. When
+          content becomes longer than the prefedined max-height of modal,
+          content will be cropped and scrollable within the modal.
+        </p>
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <p>This content should appear at the bottom after you scroll.</p>
+      </div>
+    </>
+  );
+};
 
 export default function Home(props: any) {
   console.log('Home rendered!');
   return (
     <div className="home-wrapper">
-      <div className="container-fluid py-4">
-        <ActionButtons />
+      <div className="container-fluid">
+        <div className="row pb-4">
+          <Modal
+            title="Add Account"
+            buttonName="Add Account"
+            buttonIcon={<UilPlusCircle />}
+            content={<RegisterAccountForm />}
+            buttonMaxWidth="16rem"
+          />
+          <Modal
+            title="Add Income"
+            buttonName="Add Income"
+            buttonIcon={<UilPlusCircle />}
+            content={<NewContent />}
+            buttonMaxWidth="16rem"
+          />
+          <Modal
+            title="Add Expense"
+            buttonName="Add Expense"
+            buttonIcon={<UilPlusCircle />}
+            content={<h1>Expense</h1>}
+            buttonMaxWidth="16rem"
+          />
+        </div>
         <div className="row">
           <StatCard />
           <StatCard />

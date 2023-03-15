@@ -6,7 +6,18 @@ import useUI from '../../helpers/hooks/useUI';
 
 // TODO add footer if needed
 export default function Layout() {
-  const { sidebarWidth } = useUI();
+  const {
+    sidebarWidth,
+    isSidebarExpanded,
+    setIsSidebarExpanded,
+    deviceTypeByWidth,
+    toggleSidebarExpanded,
+    // deviceTypeByWidth,
+  } = useUI();
+
+  console.log('************ on ' + deviceTypeByWidth);
+  console.log('isSidebarExpanded? ', isSidebarExpanded);
+  console.log('sidebarWidth? ', sidebarWidth);
 
   return (
     <div className="layout-wrapper">
@@ -17,7 +28,6 @@ export default function Layout() {
           className="main-container"
           style={{
             marginLeft: `calc(2rem + ${sidebarWidth}px)`,
-            marginRight: '.1rem',
           }}
         >
           <Outlet />

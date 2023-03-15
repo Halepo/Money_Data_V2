@@ -1,7 +1,12 @@
 .layout-wrapper
     display: flex
-.main-container
-    overflow: hidden
-.content-wrapper
-    width: 100%
-    background-color: #eaeeef
+    .content-wrapper
+        width: 100%
+        background-color: #eaeeef
+        min-height: 100vh
+        .main-container
+            //TODO make the top nav bar a UI context
+            margin-top: 3rem
+            margin-right: 1rem
+            padding-bottom: 3rem
+            overflow: hidden
