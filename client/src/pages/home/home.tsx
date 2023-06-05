@@ -1,10 +1,13 @@
-import './home.sass';
-import TransactionsDataTable from '../transactions/transactionsDataTable';
-import StatCard from './components/statCard';
-import Modal from '../../components/shared/modal/modal';
+import "./home.sass";
+import TransactionsDataTable from "../transactions/transactionsDataTable";
+import StatCard from "./components/statCard";
+import Modal from "../../components/shared/modal";
 
-import { RegisterAccountForm } from './account/registerAccountForm';
-import { UilPlusCircle } from '@iconscout/react-unicons';
+import { RegisterAccountForm } from "./account/registerAccountForm";
+import { UilPlusCircle, UilInvoice } from "@iconscout/react-unicons";
+import CustomButton from "../../components/shared/customButton";
+
+import useUI from "../../helpers/hooks/useUI";
 
 const NewContent = (): any => {
   return (
@@ -17,7 +20,54 @@ const NewContent = (): any => {
           content becomes longer than the prefedined max-height of modal,
           content will be cropped and scrollable within the modal.
         </p>
-
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
         <br />
         <br />
         <br />
@@ -40,32 +90,34 @@ const NewContent = (): any => {
 };
 
 export default function Home(props: any) {
-  console.log('Home rendered!');
+  const { setModalContent, setIsModalOpen } = useUI();
+  console.log("Home rendered!");
   return (
     <div className="home-wrapper">
       <div className="container-fluid">
         <div className="row pb-4">
-          <Modal
-            title="Add Account"
-            buttonName="Add Account"
-            buttonIcon={<UilPlusCircle />}
-            content={<RegisterAccountForm />}
-            buttonMaxWidth="16rem"
-          />
-          <Modal
-            title="Add Income"
-            buttonName="Add Income"
-            buttonIcon={<UilPlusCircle />}
-            content={<NewContent />}
-            buttonMaxWidth="16rem"
-          />
-          <Modal
-            title="Add Expense"
-            buttonName="Add Expense"
-            buttonIcon={<UilPlusCircle />}
-            content={<h1>Expense</h1>}
-            buttonMaxWidth="16rem"
-          />
+          <CustomButton
+            style={{ width: "inherit", color: "blue" }}
+            icon={<UilPlusCircle />}
+            name="Add Account"
+            type="button"
+            className="modal-trigger"
+            onClick={() => {
+              setModalContent(<RegisterAccountForm />);
+              setIsModalOpen(true);
+            }}
+          ></CustomButton>
+          <CustomButton
+            style={{ width: "inherit", color: "green" }}
+            icon={<UilInvoice />}
+            name="Add Transaction"
+            type="button"
+            className="modal-trigger"
+            onClick={() => {
+              setModalContent(<NewContent />);
+              setIsModalOpen(true);
+            }}
+          ></CustomButton>
         </div>
         <div className="row">
           <StatCard />

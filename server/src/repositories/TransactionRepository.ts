@@ -1,16 +1,16 @@
-import { db } from 'src/config/database';
-import { ObjectId } from 'bson';
-import { logger } from '../classes/consoleLoggerClass';
-import { ITransaction } from 'src/interfaces/transactionInterface';
-import moment from 'moment';
+import { db } from "src/config/database";
+import { ObjectId } from "bson";
+import { logger } from "../classes/consoleLoggerClass";
+import { ITransaction } from "src/interfaces/transactionInterface";
+import moment from "moment";
 
 export class TransactionRepository {
   public async registerTransaction(newTransaction: ITransaction): Promise<any> {
-    logger.infoData('Validating Request');
+    logger.infoData("Validating Request");
 
-    logger.infoData('Registering transaction..');
+    logger.infoData("Registering transaction..");
     let result = await db
-      .collection('Transaction')
+      .collection("Transaction")
       .insertOne(newTransaction, { upsert: true, returnOriginal: false });
     if (result.ops[0]) return result.ops[0];
   }
@@ -28,7 +28,7 @@ export class TransactionRepository {
     currency: string,
     reason: string
   ): Promise<any> {
-    logger.infoData('Fetching Transactions...');
+    logger.infoData("Fetching Transactions...");
     let fetchParams: any = {};
     if (id) fetchParams._id = new ObjectId(id);
     if (userId) fetchParams.userId = new ObjectId(userId);
@@ -38,51 +38,56 @@ export class TransactionRepository {
     if (currency) fetchParams.currency = currency;
     if (reason) fetchParams.reason = reason;
     // TODO Test this
-    if (startDate && moment(startDate).isValid())
+    if (startDate && moment(startDate).isValid()) {
+      logger.infoData("valid startDate.... ", startDate);
       fetchParams.dateTime = { ...fetchParams.dateTime, $gte: startDate };
-    if (endDate && moment(endDate).isValid())
+    }
+    if (endDate && moment(endDate).isValid()) {
+      logger.infoData("valid endDate....", endDate);
       fetchParams.dateTime = { ...fetchParams.dateTime, $lte: endDate };
-
+    }
     if (!page || page <= 0) page = 1;
     if (!pageLimit || pageLimit <= 0) pageLimit = 10;
 
     const startIndex = (page - 1) * pageLimit;
     const endIndex = page * pageLimit;
 
+    logger.infoData("fetchParams", fetchParams);
+
     let results: { data?: Object; next?: Object; previous?: Object } = {};
 
     //TODO check currency issue ---
 
     let result = await db
-      .collection('Transaction')
+      .collection("Transaction")
       .aggregate([
         {
           $match: fetchParams, // filter by fetchParams
         },
         {
           $lookup: {
-            from: 'User',
-            let: { userId: '$userId' },
-            pipeline: [{ $match: { $expr: { $eq: ['$_id', '$$userId'] } } }],
-            as: 'user',
+            from: "User",
+            let: { userId: "$userId" },
+            pipeline: [{ $match: { $expr: { $eq: ["$_id", "$$userId"] } } }],
+            as: "user",
           },
         },
         {
           $lookup: {
-            from: 'Account',
-            let: { accountId: '$accountId' },
-            pipeline: [{ $match: { $expr: { $eq: ['$_id', '$$accountId'] } } }],
-            as: 'account',
+            from: "Account",
+            let: { accountId: "$accountId" },
+            pipeline: [{ $match: { $expr: { $eq: ["$_id", "$$accountId"] } } }],
+            as: "account",
           },
         },
         {
           $lookup: {
-            from: 'Category',
-            let: { categoryId: '$categoryId' },
+            from: "Category",
+            let: { categoryId: "$categoryId" },
             pipeline: [
-              { $match: { $expr: { $eq: ['$_id', '$$categoryId'] } } },
+              { $match: { $expr: { $eq: ["$_id", "$$categoryId"] } } },
             ],
-            as: 'category',
+            as: "category",
           },
         },
         {
@@ -95,7 +100,7 @@ export class TransactionRepository {
       .toArray();
 
     let resultCount = await db
-      .collection('Transaction')
+      .collection("Transaction")
       .find(fetchParams)
       .count();
 
@@ -147,8 +152,8 @@ export class TransactionRepository {
     id: string,
     update: ITransaction
   ): Promise<any> {
-    logger.infoData('Fetching Transaction...');
-    let result = await db.collection('Transaction').updateOne(
+    logger.infoData("Fetching Transaction...");
+    let result = await db.collection("Transaction").updateOne(
       { _id: new ObjectId(id) },
       { $set: { reason: update.reason, amount: update.amount } },
       {
@@ -156,20 +161,20 @@ export class TransactionRepository {
         upsert: true,
       }
     );
-    logger.infoData('Successfully Updated!');
+    logger.infoData("Successfully Updated!");
     if (result) return update;
   }
 
   public async deleteTransaction(id: string): Promise<any> {
-    logger.infoData('Deleting Transactions...');
+    logger.infoData("Deleting Transactions...");
     let result = await db
-      .collection('Transaction')
+      .collection("Transaction")
       .deleteOne({ _id: new ObjectId(id) });
-    logger.infoData('Successfully Deleted!');
+    logger.infoData("Successfully Deleted!");
     if (result.deletedCount === 1) {
-      logger.infoData('Successfully Deleted!');
+      logger.infoData("Successfully Deleted!");
       return {
-        message: 'Successfully Deleted!',
+        message: "Successfully Deleted!",
       };
     }
   }

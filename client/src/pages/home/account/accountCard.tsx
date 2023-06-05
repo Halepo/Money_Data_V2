@@ -1,14 +1,14 @@
-import './accountCard.sass';
-import { IAccount } from '../../../helpers/interface/account';
-import moment from 'moment';
+import "./accountCard.sass";
+import { IAccount } from "../../../helpers/interface/account";
+import moment from "moment";
 const data = {
-  _id: '62e4f52a2f17311b521afa72',
-  userId: '62e4e6c22f17311b521afa71',
+  _id: "62e4f52a2f17311b521afa72",
+  userId: "62e4e6c22f17311b521afa71",
   balance: 0,
-  accountName: 'Cash',
-  bank: 'Pocket',
+  accountName: "Cash",
+  bank: "Pocket",
   accountNumber: 12345,
-  created: '2022-07-30T09:08:58.083Z',
+  created: "2022-07-30T09:08:58.083Z",
 };
 
 export default function AccountCard({
@@ -40,7 +40,7 @@ export default function AccountCard({
         <button className="btn btn-outline-secondary">See Transactions</button>
       </div>
       <div className="card-footer text-muted">
-        {moment(created).format('LLLL')}
+        {moment(created).format("LLLL")}
       </div>
     </div>
   );

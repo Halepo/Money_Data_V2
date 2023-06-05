@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { MakeRequest } from '../../../helpers/services/apiService';
-import { FormError } from '../../../components/shared/formError';
+import { MakeRequest } from "../../../helpers/services/apiService";
+import { FormError } from "../../../components/shared/formError";
 
-import Modal from '../../../components/shared/modal/modal';
-import InputField from '../../../components/shared/inputField';
+import InputField from "../../../components/shared/inputField";
+
+import useUI from "../../../helpers/hooks/useUI";
 
 type props = {
   userId: string;
@@ -19,16 +20,16 @@ type TNewAccount = {
 };
 
 export const RegisterAccountForm = ({ userId }: any) => {
-  console.log('register account modal rendered');
-  const [error, setError] = useState('');
-  const [name, setName] = useState('');
+  console.log("register account modal rendered");
+  const { setModalContent, setIsModalOpen } = useUI();
+  const [error, setError] = useState("");
+  const [name, setName] = useState("");
   const [balance, setBalance] = useState(0);
-  const [number, setNumber] = useState('');
-  const [bank, setBank] = useState('');
-  const [description, setDescription] = useState('');
+  const [number, setNumber] = useState("");
+  const [bank, setBank] = useState("");
+  const [description, setDescription] = useState("");
 
-  // const handleOpen = () => setModalOpen(true);
-  const handleRegister = async (): Promise<void> => {
+  const handleSave = async (): Promise<void> => {
     const newAccount = {
       user_id: userId,
       account_balance: balance,
@@ -40,13 +41,14 @@ export const RegisterAccountForm = ({ userId }: any) => {
     console.log(newAccount);
     try {
       const registered = await MakeRequest({
-        url: 'account',
-        method: 'post',
+        url: "account",
+        method: "post",
         data: newAccount,
         needAuthorization: true,
       });
-      console.log(registered, 'registered');
-      // TODO close modal here
+      console.log(registered, "registered");
+      setIsModalOpen(false);
+      setModalContent(<></>);
     } catch (error: any) {
       if (error?.response?.data?.error) {
         let errorData = error.response.data.error;
@@ -115,7 +117,7 @@ export const RegisterAccountForm = ({ userId }: any) => {
         type="number"
         placeholder="Enter Your Bank Name"
       />
-      {Object.keys(error).length > 0 ? <FormError error={error} /> : ''}
+      {Object.keys(error).length > 0 ? <FormError error={error} /> : ""}
     </>
   );
 };

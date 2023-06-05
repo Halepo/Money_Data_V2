@@ -15,5 +15,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "githubPullRequests.ignoredPullRequestBranches": ["master"],
-  "liveServer.settings.port": 5502 // optional but recommended
+  "liveServer.settings.port": 5502,
+  "thunder-client.workspaceRelativePath": ".vscode/",
+  "thunder-client.saveToWorkspace": true // optional but recommended
 }

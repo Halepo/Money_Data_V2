@@ -1,20 +1,20 @@
-import { ObjectId } from 'bson';
-import { ResponseBuilder } from '../shared/response-builder';
-import { requestInterceptor } from '../interceptors/interceptor';
-import { logger } from '../classes/consoleLoggerClass';
-import { ErrorCode } from '../shared/error-codes';
-import { Service } from 'src/services';
-import { Request, Response } from 'express';
+import { ObjectId } from "bson";
+import { ResponseBuilder } from "../shared/response-builder";
+import { requestInterceptor } from "../interceptors/interceptor";
+import { logger } from "../classes/consoleLoggerClass";
+import { ErrorCode } from "../shared/error-codes";
+import { Service } from "src/services";
+import { Request, Response } from "express";
 import {
   deleteTransactionSchema,
   editTransactionSchema,
   fetchTransactionSchema,
   registerTransactionSchema,
-} from '@routes/transaction/schema';
-import { ITransaction } from 'src/interfaces/transactionInterface';
-import { requestValidator } from 'src/classes/requestValidator';
-import moment, { now } from 'moment';
-import { db } from 'src/config/database';
+} from "@routes/transaction/schema";
+import { ITransaction } from "src/interfaces/transactionInterface";
+import { requestValidator } from "src/classes/requestValidator";
+import moment, { now } from "moment";
+import { db } from "src/config/database";
 
 export class TransactionController {
   public constructor(private readonly _service: Service) {}
@@ -78,7 +78,7 @@ export class TransactionController {
         if (!dateTime || moment(dateTime).isAfter(new Date()))
           dateTime = created;
 
-        // TODO check if userId and accountId are valid...
+        // TODO check if userId and accountId are valid...DONE
         const newTransaction: ITransaction = {
           userId: new ObjectId(userId),
           accountId: new ObjectId(accountId),
@@ -93,7 +93,7 @@ export class TransactionController {
         };
 
         // Define an array of collections and ids
-        let collections = ['User', 'Account', 'Category'];
+        let collections = ["User", "Account", "Category"];
         let ids = [
           newTransaction.userId,
           newTransaction.accountId,
@@ -120,7 +120,7 @@ export class TransactionController {
             `Category is for ${category.transactionType}. Please change!`
           );
         } else if (
-          category.transactionType != 'income' &&
+          category.transactionType != "income" &&
           account.accountBalance < newTransaction.amount
         ) {
           //will do currency conversion here
@@ -130,35 +130,35 @@ export class TransactionController {
         } else {
           //add or subtract from account
           let newAccountBalance = 0;
-          if (category.transactionType == 'income') {
+          if (category.transactionType == "income") {
             newAccountBalance = account.accountBalance += newTransaction.amount;
           } else {
             newAccountBalance = account.accountBalance -= newTransaction.amount;
           }
 
           account = await db
-            .collection('Account')
+            .collection("Account")
             .findOneAndUpdate(
               { _id: new ObjectId(account._id) },
               { $set: { accountBalance: newAccountBalance } }
             );
-          logger.infoData('Altered Account : ', account);
+          logger.infoData("Altered Account : ", account);
         }
 
         let registeredTransaction = await this._service.registerTransaction(
           newTransaction
         );
-        logger.infoData(registeredTransaction, 'registeredTransaction');
+        logger.infoData(registeredTransaction, "registeredTransaction");
         if (registeredTransaction) {
           return ResponseBuilder.ok(
             {
-              message: 'Successfully Registered',
+              message: "Successfully Registered",
               data: registeredTransaction,
             },
             res
           );
         } else {
-          throw new Error('Error registering transaction!');
+          throw new Error("Error registering transaction!");
         }
       } catch (error) {
         return ResponseBuilder.configurationError(
@@ -234,11 +234,11 @@ export class TransactionController {
           currency,
           reason
         );
-        logger.infoData(transactions, 'All transaction');
+        logger.infoData(transactions, "All transaction");
         if (transactions) {
           return ResponseBuilder.ok(
             {
-              message: 'Successfully Fetched',
+              message: "Successfully Fetched",
               data: transactions.data,
               next: transactions.next,
               previous: transactions.previous,
@@ -248,7 +248,7 @@ export class TransactionController {
         } else {
           return ResponseBuilder.configurationError(
             ErrorCode.GeneralError,
-            'Error fetching transactions!',
+            "Error fetching transactions!",
             res
           );
         }
@@ -277,13 +277,13 @@ export class TransactionController {
       let deleted = await this._service.deleteTransaction(id);
       if (deleted) {
         return ResponseBuilder.ok(
-          { message: 'Successfully Deleted', data: deleted },
+          { message: "Successfully Deleted", data: deleted },
           res
         );
       } else {
         return ResponseBuilder.configurationError(
           ErrorCode.GeneralError,
-          'Error deleting transaction!',
+          "Error deleting transaction!",
           res
         );
       }
@@ -324,16 +324,16 @@ export class TransactionController {
         id,
         update
       );
-      logger.infoData(updatedTransaction, 'updatedTransaction');
+      logger.infoData(updatedTransaction, "updatedTransaction");
       if (updatedTransaction) {
         return ResponseBuilder.ok(
-          { message: 'Successfully updated', data: updatedTransaction },
+          { message: "Successfully updated", data: updatedTransaction },
           res
         );
       } else {
         return ResponseBuilder.configurationError(
           ErrorCode.GeneralError,
-          'Error updating transaction!',
+          "Error updating transaction!",
           res
         );
       }

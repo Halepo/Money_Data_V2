@@ -1,3 +1,11 @@
+@keyframes slidein
+    from
+        margin-left: 100%
+        width: 100%
+    to
+        margin-left: 0%
+        width: 100%
+
 .modal-backdrop-zee.show
     opacity: 0.5
 .modal-backdrop-zee
@@ -9,6 +17,9 @@
     height: 100vh
     background-color: #000
 .modal-zee
+    animation-name: slidein
+    animation-duration: .2s
+    animation-timing-function: ease-out
     z-index: 1100
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)
     inner-border-radius: calc(0.5rem - 1px)
@@ -56,15 +67,12 @@
             border-radius: 0
             border: none
             .modal-header-zee
+                justify-content: center
+                align-items: center
                 margin: 1rem
-                border-radius: 1rem
-                background-color: #fff
+                margin-bottom: 0
                 display: flex
-                padding-x: 1rem
-                padding-y: 1rem
-                padding: 1rem 1rem
-                border-color: var(--bs-border-color)
-                border-width: 1px
+                padding: .5rem
             .modal-title-zee
                 line-height: 1.5
             .modal-close-button-zee
@@ -86,10 +94,11 @@
                 padding: 1rem
                 overflow-y: auto
                 background-color: #fff
-                height: calc(100vh - 12rem)
+                height: calc(100vh - 10rem)
                 border-radius: 0.375rem
             .modal-footer-zee
                 position: absolute
+                margin-bottom: 1rem
                 bottom: 0
                 width: 100%
                 display: flex

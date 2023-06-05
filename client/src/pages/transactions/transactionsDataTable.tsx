@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import useAxiosPrivate from '../../helpers/hooks/useAxiosPrivate';
-import { decodeJWT } from '../../helpers/services/utils';
-import useAuth from '../../helpers/hooks/useAuth';
-import moment from 'moment';
+import { useEffect, useState } from "react";
+import useAxiosPrivate from "../../helpers/hooks/useAxiosPrivate";
+import { decodeJWT } from "../../helpers/services/utils";
+import useAuth from "../../helpers/hooks/useAuth";
+import moment from "moment";
 
 import {
   UilCornerRightDown,
@@ -13,8 +13,8 @@ import {
   UilSkipForwardAlt,
   UilStepBackwardAlt,
   UilBill,
-} from '@iconscout/react-unicons';
-import Modal from '../../components/shared/modal/modal';
+} from "@iconscout/react-unicons";
+import Modal from "../../components/shared/modal";
 
 export default function transactionsDataTable(props: any) {
   const { auth }: any = useAuth();
@@ -72,7 +72,7 @@ export default function transactionsDataTable(props: any) {
       const response: any = await axiosPrivate.get(
         `transaction?user_id=${userId}`
       );
-      console.log('Response', response.data.data);
+      console.log("Response", response.data.data);
       if (response.data.data.length > 0) {
         setTransactions(response.data.data);
         return response;
@@ -117,19 +117,19 @@ export default function transactionsDataTable(props: any) {
                   {transactions.map((transaction: any, index) => {
                     return (
                       <tr key={index}>
-                        <td style={{ display: 'none' }}>{index}</td>
+                        <td style={{ display: "none" }}>{index}</td>
                         <td>{index}</td>
-                        {transaction.type == 'income' ? (
-                          <td style={{ backgroundColor: 'rgb(206 255 219)' }}>
+                        {transaction.type == "income" ? (
+                          <td style={{ backgroundColor: "rgb(206 255 219)" }}>
                             <UilCornerRightDown /> Income
                           </td>
                         ) : (
-                          <td style={{ backgroundColor: 'rgb(255 206 206)' }}>
+                          <td style={{ backgroundColor: "rgb(255 206 206)" }}>
                             <UilCornerUpLeft /> Expence
                           </td>
                         )}
                         <td>
-                          {transaction.account[0].accountName}{' '}
+                          {transaction.account[0].accountName}{" "}
                           <small>
                             [Balance: {transaction.account[0].accountBalance}]
                           </small>
@@ -137,8 +137,8 @@ export default function transactionsDataTable(props: any) {
                         <td>{transaction.category[0].category}</td>
                         <td>{`${transaction.amount} ${transaction.currency}`}</td>
                         <td>{transaction.reason}</td>
-                        <td>{moment(transaction.created).format('LLLL')}</td>
-                        <td style={{ display: 'flex' }}>
+                        <td>{moment(transaction.created).format("LLLL")}</td>
+                        <td style={{ display: "flex" }}>
                           <Modal title="Edit" buttonIcon={<UilEdit />} />
                           <Modal title="View" buttonIcon={<UilEye />} />
                           <Modal title="Delete" buttonIcon={<UilTrashAlt />} />

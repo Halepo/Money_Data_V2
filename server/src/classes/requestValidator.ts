@@ -1,8 +1,8 @@
-import { ObjectId } from 'bson';
-import { db } from 'src/config/database';
-import { ErrorCode } from 'src/shared/error-codes';
-import { ResponseBuilder } from 'src/shared/response-builder';
-import { logger } from './consoleLoggerClass';
+import { ObjectId } from "bson";
+import { db } from "src/config/database";
+import { ErrorCode } from "src/shared/error-codes";
+import { ResponseBuilder } from "src/shared/response-builder";
+import { logger } from "./consoleLoggerClass";
 
 type IValidation = {
   required: boolean;
@@ -15,14 +15,14 @@ class RequestValidator {
     try {
       if (validationBody.required) {
         const result = validationBody.schema.validate(validationBody.body);
-        logger.logData('validation result', result);
+        logger.logData("validation result", result);
         if (!result.error) {
           //no validation error
           logger.infoData(result.value);
           if (Object.keys(result.value).length === 0) {
             return ResponseBuilder.badRequest(
               ErrorCode.Invalid,
-              'request body is required and must be not empty',
+              "request body is required and must be not empty",
               res
             );
           } else {
@@ -30,7 +30,7 @@ class RequestValidator {
             return result;
           }
         } else {
-          logger.infoData('error happened');
+          logger.infoData("error happened");
           return ResponseBuilder.badRequest(
             ErrorCode.Invalid,
             result.error.details[0].message,
@@ -38,10 +38,10 @@ class RequestValidator {
           );
         }
       } else {
-        logger.errorData('request parameters or body not found');
+        logger.errorData("request parameters or body not found");
         return ResponseBuilder.badRequest(
           ErrorCode.Invalid,
-          'Request parameters or body not found',
+          "Request parameters or body not found",
           res
         );
       }
@@ -60,7 +60,7 @@ class RequestValidator {
       return document;
     }
 
-    logger.infoData('Validating Request');
+    logger.infoData("Validating Request");
     // Use promise.all to query all collections in parallel and store the results in an array
     let results = await Promise.all(
       collections.map((collection, index) =>

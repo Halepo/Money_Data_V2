@@ -68,7 +68,7 @@
     "method": "POST",
     "sortNum": 5000,
     "created": "2023-03-07T19:37:52.134Z",
-    "modified": "2023-03-07T20:24:15.310Z",
+    "modified": "2023-04-19T07:28:13.476Z",
     "headers": [],
     "params": [],
     "body": {
@@ -77,15 +77,15 @@
       "form": [
         {
           "name": "category",
-          "value": "62e3928cc82243611c6ad6c1"
+          "value": "Fun"
         },
         {
           "name": "description",
-          "value": "62e3928cc82243611c6ad6c4"
+          "value": "Having Fun spending money"
         },
         {
           "name": "transaction_type",
-          "value": "asdf"
+          "value": "expense"
         }
       ]
     },
@@ -104,7 +104,7 @@
     "method": "POST",
     "sortNum": 10000,
     "created": "2023-03-07T20:19:25.042Z",
-    "modified": "2023-03-12T16:01:22.821Z",
+    "modified": "2023-04-19T07:29:13.432Z",
     "headers": [],
     "params": [],
     "body": {
@@ -113,23 +113,23 @@
       "form": [
         {
           "name": "user_id",
-          "value": "62e3928cc82243611c6ad6c1"
+          "value": "6408e76d396a00a260364fd3"
         },
         {
           "name": "account_id",
-          "value": "6407a82c3dee441c5dabebeb"
+          "value": "643f91481423583fdff99d60"
         },
         {
           "name": "category_id",
-          "value": "6407ac40bb43d6207bab8e7e"
+          "value": "643f92311423583fdff99d62"
         },
         {
           "name": "type",
-          "value": "expense"
+          "value": "income"
         },
         {
           "name": "amount",
-          "value": "10"
+          "value": "30000"
         },
         {
           "name": "currency",
@@ -137,11 +137,11 @@
         },
         {
           "name": "reason",
-          "value": "Trying out currency II"
+          "value": "Salary"
         },
         {
           "name": "description",
-          "value": "Some expense"
+          "value": "Binanace"
         },
         {
           "name": "date_time",
@@ -164,7 +164,7 @@
     "method": "POST",
     "sortNum": 5000,
     "created": "2023-03-07T20:26:28.244Z",
-    "modified": "2023-03-07T22:42:44.067Z",
+    "modified": "2023-04-19T06:59:20.768Z",
     "headers": [],
     "params": [],
     "body": {
@@ -173,7 +173,7 @@
       "form": [
         {
           "name": "user_id",
-          "value": "62e3928cc82243611c6ad6c1"
+          "value": "6408e76d396a00a260364fd3"
         },
         {
           "name": "account_name",
@@ -215,16 +215,16 @@
     "colId": "53267d27-d18f-4f64-a18e-ebadff3403c2",
     "containerId": "",
     "name": "GET Fetch Accounts",
-    "url": "{{baseUrl}}/api/account?user_id=62e3928cc82243611c6ad6c1",
+    "url": "{{baseUrl}}/api/account?user_id=6408e76d396a00a260364fd3",
     "method": "GET",
     "sortNum": 15000,
     "created": "2023-03-07T21:18:03.691Z",
-    "modified": "2023-03-07T21:18:32.679Z",
+    "modified": "2023-04-19T06:59:08.901Z",
     "headers": [],
     "params": [
       {
         "name": "user_id",
-        "value": "62e3928cc82243611c6ad6c1",
+        "value": "6408e76d396a00a260364fd3",
         "isPath": false
       }
     ],
@@ -257,16 +257,17 @@
     "colId": "a86ae142-9970-475f-92cf-47aac1473f3d",
     "containerId": "",
     "name": "GET Fetch Transactions",
-    "url": "{{baseUrl}}/api/transaction?user_id=62e3928cc82243611c6ad6c1&type=income&id=6407b08d0f91852417f4a3b5",
+    "url": "{{baseUrl}}/api/transaction",
     "method": "GET",
     "sortNum": 20000,
     "created": "2023-03-07T21:47:39.867Z",
-    "modified": "2023-03-07T22:41:28.544Z",
+    "modified": "2023-06-03T13:11:11.980Z",
     "headers": [],
     "params": [
       {
         "name": "user_id",
         "value": "62e3928cc82243611c6ad6c1",
+        "isDisabled": true,
         "isPath": false
       },
       {
@@ -283,7 +284,8 @@
       },
       {
         "name": "type",
-        "value": "income",
+        "value": "expense",
+        "isDisabled": true,
         "isPath": false
       },
       {
@@ -295,6 +297,19 @@
       {
         "name": "id",
         "value": "6407b08d0f91852417f4a3b5",
+        "isDisabled": true,
+        "isPath": false
+      },
+      {
+        "name": "start_date",
+        "value": "1/11/2024",
+        "isDisabled": true,
+        "isPath": false
+      },
+      {
+        "name": "end_date",
+        "value": "5/10/2022",
+        "isDisabled": true,
         "isPath": false
       }
     ],

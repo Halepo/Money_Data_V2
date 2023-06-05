@@ -1,8 +1,9 @@
-import './layout.sass';
-import { Outlet } from 'react-router';
-import NavBar from './navbar';
-import { Sidebar } from './sidebar';
-import useUI from '../../helpers/hooks/useUI';
+import "./layout.sass";
+import { Outlet } from "react-router";
+import NavBar from "./navbar";
+import { Sidebar } from "./sidebar";
+import useUI from "../../helpers/hooks/useUI";
+import Modal from "../../components/shared/modal";
 
 // TODO add footer if needed
 export default function Layout() {
@@ -13,11 +14,13 @@ export default function Layout() {
     deviceTypeByWidth,
     toggleSidebarExpanded,
     // deviceTypeByWidth,
+    modalContent,
+    modalTitle,
   } = useUI();
 
-  console.log('************ on ' + deviceTypeByWidth);
-  console.log('isSidebarExpanded? ', isSidebarExpanded);
-  console.log('sidebarWidth? ', sidebarWidth);
+  console.log("************ on " + deviceTypeByWidth);
+  console.log("isSidebarExpanded? ", isSidebarExpanded);
+  console.log("sidebarWidth? ", sidebarWidth);
 
   return (
     <div className="layout-wrapper">
@@ -31,6 +34,7 @@ export default function Layout() {
           }}
         >
           <Outlet />
+          <Modal content={modalContent} title={modalTitle} />
         </div>
       </div>
     </div>
