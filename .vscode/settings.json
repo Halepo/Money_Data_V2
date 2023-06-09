@@ -17,5 +17,13 @@
   "githubPullRequests.ignoredPullRequestBranches": ["master"],
   "liveServer.settings.port": 5502,
   "thunder-client.workspaceRelativePath": ".vscode/",
-  "thunder-client.saveToWorkspace": true // optional but recommended
+  "thunder-client.saveToWorkspace": true, // optional but recommended
+
+  "css.validate": false,
+  "editor.tabSize": 2,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "headwind.runOnSave": false,
+  "typescript.preferences.importModuleSpecifier": "non-relative"
 }

@@ -1,24 +1,27 @@
-import useAuth from "../helpers/hooks/useAuth";
-import useRefreshToken from "../helpers/hooks/useRefreshToken";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect } from 'react';
+import { useState } from 'react';
 
-export default function PersistLogin(children: any) {
+import Logger from '@/helpers/lib/logger';
+
+import useAuth from '../helpers/hooks/useAuth';
+import useRefreshToken from '../helpers/hooks/useRefreshToken';
+
+export default function PersistLogin({ children }: any) {
   const [isLoading, setIsLoading] = useState(true);
   const { auth, setAuth } = useAuth();
   const refresh = useRefreshToken();
 
-  console.log("persist calleddddddddddddddddd");
+  Logger.info('persist calleddddddddddddddddd');
 
   useEffect(() => {
     let ignore = false;
     const verifyRefreshToken = async () => {
       try {
         const newAccessToken = await refresh();
-        console.log("New Access Token", newAccessToken);
+        Logger.info('New Access Token', newAccessToken);
         setAuth({ token: newAccessToken });
       } catch (error) {
-        console.log(error);
+        Logger.info(error);
       } finally {
         if (!ignore) setIsLoading(false);
       }
@@ -28,7 +31,7 @@ export default function PersistLogin(children: any) {
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [auth?.token, refresh, setAuth]);
 
   return <>{isLoading ? <div>Loading...</div> : <>{children}</>}</>;
 }
