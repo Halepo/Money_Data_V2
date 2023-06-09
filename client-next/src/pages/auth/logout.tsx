@@ -1,9 +1,10 @@
 import { AxiosResponse } from 'axios';
 import { useEffect } from 'react';
-import { Navigate, useLocation } from 'react-router';
-import useAuth from '../../helpers/hooks/useAuth';
-import AuthService from '../../helpers/services/AuthService';
-import { axiosPrivate } from '../../helpers/services/axios';
+import { Navigate } from 'react-router';
+
+import useAuth from '../../lib/hooks/useAuth';
+import AuthService from '../../lib/services/AuthService';
+import { axiosPrivate } from '../../lib/services/axios';
 
 export default function Logout() {
   const { setAuth } = useAuth();
@@ -20,5 +21,5 @@ export default function Logout() {
     };
     logoutHandler().catch((error) => console.log(error));
   }, []);
-  return <Navigate to="/login" replace />;
+  return <Navigate to='/login' replace />;
 }

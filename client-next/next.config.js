@@ -7,12 +7,18 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
 
-  // TODO configure nextConfig: /login route to get file from /auth/login
-  // TODO configure /register route to get file from /auth/register
+  rewrites: async () => [
+    {
+      source: '/login',
+      destination: '/auth/login',
+    },
+    {
+      source: '/register',
+      destination: '/auth/register',
+    },
+  ],
   // TODO configure /forgot-password route to get file from /auth/forgot-password
   // TODO configure /reset-password route to get file from /auth/reset-password
-  // TODO configure /verify-email route to get file from /auth/verify-email
-  // TODO configure /verify-request route to get file from /auth/verify-request
 
   // Uncoment to add domain whitelist
   // images: {

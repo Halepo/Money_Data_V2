@@ -1,16 +1,16 @@
 import { ReactNode } from 'react';
 import './layout.module.sass';
 
+import useAuth from '@/lib/hooks/useAuth';
+import logger from '@/lib/logger';
+
 import PersistLogin from '@/components/PersistLogin';
 import RequireAuth from '@/components/RequireAuth';
-
-import useAuth from '@/helpers/hooks/useAuth';
-import logger from '@/helpers/lib/logger';
 
 import NavBar from './NavBar';
 import { Sidebar } from './SideBar';
 import Modal from '../../components/shared/modal';
-import useUI from '../../helpers/hooks/useUI';
+import useUI from '../../lib/hooks/useUI';
 
 // TODO add footer if needed
 export default function Layout({

@@ -4,8 +4,9 @@ import '@/styles/globals.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
 import '@/styles/colors.css';
 
-import UIProvider from '@/helpers/context/UIContext';
-import AuthProvider from '@/helpers/context/UserDetailsContext';
+import UIProvider from '@/lib/context/UIContext';
+import AuthProvider from '@/lib/context/UserDetailsContext';
+import Logger from '@/lib/logger';
 
 /**
  * !STARTERCONF info
@@ -13,6 +14,7 @@ import AuthProvider from '@/helpers/context/UserDetailsContext';
  */
 
 function MyApp({ Component, pageProps }: AppProps) {
+  Logger.info('App started');
   return (
     <AuthProvider>
       <UIProvider>

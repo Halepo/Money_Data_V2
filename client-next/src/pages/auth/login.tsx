@@ -2,11 +2,11 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import './login.module.sass';
 
-import Logger from '@/helpers/lib/logger';
+import Logger from '@/lib/logger';
 
 import { FormError } from '../../components/shared/formError';
-import useAuth from '../../helpers/hooks/useAuth';
-import { login } from '../../helpers/services/authApiService';
+import useAuth from '../../lib/hooks/useAuth';
+import { login } from '../../lib/services/authApiService';
 
 export default function Login(props: any) {
   Logger.info('Login rendered!');
@@ -28,12 +28,15 @@ export default function Login(props: any) {
   async function handleLogin(e: any) {
     try {
       const response: any = await login(email, password);
+
       Logger.info('response', response);
+
       if (response.data.data.token) {
         Logger.info('successfully logged in!');
+
         setAuth({ token: response.data.data.token });
         setError({});
-        router.push(from, { replace: true });
+        router.replace(from, from);
       }
     } catch (error: any) {
       if (error?.response?.data?.error) {

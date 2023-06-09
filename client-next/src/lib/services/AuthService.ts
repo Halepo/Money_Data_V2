@@ -1,6 +1,6 @@
 import jwtDecode, { JwtPayload } from 'jwt-decode';
 
-import Logger from '@/helpers/lib/logger';
+import Logger from '@/lib/logger';
 
 import { refresh } from './authApiService';
 import { iAuthService } from '../interface/authService';

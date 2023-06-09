@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import './accounts.sass';
-import useAxiosPrivate from '../../../helpers/hooks/useAxiosPrivate';
-import { IAccount } from '../../../helpers/interface/account';
 
 import AccountCard from './accountCard';
 import RegisterAccountModal from './registerAccountForm';
-
-import useAuth from '../../../helpers/hooks/useAuth';
-import { decodeJWT } from '../../../helpers/services/jwtDecode';
 import CardContainer from '../../../components/shared/cardContainer';
+import useAuth from '../../../lib/hooks/useAuth';
+import useAxiosPrivate from '../../../lib/hooks/useAxiosPrivate';
+import { IAccount } from '../../../lib/interface/account';
+import { decodeJWT } from '../../../lib/services/jwtDecode';
 export default function Accounts() {
   const axiosPrivate = useAxiosPrivate();
   const { auth }: any = useAuth();

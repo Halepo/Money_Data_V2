@@ -4,10 +4,10 @@ import { useRouter } from 'next/router';
 import './navbar.module.sass';
 
 //context
-import useAuth from '@/helpers/hooks/useAuth';
-import useUI from '@/helpers/hooks/useUI';
-import { IDecodedJWT } from '@/helpers/interface/authTypes';
-import logger from '@/helpers/lib/logger';
+import useAuth from '@/lib/hooks/useAuth';
+import useUI from '@/lib/hooks/useUI';
+import { IDecodedJWT } from '@/lib/interface/authTypes';
+import logger from '@/lib/logger';
 
 // TODO Register expense and income modal or UI
 

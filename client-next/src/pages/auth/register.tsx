@@ -2,11 +2,11 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import './register.module.sass';
 
-import Logger from '@/helpers/lib/logger';
+import Logger from '@/lib/logger';
 
 import { FormError } from '../../components/shared/formError';
-import useAuth from '../../helpers/hooks/useAuth';
-import { register } from '../../helpers/services/authApiService';
+import useAuth from '../../lib/hooks/useAuth';
+import { register } from '../../lib/services/authApiService';
 
 export default function Register(props: any) {
   const { auth } = useAuth();

@@ -1,24 +1,26 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-import Logger from '@/helpers/lib/logger';
+import Logger from '@/lib/logger';
 
-import useAuth from '../helpers/hooks/useAuth';
-import useRefreshToken from '../helpers/hooks/useRefreshToken';
+import useAuth from '../lib/hooks/useAuth';
+import useRefreshToken from '../lib/hooks/useRefreshToken';
 
 export default function PersistLogin({ children }: any) {
   const [isLoading, setIsLoading] = useState(true);
   const { auth, setAuth } = useAuth();
   const refresh = useRefreshToken();
 
-  Logger.info('persist calleddddddddddddddddd');
+  Logger.info('*** Persist Called ***');
 
   useEffect(() => {
     let ignore = false;
     const verifyRefreshToken = async () => {
       try {
         const newAccessToken = await refresh();
+
         Logger.info('New Access Token', newAccessToken);
+
         setAuth({ token: newAccessToken });
       } catch (error) {
         Logger.info(error);

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import useAuth from '../helpers/hooks/useAuth';
+import useAuth from '../lib/hooks/useAuth';
 
 const RequireAuth = ({ children }: any) => {
   const { auth } = useAuth();

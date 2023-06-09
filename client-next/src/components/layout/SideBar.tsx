@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import './sidebar.module.sass';
 
 import { sidebarItems } from './SideBarItems';
-import useUI from '../../helpers/hooks/useUI';
+import useUI from '../../lib/hooks/useUI';
 
 export function Sidebar() {
   const { isSidebarExpanded, sidebarWidth, toggleSidebarExpanded } = useUI();

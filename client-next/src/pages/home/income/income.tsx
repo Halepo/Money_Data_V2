@@ -2,11 +2,11 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import './income.sass';
 
-import { decodeJWT } from '@/helpers/lib/jwtDecode';
+import { decodeJWT } from '@/lib/jwtDecode';
 
 import CardContainer from '../../../components/shared/cardContainer';
-import useAuth from '../../../helpers/hooks/useAuth';
-import useAxiosPrivate from '../../../helpers/hooks/useAxiosPrivate';
+import useAuth from '../../../lib/hooks/useAuth';
+import useAxiosPrivate from '../../../lib/hooks/useAxiosPrivate';
 export default function Incomes() {
   const { auth }: any = useAuth();
   const [incomes, setIncomes] = useState([]);

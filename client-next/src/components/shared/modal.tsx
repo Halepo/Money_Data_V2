@@ -7,7 +7,7 @@ import React from 'react';
 import './modal.module.sass';
 
 import CustomButton from './customButton';
-import useUI from '../../helpers/hooks/useUI';
+import useUI from '../../lib/hooks/useUI';
 
 export let toggleModalVisible: any;
 

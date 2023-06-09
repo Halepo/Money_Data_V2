@@ -11,12 +11,12 @@ import {
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 
-import Modal from '@/components/shared/modal';
+import useAuth from '@/lib/hooks/useAuth';
+import useAxiosPrivate from '@/lib/hooks/useAxiosPrivate';
+import { decodeJWT } from '@/lib/jwtDecode';
+import Logger from '@/lib/logger';
 
-import useAuth from '@/helpers/hooks/useAuth';
-import useAxiosPrivate from '@/helpers/hooks/useAxiosPrivate';
-import { decodeJWT } from '@/helpers/lib/jwtDecode';
-import Logger from '@/helpers/lib/logger';
+import Modal from '@/components/shared/modal';
 
 export default function TransactionsDataTable(props: any) {
   const { auth }: any = useAuth();

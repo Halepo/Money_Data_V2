@@ -5,7 +5,7 @@ import { RegisterAccountForm } from './home/account/registerAccountForm';
 import StatCard from './home/components/statCard';
 import TransactionsDataTable from './transactions/transactionsDataTable';
 import CustomButton from '../components/shared/customButton';
-import useUI from '../helpers/hooks/useUI';
+import useUI from '../lib/hooks/useUI';
 
 const NewContent = (): any => {
   return (

@@ -1,7 +1,7 @@
 import Image, { ImageProps } from 'next/image';
 import { useState } from 'react';
 
-import clsxm from '@/helpers/lib/clsxm';
+import clsxm from '@/lib/clsxm';
 
 type NextImageProps = {
   useSkeleton?: boolean;

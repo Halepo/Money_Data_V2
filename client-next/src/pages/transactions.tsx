@@ -1,4 +1,4 @@
-import Logger from '@/helpers/lib/logger';
+import Logger from '@/lib/logger';
 
 import TransactionsDataTable from './transactions/transactionsDataTable';
 
